@@ -1,0 +1,296 @@
+:root {
+  --fg: #1a1a1a;
+  --fg-dim: #666;
+  --fg-faint: #999;
+  --bg: #fdfdfc;
+  --accent: #7a1f1f;
+  --rule: #e3e3e0;
+  --badge-bg: #f0eeea;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #e8e6e3;
+    --fg-dim: #a0a0a0;
+    --fg-faint: #777;
+    --bg: #16161a;
+    --accent: #d98a8a;
+    --rule: #2e2e33;
+    --badge-bg: #2a2a30;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "Charter", "Iowan Old Style", "Source Serif Pro", Georgia, "Noto Serif KR", serif;
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 5rem 1.5rem 4rem;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+}
+a:hover { border-bottom-color: var(--accent); }
+
+/* ---------- header ---------- */
+
+header {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-bottom: 3rem;
+}
+
+/* 사진의 원래 비율을 그대로 따라갑니다 (세로/가로/정사각 모두 대응).
+   너비만 고정하고 높이는 auto — 잘리는 부분 없음.
+   지나치게 세로로 긴 사진만 max-height 에서 부드럽게 잘립니다. */
+.portrait {
+  width: 165px;
+  height: auto;
+  max-height: 240px;
+  object-fit: cover;
+  object-position: 50% 30%;
+  display: block;
+  border-radius: 3px;
+  flex-shrink: 0;
+  background: var(--badge-bg);
+}
+
+.intro { flex: 1; min-width: 0; }
+
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.4rem;
+  line-height: 1.15;
+}
+
+h1 .hangul {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--fg-faint);
+  letter-spacing: 0;
+  margin-left: 0.4rem;
+}
+
+.affil {
+  margin: 0 0 0.8rem;
+  color: var(--fg-dim);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.links {
+  margin: 0;
+  font-size: 0.9rem;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--fg-faint);
+}
+
+/* ---------- sections ---------- */
+
+section { margin-bottom: 3rem; }
+
+h2 {
+  font-size: 0.78rem;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--fg-faint);
+  margin: 0 0 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+  color: var(--fg-dim);
+}
+
+#about p { margin: 0 0 1rem; }
+
+.keywords {
+  font-size: 0.9rem;
+  color: var(--fg-dim);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* ---------- research projects ---------- */
+
+.proj {
+  margin-bottom: 1.8rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--rule);
+}
+
+.proj h3 {
+  font-size: 1rem;
+  color: var(--fg);
+  margin: 0 0 0.4rem;
+}
+
+.proj p {
+  margin: 0 0 0.4rem;
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+
+.proj .tags {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  color: var(--fg-faint);
+}
+
+/* ---------- news ---------- */
+
+.news {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.95rem;
+}
+.news li { margin-bottom: 0.5rem; }
+.news .date {
+  display: inline-block;
+  width: 3.5rem;
+  color: var(--fg-faint);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 0.85rem;
+}
+
+/* ---------- publications ---------- */
+
+.note {
+  font-size: 0.82rem;
+  color: var(--fg-faint);
+  margin: -0.6rem 0 1.2rem;
+}
+
+.pubs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: pub;
+}
+
+.pubs li {
+  position: relative;
+  padding-left: 2.2rem;
+  margin-bottom: 1.4rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.pubs li::before {
+  counter-increment: pub;
+  content: "[" counter(pub) "]";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--fg-faint);
+  font-size: 0.85rem;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.pubs .title { font-weight: 600; }
+.pubs .authors { color: var(--fg-dim); font-size: 0.9rem; }
+.pubs .venue { color: var(--fg-faint); font-size: 0.88rem; font-style: italic; }
+.me { font-weight: 700; color: var(--fg); }
+
+.badge {
+  display: inline-block;
+  background: var(--badge-bg);
+  color: var(--accent);
+  font-style: normal;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.1rem 0.45rem;
+  border-radius: 3px;
+  vertical-align: 1px;
+}
+
+/* ---------- cv-style lists ---------- */
+
+.cv {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cv li {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.cv .date {
+  flex: 0 0 7.5rem;
+  color: var(--fg-faint);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 0.85rem;
+  padding-top: 0.12rem;
+}
+
+.cv .entry { flex: 1; min-width: 0; }
+
+.cv .detail {
+  display: block;
+  color: var(--fg-dim);
+  font-size: 0.88rem;
+  margin-top: 0.15rem;
+}
+
+/* ---------- footer ---------- */
+
+footer {
+  margin-top: 4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.82rem;
+  color: var(--fg-faint);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+footer p { margin: 0; }
+
+/* ---------- mobile ---------- */
+
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  main { padding: 2.5rem 1.25rem 3rem; }
+
+  header {
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+  .portrait { width: 120px; max-height: 175px; }
+  h1 { font-size: 1.6rem; }
+
+  .cv li { flex-direction: column; gap: 0.15rem; }
+  .cv .date { flex: none; }
+  .news .date { display: block; width: auto; }
+}

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taewoo Jo</title>
+<meta name="description" content="Taewoo Jo — Ph.D. student in Computer Science at Yonsei University. Human-Computer Interaction, Virtual Reality, Accessibility, Eye Tracking.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:,">
+</head>
+<body>
+<main>
+
+  <header>
+    <!-- 사진을 assets/profile.jpg 로 넣으면 자동으로 표시됩니다 -->
+    <img src="assets/profile.jpg" alt="Taewoo Jo" class="portrait"
+         onerror="this.style.visibility='hidden'">
+    <div class="intro">
+      <h1>Taewoo Jo <span class="hangul">조태우</span></h1>
+      <p class="affil">Ph.D. Student, Department of Computer Science<br>
+      Computer Graphics and Applications Lab (CGnA)<br>
+      Yonsei University, Seoul, Republic of Korea</p>
+      <p class="links">
+        <!-- TODO: 연세대 이메일 주소를 알려주시면 아래 줄의 주석을 풀고 주소를 채우겠습니다
+        <a href="mailto:____@yonsei.ac.kr">Yonsei</a> · -->
+        <a href="mailto:twj5349@gmail.com">Email</a> ·
+        <a href="https://scholar.google.co.kr/citations?hl=en&user=6_-TuDIAAAAJ">Google Scholar</a> ·
+        <a href="https://www.linkedin.com/in/taewoo-jo-77134614b/">LinkedIn</a> ·
+        <a href="assets/cv.pdf">CV</a>
+      </p>
+    </div>
+  </header>
+
+  <section id="about">
+    <p>I am an <strong>extended reality (XR)</strong> and <strong>human-computer interaction
+    (HCI)</strong> researcher, currently a full-time Ph.D. student in the Department of Computer
+    Science at Yonsei University. I build and evaluate systems that read a user's implicit
+    signals — gaze, head movement, body state — and turn them into interaction that requires
+    no explicit command.</p>
+
+    <p>Before that, I received my M.S. in Intelligent Robotics and B.S. in Physics from the
+    Gwangju Institute of Science and Technology (GIST), where I worked in the Human-Centered
+    Intelligent Systems Lab on in-car XR, explainable autonomous driving (with MIT CSAIL), and
+    assistive technology for people with low vision.</p>
+
+    <p class="keywords">Human-Computer Interaction &nbsp;·&nbsp; Virtual &amp; Extended Reality
+    &nbsp;·&nbsp; Eye Tracking &nbsp;·&nbsp; Accessibility</p>
+  </section>
+
+  <section id="news">
+    <h2>News</h2>
+    <ul class="news">
+      <li><span class="date">2026</span> <em>Can't Nobody Stop Me!</em> accepted to IEEE TVCG.</li>
+      <li><span class="date">2025</span> <em>Manual-Free Gaze Interaction</em> published in IEEE TVCG.</li>
+      <li><span class="date">2024</span> <em>WatchCap</em> published in ACM IMWUT.</li>
+    </ul>
+  </section>
+
+  <section id="research">
+    <h2>Research</h2>
+
+    <div class="proj">
+      <h3>Implicit Intention Prediction for Hands-Free XR Interaction</h3>
+      <p>Interaction in XR still leans on explicit input — a controller press, a pinch, a dwell timer.
+      I model what a user <em>intends</em> from gaze alone, using a Bayesian formulation of implicit
+      intention, so that selection happens without any manual trigger. Related work in this line
+      explores non-Euclidean spatial resets that keep users walking continuously in room-scale VR.</p>
+      <p class="tags">Yonsei University &nbsp;·&nbsp; Gaze Interaction, Locomotion</p>
+    </div>
+
+    <div class="proj">
+      <h3>Enhancing Perception: Assistive Technology for People with Low Vision</h3>
+      <p>People with peripheral vision loss struggle with visual scanning because their gaze
+      movement adapts poorly to the impairment. I designed <strong>WatchCap</strong>, a wearable
+      device that stimulates compensatory head movement to reshape how a user scans a scene.
+      A user study with gaze analysis showed faster, more efficient scanning — reaching
+      task-critical visual information sooner.</p>
+      <p class="tags">GIST &nbsp;·&nbsp; Accessibility, Wearables, Eye Tracking</p>
+    </div>
+
+    <div class="proj">
+      <h3>Explainable AI for Autonomous Vehicles</h3>
+      <p>Joint work with MIT CSAIL on making an autonomous vehicle's decisions legible to its
+      passengers. I led the XAI visualization system: given the hazard the vehicle's classifier
+      acted on, a semantic segmentation model renders a visual cue marking exactly what the car
+      reacted to, and when. Evaluated on real roads.</p>
+      <p class="tags">GIST &times; MIT CSAIL &nbsp;·&nbsp; Explainable AI, Trust, Automotive UX</p>
+    </div>
+
+    <div class="proj">
+      <h3>Wayfinding Assistance for Low Vision Pedestrians</h3>
+      <p>A guidance system for low-vision pedestrians, built alongside a simulator that reproduces
+      low-vision symptoms so designers can experience the condition first-hand and design the
+      interface around it. AR- and map-based navigation were compared in a virtual walking
+      environment to evaluate the pedestrian experience.</p>
+      <p class="tags">GIST &nbsp;·&nbsp; Accessibility, Mobile UI, VR Simulation</p>
+    </div>
+
+    <div class="proj">
+      <h3>In-Car XR Platform</h3>
+      <p>A platform for experiencing XR content inside an autonomous vehicle. On the systems side,
+      I worked on fusing GPS and IMU data to track the vehicle in real time and to keep HMD
+      tracking accurate in a moving car. I led content development: an event-detection algorithm
+      recognizes driving events such as turning and braking, and folds them into the content —
+      improving immersion and situation awareness while reducing sickness.</p>
+      <p class="tags">GIST &nbsp;·&nbsp; Metaverse Lab Program, Meta Fellowship &nbsp;·&nbsp; Unity, XR Content</p>
+    </div>
+
+  </section>
+
+  <section id="publications">
+    <h2>Publications</h2>
+    <p class="note"><span class="me">Bold</span> denotes my name. <sup>*</sup> denotes equal contribution.</p>
+
+    <h3>Journal &amp; Conference Papers</h3>
+    <ol class="pubs" reversed>
+
+      <li>
+        <span class="title">Can't Nobody Stop Me! Non-Euclidean Portal Reset for Continuous Walking in Virtual Reality</span><br>
+        <span class="authors">Hyeong-Jun Lee, <span class="me">Taewoo Jo</span>, Sanghun Chun, In-Kwon Lee</span><br>
+        <span class="venue">IEEE Transactions on Visualization and Computer Graphics (TVCG), 2026</span>
+      </li>
+
+      <li>
+        <span class="title">Manual-Free Gaze Interaction via Bayesian-Based Implicit Intention Prediction</span><br>
+        <span class="authors"><span class="me">Taewoo Jo</span>, Hyeong-Jun Lee, Sanghun Chun, In-Kwon Lee</span><br>
+        <span class="venue">IEEE Transactions on Visualization and Computer Graphics (TVCG), 2025</span>
+      </li>
+
+      <li>
+        <span class="title">Decoding Your Ride: What Information Builds Human Trust on Real Roads?</span><br>
+        <span class="authors">Gyeongwon Kim, Dohyeon Yeo, <span class="me">Taewoo Jo</span>, Daniela Rus, Seungjun Kim</span><br>
+        <span class="venue">GetMobile: Mobile Computing and Communications, 29(2), 2025</span>
+      </li>
+
+      <li>
+        <span class="title">WatchCap: Improving Scanning Efficiency in People with Low Vision through Compensatory Head Movement Stimulation</span><br>
+        <span class="authors"><span class="me">Taewoo Jo</span>, Dohyeon Yeo, Gyeongwon Kim, Seokhyun Hwang, Seungjun Kim</span><br>
+        <span class="venue">Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies (IMWUT), 8(2), 2024</span>
+      </li>
+
+      <li>
+        <span class="title">The Way of Water: Exploring the Role of Interaction Elements in Usability Challenges with In-Car VR Experience</span><br>
+        <span class="authors">Hyunjin Jeon<sup>*</sup>, <span class="me">Taewoo Jo</span><sup>*</sup>, Dohyeon Yeo<sup>*</sup>, Eunki An, Yeonju Kang, Seungjun Kim</span><br>
+        <span class="venue">Virtual Reality, 28(3), 2024</span>
+      </li>
+
+      <li>
+        <span class="title">What and When to Explain? On-Road Evaluation of Explanations in Highly Automated Vehicles</span><br>
+        <span class="authors">Gyeongwon Kim, Dohyeon Yeo, <span class="me">Taewoo Jo</span>, Daniela Rus, Seungjun Kim</span><br>
+        <span class="venue">Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies (IMWUT), 2023</span>
+      </li>
+
+      <li>
+        <span class="title">Enhancing Wayfinding Experience in Low-Vision Individuals through a Tailored Mobile Guidance Interface</span><br>
+        <span class="authors"><span class="me">Taewoo Jo</span>, Dohyeon Yeo, Seungjun Kim</span><br>
+        <span class="venue">Electronics, 12(22), 2023</span>
+      </li>
+
+      <li>
+        <span class="title">A Study on User Experience of Mobile Wayfinding Application for Low Vision Pedestrians</span><br>
+        <span class="authors"><span class="me">Taewoo Jo</span>, Dohyeon Yeo, Seungjun Kim</span><br>
+        <span class="venue">HCI Korea 2022 &nbsp;<span class="badge">Best Paper Award</span></span>
+      </li>
+
+    </ol>
+  </section>
+
+  <section id="education">
+    <h2>Education</h2>
+    <ul class="cv">
+      <li>
+        <span class="date">2024 &ndash;</span>
+        <span class="entry"><strong>Ph.D. in Computer Science</strong><br>Yonsei University</span>
+      </li>
+      <li>
+        <span class="date">2022 &ndash; 2024</span>
+        <span class="entry"><strong>M.S. in Intelligent Robotics</strong><br>Gwangju Institute of Science and Technology (GIST)</span>
+      </li>
+      <li>
+        <span class="date">2017 &ndash; 2022</span>
+        <span class="entry"><strong>B.S. in Physics</strong><br>Gwangju Institute of Science and Technology (GIST)</span>
+      </li>
+      <li>
+        <span class="date">2020</span>
+        <span class="entry"><strong>Exchange Student</strong><br>KAIST</span>
+      </li>
+    </ul>
+  </section>
+
+  <section id="experience">
+    <h2>Experience</h2>
+    <ul class="cv">
+      <li>
+        <span class="date">2020 &ndash; 2024</span>
+        <span class="entry"><strong>Research Assistant / Intern</strong><br>
+        Human-Centered Intelligent Systems Lab (HCIS), GIST<br>
+        <span class="detail">In-car XR systems, explainable AI for autonomous vehicles (with MIT CSAIL),
+        VR-based low-vision simulation, multimodal stimulation in VR</span></span>
+      </li>
+      <li>
+        <span class="date">2022</span>
+        <span class="entry"><strong>Metaverse Fellowship</strong><br>RAPA &times; Meta</span>
+      </li>
+      <li>
+        <span class="date">2022</span>
+        <span class="entry"><strong>Pitch Your Lab</strong><br>
+        GIST Metaverse Research Center, ISMAR 2022</span>
+      </li>
+      <li>
+        <span class="date">2021</span>
+        <span class="entry"><strong>External Developer</strong><br>Unity Simulation Development, Robotry Co.</span>
+      </li>
+      <li>
+        <span class="date">2019 &ndash;</span>
+        <span class="entry"><strong>Senior Mentee</strong><br>
+        Hanlim-Mirae Science Camp, The Korean Academy of Science and Technology (KAST)</span>
+      </li>
+    </ul>
+  </section>
+
+  <section id="teaching">
+    <h2>Teaching</h2>
+    <ul class="cv">
+      <li><span class="date">Spring 2023</span> <span class="entry">Human-Computer Interaction &mdash; Teaching Assistant, GIST</span></li>
+      <li><span class="date">2021 &ndash; 2022</span> <span class="entry">Mathematics in Civilization &mdash; Teaching Assistant, GIST</span></li>
+      <li><span class="date">Spring 2021</span> <span class="entry">General Physics &mdash; Teaching Assistant, GIST</span></li>
+      <li><span class="date">Fall 2020</span> <span class="entry">Introduction to Linear Algebra &mdash; Teaching Assistant, GIST</span></li>
+    </ul>
+  </section>
+
+  <section id="awards">
+    <h2>Awards &amp; Honors</h2>
+    <ul class="cv">
+      <li><span class="date">2022 &ndash; 2024</span> <span class="entry">GIST Scholarship (M.S., Government Supported)</span></li>
+      <li><span class="date">2022</span> <span class="entry">Best Paper Award, HCI Korea 2022</span></li>
+      <li><span class="date">2017 &ndash; 2022</span> <span class="entry">GIST Scholarship (B.S., Government Supported)</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>Last updated July 2026 &nbsp;·&nbsp; twj5349 [at] gmail [dot] com</p>
+  </footer>
+
+</main>
+</body>
+</html>
