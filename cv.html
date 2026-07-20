@@ -141,9 +141,20 @@ h2 {
   break-inside: avoid;
 }
 
+.subhead {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 8.5pt;
+  font-weight: 600;
+  color: var(--dim);
+  margin: 0.5rem 0 0.4rem;
+}
+
+.pubs-j { --pub-prefix: "J"; }
+.pubs-c { --pub-prefix: "C"; }
+
 .pubs li::before {
   counter-increment: pub;
-  content: "[" counter(pub) "]";
+  content: "[" var(--pub-prefix, "") counter(pub) "]";
   position: absolute;
   left: 0;
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -278,7 +289,8 @@ h2 {
     <h2>Publications</h2>
     <p style="margin:0 0 0.5rem; font-size:9pt; color:var(--faint);">
       <span class="me">Bold</span> denotes my name. <sup>*</sup> denotes equal contribution.</p>
-    <ol class="pubs">
+    <h3 class="subhead">International Journal Papers</h3>
+    <ol class="pubs pubs-j">
       <li>
         Ho Jung Lee, <span class="me">Taewoo Jo</span>, Sulim Chun, In-Kwon Lee.
         Can't Nobody Stop Me! Non-Euclidean Portal Reset for Continuous Walking in Virtual Reality.
@@ -315,6 +327,9 @@ h2 {
         Enhancing Wayfinding Experience in Low-Vision Individuals through a Tailored Mobile Guidance Interface.
         <span class="venue">Electronics</span>, 12(22), 4561, 2023.
       </li>
+    </ol>
+    <h3 class="subhead">Domestic Conference Papers</h3>
+    <ol class="pubs pubs-c">
       <li>
         <span class="me">Taewoo Jo</span>, Dohyeon Yeo, Seungjun Kim.
         A Study on User Experience of Mobile Wayfinding Application for Low Vision Pedestrians.

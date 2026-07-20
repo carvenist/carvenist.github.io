@@ -44,15 +44,17 @@ assets/
 
 이후 수정은 `git add . && git commit -m "update" && git push` 하면 자동 반영.
 
-## 방문자 카운터 켜기
+## 방문자 통계
 
-`index.html` 맨 아래에 GoatCounter 스니펫이 주석 처리되어 있습니다. 쿠키를 쓰지 않고
-개인정보도 수집하지 않으며 무료입니다.
+GoatCounter 를 씁니다 (쿠키·개인정보 수집 없음). 통계 확인:
+**https://twj5349.goatcounter.com**
 
-1. https://www.goatcounter.com/signup 에서 가입 (코드 이름을 정하면 `그이름.goatcounter.com` 이 됨)
-2. `index.html` 아래쪽 주석에서 `YOURCODE` 를 그 이름으로 바꾸고, `<!--` / `-->` 두 줄 삭제
-3. commit &amp; push
-4. 통계는 `https://그이름.goatcounter.com` 에서 확인
+스니펫은 `index.html` 맨 아래에 있습니다.
+
+## 캐시 주의
+
+`index.html` 의 `style.css?v=3` 에서 `?v=` 는 캐시 무효화용입니다.
+CSS 를 크게 고쳤는데 브라우저에 반영이 안 되면 이 숫자를 올리고 push 하세요.
 
 ## 내용 수정
 

@@ -43,6 +43,14 @@
 
 * { box-sizing: border-box; }
 
+/* 안전장치: 어떤 이미지도 자기 컨테이너보다 넓어지지 않는다.
+   (아래 개별 규칙이 적용되지 않는 상황에서도 가로 스크롤이 생기지 않도록) */
+img, figure, video { max-width: 100%; }
+img { height: auto; }
+
+/* 본문이 가로로 삐져나가는 일은 없어야 한다 */
+html, body { overflow-x: hidden; }
+
 html { -webkit-text-size-adjust: 100%; }
 
 body {
@@ -265,7 +273,7 @@ h3 {
 
 .pubs li::before {
   counter-increment: pub;
-  content: "[" counter(pub) "]";
+  content: "[" var(--pub-prefix, "") counter(pub) "]";
   position: absolute;
   left: 0;
   top: 0;
@@ -273,6 +281,10 @@ h3 {
   font-size: 0.85rem;
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
+
+/* [J1] 국제 저널 / [C1] 학술대회 — 예전 CV 표기 방식을 그대로 씀 */
+.pubs-j { --pub-prefix: "J"; }
+.pubs-c { --pub-prefix: "C"; }
 
 .pubs .title { font-weight: 600; }
 .pubs .authors { color: var(--fg-dim); font-size: 0.9rem; }
