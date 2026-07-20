@@ -7,8 +7,16 @@
 <meta name="description" content="Taewoo Jo — Ph.D. student in Computer Science at Yonsei University. Human-Computer Interaction, Virtual Reality, Accessibility, Eye Tracking.">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="data:,">
+<script>
+  // 저장된 테마를 페인트 전에 적용 (새로고침 시 깜빡임 방지)
+  try {
+    var t = localStorage.getItem('theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+</script>
 </head>
 <body>
+<button id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button>
 <main>
 
   <header>
@@ -60,6 +68,10 @@
 
     <div class="proj">
       <h3>Implicit Intention Prediction for Hands-Free XR Interaction</h3>
+      <figure>
+        <img src="assets/figures/gaze-interaction.jpg" alt="Pipeline: gaze data in a VR environment is turned into likelihood features, then into a predicted selection intention" loading="lazy">
+        <figcaption>From raw gaze to a predicted selection intention, with no manual trigger. (TVCG 2025)</figcaption>
+      </figure>
       <p>Interaction in XR still leans on explicit input — a controller press, a pinch, a dwell timer.
       I model what a user <em>intends</em> from gaze alone, using a Bayesian formulation of implicit
       intention, so that selection happens without any manual trigger. Related work in this line
@@ -69,6 +81,10 @@
 
     <div class="proj">
       <h3>Enhancing Perception: Assistive Technology for People with Low Vision</h3>
+      <figure>
+        <img src="assets/figures/watchcap.jpg" alt="A user wearing the WatchCap device and an HMD, with simulated mild and severe peripheral vision loss and induced head rotations" loading="lazy">
+        <figcaption>WatchCap induces compensatory head rotation under simulated peripheral vision loss. (IMWUT 2024)</figcaption>
+      </figure>
       <p>People with peripheral vision loss struggle with visual scanning because their gaze
       movement adapts poorly to the impairment. I designed <strong>WatchCap</strong>, a wearable
       device that stimulates compensatory head movement to reshape how a user scans a scene.
@@ -79,6 +95,10 @@
 
     <div class="proj">
       <h3>Explainable AI for Autonomous Vehicles</h3>
+      <figure>
+        <img src="assets/figures/xai-autonomous-vehicle.jpg" alt="System diagram: a 360-degree camera feed from a real vehicle is segmented and shown as a windshield AR explanation to a participant in a graphical vehicle" loading="lazy">
+        <figcaption>On-road evaluation setup: real 360&deg; footage, segmented hazards, explanations rendered on a virtual windshield. (IMWUT 2023)</figcaption>
+      </figure>
       <p>Joint work with MIT CSAIL on making an autonomous vehicle's decisions legible to its
       passengers. I led the XAI visualization system: given the hazard the vehicle's classifier
       acted on, a semantic segmentation model renders a visual cue marking exactly what the car
@@ -88,6 +108,10 @@
 
     <div class="proj">
       <h3>Wayfinding Assistance for Low Vision Pedestrians</h3>
+      <figure>
+        <img src="assets/figures/wayfinding.jpg" alt="Four first-person views of a virtual pedestrian environment showing AR and map-based navigation guidance under simulated low vision" loading="lazy">
+        <figcaption>Navigation guidance conditions in the virtual walking environment. (Electronics 2023)</figcaption>
+      </figure>
       <p>A guidance system for low-vision pedestrians, built alongside a simulator that reproduces
       low-vision symptoms so designers can experience the condition first-hand and design the
       interface around it. AR- and map-based navigation were compared in a virtual walking
@@ -97,6 +121,10 @@
 
     <div class="proj">
       <h3>In-Car XR Platform</h3>
+      <figure>
+        <img src="assets/figures/in-car-xr.jpg" alt="A real vehicle rendered inside an underwater virtual scene, with five insets showing in-car VR content and interaction elements" loading="lazy">
+        <figcaption>Underwater XR content mapped onto real vehicle motion, with the interaction elements evaluated. (Virtual Reality 2024)</figcaption>
+      </figure>
       <p>A platform for experiencing XR content inside an autonomous vehicle. On the systems side,
       I worked on fusing GPS and IMU data to track the vehicle in real time and to keep HMD
       tracking accurate in a moving car. I led content development: an event-detection algorithm
@@ -116,21 +144,41 @@
 
       <li>
         <span class="title">Can't Nobody Stop Me! Non-Euclidean Portal Reset for Continuous Walking in Virtual Reality</span><br>
-        <span class="authors">Hojung Lee, <span class="me">Taewoo Jo</span>, Sulim Chun, In-Kwon Lee</span><br>
+        <span class="authors">Ho Jung Lee, <span class="me">Taewoo Jo</span>, Sulim Chun, In-Kwon Lee</span><br>
         <span class="venue">IEEE Transactions on Visualization and Computer Graphics (TVCG), 32(5), 2026</span>
         <span class="publinks">
           <a href="assets/papers/2026-tvcg-portal-reset.pdf">PDF</a>
           <a href="https://doi.org/10.1109/TVCG.2026.3679901">DOI</a>
+          <details class="bib"><summary>BibTeX</summary><pre>@article{lee2026portal,
+  author  = {Lee, Ho Jung and Jo, Taewoo and Chun, Sulim and Lee, In-Kwon},
+  title   = {Can't Nobody Stop Me! Non-Euclidean Portal Reset for
+             Continuous Walking in Virtual Reality},
+  journal = {IEEE Transactions on Visualization and Computer Graphics},
+  volume  = {32},
+  number  = {5},
+  year    = {2026},
+  doi     = {10.1109/TVCG.2026.3679901}
+}</pre></details>
         </span>
       </li>
 
       <li>
         <span class="title">Manual-Free Gaze Interaction via Bayesian-Based Implicit Intention Prediction</span><br>
-        <span class="authors"><span class="me">Taewoo Jo</span>, Hojung Lee, Sulim Chun, In-Kwon Lee</span><br>
+        <span class="authors"><span class="me">Taewoo Jo</span>, Ho Jung Lee, Sulim Chun, In-Kwon Lee</span><br>
         <span class="venue">IEEE Transactions on Visualization and Computer Graphics (TVCG), 31(12), 2025</span>
         <span class="publinks">
           <a href="assets/papers/2025-tvcg-gaze-interaction.pdf">PDF</a>
           <a href="https://doi.org/10.1109/TVCG.2025.3615198">DOI</a>
+          <details class="bib"><summary>BibTeX</summary><pre>@article{jo2025gaze,
+  author  = {Jo, Taewoo and Lee, Ho Jung and Chun, Sulim and Lee, In-Kwon},
+  title   = {Manual-Free Gaze Interaction via Bayesian-Based
+             Implicit Intention Prediction},
+  journal = {IEEE Transactions on Visualization and Computer Graphics},
+  volume  = {31},
+  number  = {12},
+  year    = {2025},
+  doi     = {10.1109/TVCG.2025.3615198}
+}</pre></details>
         </span>
       </li>
 
@@ -141,6 +189,17 @@
         <span class="publinks">
           <a href="assets/papers/2025-getmobile-decoding-your-ride.pdf">PDF</a>
           <a href="https://doi.org/10.1145/3760535.3760537">DOI</a>
+          <details class="bib"><summary>BibTeX</summary><pre>@article{kim2025decoding,
+  author  = {Kim, Gwangbin and Yeo, Dohyeon and Jo, Taewoo and
+             Rus, Daniela and Kim, Seungjun},
+  title   = {Decoding Your Ride: What Information Builds Human Trust
+             on Real Roads?},
+  journal = {GetMobile: Mobile Computing and Communications},
+  volume  = {29},
+  number  = {2},
+  year    = {2025},
+  doi     = {10.1145/3760535.3760537}
+}</pre></details>
         </span>
       </li>
 
@@ -151,6 +210,19 @@
         <span class="publinks">
           <a href="assets/papers/2024-imwut-watchcap.pdf">PDF</a>
           <a href="https://doi.org/10.1145/3659592">DOI</a>
+          <details class="bib"><summary>BibTeX</summary><pre>@article{jo2024watchcap,
+  author  = {Jo, Taewoo and Yeo, Dohyeon and Kim, Gwangbin and
+             Hwang, Seokhyun and Kim, Seungjun},
+  title   = {WatchCap: Improving Scanning Efficiency in People with Low Vision
+             through Compensatory Head Movement Stimulation},
+  journal = {Proceedings of the ACM on Interactive, Mobile, Wearable and
+             Ubiquitous Technologies},
+  volume  = {8},
+  number  = {2},
+  articleno = {47},
+  year    = {2024},
+  doi     = {10.1145/3659592}
+}</pre></details>
         </span>
       </li>
 
@@ -161,6 +233,17 @@
         <span class="publinks">
           <a href="assets/papers/2024-vr-way-of-water.pdf">PDF</a>
           <a href="https://doi.org/10.1007/s10055-024-01001-3">DOI</a>
+          <details class="bib"><summary>BibTeX</summary><pre>@article{jeon2024water,
+  author  = {Jeon, Hwaseung and Jo, Taewoo and Yeo, Dohyeon and An, Eunsol and
+             Kang, Yumin and Kim, Seungjun},
+  title   = {The Way of Water: Exploring the Role of Interaction Elements in
+             Usability Challenges with In-Car VR Experience},
+  journal = {Virtual Reality},
+  volume  = {28},
+  number  = {3},
+  year    = {2024},
+  doi     = {10.1007/s10055-024-01001-3}
+}</pre></details>
         </span>
       </li>
 
@@ -171,6 +254,19 @@
         <span class="publinks">
           <a href="assets/papers/2023-imwut-what-and-when-to-explain.pdf">PDF</a>
           <a href="https://doi.org/10.1145/3610886">DOI</a>
+          <details class="bib"><summary>BibTeX</summary><pre>@article{kim2023explain,
+  author  = {Kim, Gwangbin and Yeo, Dohyeon and Jo, Taewoo and
+             Rus, Daniela and Kim, Seungjun},
+  title   = {What and When to Explain? On-Road Evaluation of Explanations in
+             Highly Automated Vehicles},
+  journal = {Proceedings of the ACM on Interactive, Mobile, Wearable and
+             Ubiquitous Technologies},
+  volume  = {7},
+  number  = {3},
+  articleno = {104},
+  year    = {2023},
+  doi     = {10.1145/3610886}
+}</pre></details>
         </span>
       </li>
 
@@ -181,6 +277,17 @@
         <span class="publinks">
           <a href="assets/papers/2023-electronics-wayfinding.pdf">PDF</a>
           <a href="https://doi.org/10.3390/electronics12224561">DOI</a>
+          <details class="bib"><summary>BibTeX</summary><pre>@article{jo2023wayfinding,
+  author  = {Jo, Taewoo and Yeo, Dohyeon and Kim, Seungjun},
+  title   = {Enhancing Wayfinding Experience in Low-Vision Individuals through
+             a Tailored Mobile Guidance Interface},
+  journal = {Electronics},
+  volume  = {12},
+  number  = {22},
+  pages   = {4561},
+  year    = {2023},
+  doi     = {10.3390/electronics12224561}
+}</pre></details>
         </span>
       </li>
 
@@ -257,6 +364,17 @@
     </ul>
   </section>
 
+  <section id="service">
+    <h2>Academic Service</h2>
+    <p class="note">Reviewer &mdash; one submission each.</p>
+    <ul class="cv">
+      <li><span class="date">2026</span> <span class="entry">ACM CHI Conference on Human Factors in Computing Systems (CHI)</span></li>
+      <li><span class="date">2026</span> <span class="entry">IEEE Conference on Virtual Reality and 3D User Interfaces (IEEE VR)</span></li>
+      <li><span class="date">2026</span> <span class="entry">ACM Symposium on User Interface Software and Technology (UIST)</span></li>
+      <li><span class="date">Nov 2025</span> <span class="entry">Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies (IMWUT)</span></li>
+    </ul>
+  </section>
+
   <section id="awards">
     <h2>Awards &amp; Honors</h2>
     <ul class="cv">
@@ -272,5 +390,27 @@
   </footer>
 
 </main>
+
+<script>
+  // 다크모드 토글: 누르면 현재 보이는 것의 반대로 전환하고 기억해 둔다.
+  (function () {
+    var root = document.documentElement;
+    document.getElementById('theme-toggle').addEventListener('click', function () {
+      var dark = root.getAttribute('data-theme')
+        ? root.getAttribute('data-theme') === 'dark'
+        : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var next = dark ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+
+<!-- 방문자 카운터 (GoatCounter) — 쿠키·개인정보 수집 없음.
+     goatcounter.com 에서 무료 가입 후, 받은 코드를 YOURCODE 자리에 넣고
+     아래 두 줄의 주석을 풀면 동작합니다. README 참고.
+<script data-goatcounter="https://YOURCODE.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+-->
 </body>
 </html>

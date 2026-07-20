@@ -44,6 +44,16 @@ assets/
 
 이후 수정은 `git add . && git commit -m "update" && git push` 하면 자동 반영.
 
+## 방문자 카운터 켜기
+
+`index.html` 맨 아래에 GoatCounter 스니펫이 주석 처리되어 있습니다. 쿠키를 쓰지 않고
+개인정보도 수집하지 않으며 무료입니다.
+
+1. https://www.goatcounter.com/signup 에서 가입 (코드 이름을 정하면 `그이름.goatcounter.com` 이 됨)
+2. `index.html` 아래쪽 주석에서 `YOURCODE` 를 그 이름으로 바꾸고, `<!--` / `-->` 두 줄 삭제
+3. commit &amp; push
+4. 통계는 `https://그이름.goatcounter.com` 에서 확인
+
 ## 내용 수정
 
 - 논문 추가: `index.html`의 `<ol class="pubs">` 안에 기존 `<li>` 블록을 복사해서 맨 위에 붙여넣기

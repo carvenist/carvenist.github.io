@@ -8,6 +8,7 @@
   --badge-bg: #f0eeea;
 }
 
+/* 다크 팔레트 — OS 설정과 수동 토글(data-theme) 양쪽에서 동작 */
 @media (prefers-color-scheme: dark) {
   :root {
     --fg: #e8e6e3;
@@ -18,6 +19,26 @@
     --rule: #2e2e33;
     --badge-bg: #2a2a30;
   }
+}
+
+:root[data-theme="dark"] {
+  --fg: #e8e6e3;
+  --fg-dim: #a0a0a0;
+  --fg-faint: #777;
+  --bg: #16161a;
+  --accent: #d98a8a;
+  --rule: #2e2e33;
+  --badge-bg: #2a2a30;
+}
+
+:root[data-theme="light"] {
+  --fg: #1a1a1a;
+  --fg-dim: #666;
+  --fg-faint: #999;
+  --bg: #fdfdfc;
+  --accent: #7a1f1f;
+  --rule: #e3e3e0;
+  --badge-bg: #f0eeea;
 }
 
 * { box-sizing: border-box; }
@@ -134,12 +155,53 @@ h3 {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+/* ---------- theme toggle ---------- */
+
+#theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--fg-dim);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+#theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
 /* ---------- research projects ---------- */
 
 .proj {
-  margin-bottom: 1.8rem;
+  margin-bottom: 2.2rem;
   padding-left: 1rem;
   border-left: 2px solid var(--rule);
+}
+
+.proj figure {
+  margin: 0 0 0.7rem;
+}
+
+.proj figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--badge-bg);
+}
+
+.proj figcaption {
+  margin-top: 0.35rem;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 0.75rem;
+  color: var(--fg-faint);
 }
 
 .proj h3 {
@@ -237,6 +299,40 @@ h3 {
 .publinks a:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+/* BibTeX 접기/펼치기 — <details> 를 다른 링크 버튼과 같은 모양으로 */
+.bib {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.bib summary {
+  display: inline-block;
+  padding: 0.08rem 0.45rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  color: var(--fg-dim);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.bib summary::-webkit-details-marker { display: none; }
+.bib summary:hover { border-color: var(--accent); color: var(--accent); }
+.bib[open] summary { border-color: var(--accent); color: var(--accent); }
+
+.bib pre {
+  margin: 0.5rem 0 0;
+  padding: 0.7rem 0.85rem;
+  background: var(--badge-bg);
+  border-radius: 3px;
+  font-family: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--fg-dim);
+  white-space: pre;
+  overflow-x: auto;
 }
 
 .badge {
