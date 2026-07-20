@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curriculum Vitae — Taewoo Jo</title>
+<style>
+:root {
+  --fg: #111;
+  --dim: #555;
+  --faint: #888;
+  --rule: #cfcfcf;
+  --accent: #7a1f1f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #f4f4f2;
+  color: var(--fg);
+  font-family: "Charter", "Iowan Old Style", "Source Serif Pro", Georgia, serif;
+  font-size: 10.5pt;
+  line-height: 1.45;
+}
+
+.page {
+  max-width: 760px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 22mm 20mm;
+}
+
+a { color: var(--accent); text-decoration: none; }
+
+/* ---------- masthead ---------- */
+
+.masthead {
+  border-bottom: 2px solid var(--fg);
+  padding-bottom: 0.7rem;
+  margin-bottom: 1.4rem;
+}
+
+.masthead .label {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 7.5pt;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin: 0 0 0.25rem;
+}
+
+h1 {
+  font-size: 24pt;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.4rem;
+  line-height: 1.1;
+}
+
+h1 .hangul {
+  font-size: 12pt;
+  font-weight: 400;
+  color: var(--faint);
+  letter-spacing: 0;
+  margin-left: 0.35rem;
+}
+
+.masthead .role {
+  margin: 0 0 0.5rem;
+  color: var(--dim);
+  font-size: 10pt;
+}
+
+.masthead .contact {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 8.5pt;
+  color: var(--dim);
+}
+.masthead .contact span::after { content: "  ·  "; color: var(--rule); }
+.masthead .contact span:last-child::after { content: ""; }
+
+/* ---------- sections ---------- */
+
+section { margin-bottom: 1.3rem; }
+
+h2 {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--fg);
+  margin: 0 0 0.6rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.65rem;
+  break-inside: avoid;
+}
+
+.row .when {
+  flex: 0 0 105px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 8.5pt;
+  color: var(--faint);
+  padding-top: 0.1rem;
+}
+
+.row .what { flex: 1; min-width: 0; }
+
+.row .what .head { font-weight: 600; }
+.row .what .sub { color: var(--dim); }
+
+.row .what ul {
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--dim);
+  font-size: 9.5pt;
+}
+.row .what li { margin-bottom: 0.12rem; }
+
+/* ---------- publications ---------- */
+
+.pubs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: pub;
+}
+
+.pubs li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 0.6rem;
+  break-inside: avoid;
+}
+
+.pubs li::before {
+  counter-increment: pub;
+  content: "[" counter(pub) "]";
+  position: absolute;
+  left: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 8.5pt;
+  color: var(--faint);
+}
+
+.pubs .authors { color: var(--dim); }
+.pubs .venue { color: var(--faint); font-style: italic; }
+.me { font-weight: 700; color: var(--fg); }
+
+.award {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-style: normal;
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  padding: 0 0.25rem;
+  white-space: nowrap;
+}
+
+.skills p { margin: 0 0 0.25rem; }
+.skills .k {
+  display: inline-block;
+  width: 105px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 8.5pt;
+  color: var(--faint);
+}
+
+.foot {
+  margin-top: 1.6rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 8pt;
+  color: var(--faint);
+  text-align: right;
+}
+
+/* ---------- print ---------- */
+
+@page { size: A4; margin: 16mm 15mm; }
+
+@media print {
+  body { background: #fff; font-size: 10pt; }
+  .page { max-width: none; padding: 0; }
+  a { color: var(--fg); }
+  section { break-inside: auto; }
+  h2 { break-after: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="masthead">
+    <p class="label">Curriculum Vitae</p>
+    <h1>Taewoo Jo <span class="hangul">조태우</span></h1>
+    <p class="role">Ph.D. Student, Department of Computer Science<br>
+    Computer Graphics and Applications Lab (CGnA), Yonsei University, Seoul, Republic of Korea</p>
+    <p class="contact">
+      <span>twj5349@yonsei.ac.kr</span>
+      <span>twj5349@gmail.com</span>
+      <span>carvenist.github.io</span>
+    </p>
+  </div>
+
+  <section>
+    <h2>Research Interests</h2>
+    <p style="margin:0;">Extended Reality (XR) &nbsp;·&nbsp; Human-Computer Interaction (HCI) &nbsp;·&nbsp;
+    Eye Tracking &amp; Gaze Interaction &nbsp;·&nbsp; Accessibility &nbsp;·&nbsp; User Interface &amp; User Experience</p>
+  </section>
+
+  <section>
+    <h2>Education</h2>
+    <div class="row">
+      <div class="when">2024 &ndash; Present</div>
+      <div class="what"><span class="head">Ph.D. in Computer Science</span><br>
+      <span class="sub">Yonsei University &mdash; Computer Graphics and Applications Lab (CGnA)</span></div>
+    </div>
+    <div class="row">
+      <div class="when">2022 &ndash; 2024</div>
+      <div class="what"><span class="head">M.S. in Intelligent Robotics</span><br>
+      <span class="sub">Gwangju Institute of Science and Technology (GIST)</span></div>
+    </div>
+    <div class="row">
+      <div class="when">2017 &ndash; 2022</div>
+      <div class="what"><span class="head">B.S. in Physics</span><br>
+      <span class="sub">Gwangju Institute of Science and Technology (GIST)</span></div>
+    </div>
+    <div class="row">
+      <div class="when">Mar &ndash; Jun 2020</div>
+      <div class="what"><span class="head">Exchange Student</span><br>
+      <span class="sub">Korea Advanced Institute of Science and Technology (KAIST)</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Research Experience</h2>
+    <div class="row">
+      <div class="when">2024 &ndash; Present</div>
+      <div class="what"><span class="head">Graduate Researcher</span><br>
+      <span class="sub">Computer Graphics and Applications Lab (CGnA), Yonsei University</span>
+      <ul>
+        <li>Bayesian modeling of implicit selection intention for manual-free gaze interaction in XR</li>
+        <li>Non-Euclidean portal reset for continuous walking in room-scale redirected walking</li>
+      </ul></div>
+    </div>
+    <div class="row">
+      <div class="when">2020 &ndash; 2024</div>
+      <div class="what"><span class="head">Research Assistant / Research Intern</span><br>
+      <span class="sub">Human-Centered Intelligent Systems Lab (HCIS), GIST</span>
+      <ul>
+        <li>WatchCap: wearable compensatory head-movement stimulation for people with low vision</li>
+        <li>XAI visualization for autonomous vehicles &mdash; joint research with MIT CSAIL</li>
+        <li>In-car XR platform: vehicle tracking (GPS/IMU), in-vehicle HMD tracking, driving-event-aware content</li>
+        <li>VR-based low-vision simulation and mobile wayfinding interfaces</li>
+      </ul></div>
+    </div>
+    <div class="row">
+      <div class="when">Jul &ndash; Aug 2021</div>
+      <div class="what"><span class="head">G-SURF Research Internship</span><br>
+      <span class="sub">School of Integrated Technology, GIST</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Publications</h2>
+    <p style="margin:0 0 0.5rem; font-size:9pt; color:var(--faint);">
+      <span class="me">Bold</span> denotes my name. <sup>*</sup> denotes equal contribution.</p>
+    <ol class="pubs">
+      <li>
+        Hojung Lee, <span class="me">Taewoo Jo</span>, Sulim Chun, In-Kwon Lee.
+        Can't Nobody Stop Me! Non-Euclidean Portal Reset for Continuous Walking in Virtual Reality.
+        <span class="venue">IEEE Transactions on Visualization and Computer Graphics (TVCG)</span>, 32(5), 2026.
+      </li>
+      <li>
+        <span class="me">Taewoo Jo</span>, Hojung Lee, Sulim Chun, In-Kwon Lee.
+        Manual-Free Gaze Interaction via Bayesian-Based Implicit Intention Prediction.
+        <span class="venue">IEEE Transactions on Visualization and Computer Graphics (TVCG)</span>, 31(12), 2025.
+      </li>
+      <li>
+        Gwangbin Kim, Dohyeon Yeo, <span class="me">Taewoo Jo</span>, Daniela Rus, Seungjun Kim.
+        Decoding Your Ride: What Information Builds Human Trust on Real Roads?
+        <span class="venue">GetMobile: Mobile Computing and Communications</span>, 29(2), 2025. <span class="award">Invited</span>
+      </li>
+      <li>
+        <span class="me">Taewoo Jo</span>, Dohyeon Yeo, Gwangbin Kim, Seokhyun Hwang, Seungjun Kim.
+        WatchCap: Improving Scanning Efficiency in People with Low Vision through Compensatory Head Movement Stimulation.
+        <span class="venue">Proc. ACM Interact. Mob. Wearable Ubiquitous Technol. (IMWUT)</span>, 8(2), Article 47, 2024.
+      </li>
+      <li>
+        Hwaseung Jeon<sup>*</sup>, <span class="me">Taewoo Jo</span><sup>*</sup>, Dohyeon Yeo<sup>*</sup>, Eunsol An, Yumin Kang, Seungjun Kim.
+        The Way of Water: Exploring the Role of Interaction Elements in Usability Challenges with In-Car VR Experience.
+        <span class="venue">Virtual Reality</span>, 28(3), 2024.
+      </li>
+      <li>
+        Gwangbin Kim, Dohyeon Yeo, <span class="me">Taewoo Jo</span>, Daniela Rus, Seungjun Kim.
+        What and When to Explain? On-Road Evaluation of Explanations in Highly Automated Vehicles.
+        <span class="venue">Proc. ACM Interact. Mob. Wearable Ubiquitous Technol. (IMWUT)</span>, 7(3), Article 104, 2023.
+        <span class="award">Distinguished Paper</span>
+      </li>
+      <li>
+        <span class="me">Taewoo Jo</span>, Dohyeon Yeo, Seungjun Kim.
+        Enhancing Wayfinding Experience in Low-Vision Individuals through a Tailored Mobile Guidance Interface.
+        <span class="venue">Electronics</span>, 12(22), 4561, 2023.
+      </li>
+      <li>
+        <span class="me">Taewoo Jo</span>, Dohyeon Yeo, Seungjun Kim.
+        A Study on User Experience of Mobile Wayfinding Application for Low Vision Pedestrians.
+        <span class="venue">HCI Korea</span>, 2022. <span class="award">Best Paper</span>
+      </li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Awards, Honors and Scholarships</h2>
+    <div class="row">
+      <div class="when">2023</div>
+      <div class="what">Distinguished Paper Award, ACM IMWUT / UbiComp 2023</div>
+    </div>
+    <div class="row">
+      <div class="when">2022 &ndash; 2024</div>
+      <div class="what">GIST Scholarship (M.S., Government Supported)</div>
+    </div>
+    <div class="row">
+      <div class="when">2022</div>
+      <div class="what">Best Paper Award, HCI Korea 2022</div>
+    </div>
+    <div class="row">
+      <div class="when">2017 &ndash; 2022</div>
+      <div class="what">GIST Scholarship (B.S., Government Supported)</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Work Experience</h2>
+    <div class="row">
+      <div class="when">Sep &ndash; Dec 2022</div>
+      <div class="what"><span class="head">Metaverse Fellowship</span><br>
+      <span class="sub">RAPA &times; Meta</span></div>
+    </div>
+    <div class="row">
+      <div class="when">Oct 2022</div>
+      <div class="what"><span class="head">Pitch Your Lab</span><br>
+      <span class="sub">GIST Metaverse Research Center, ISMAR 2022</span></div>
+    </div>
+    <div class="row">
+      <div class="when">Apr &ndash; Jun 2021</div>
+      <div class="what"><span class="head">External Developer</span><br>
+      <span class="sub">Unity Simulation Development, Robotry Co.</span></div>
+    </div>
+    <div class="row">
+      <div class="when">Dec 2019 &ndash; Feb 2020</div>
+      <div class="what"><span class="head">Industrial-Academic Internship</span><br>
+      <span class="sub">CUop, CREATY design &amp; Breez design</span></div>
+    </div>
+    <div class="row">
+      <div class="when">2019 &ndash; Present</div>
+      <div class="what"><span class="head">Senior Mentee</span><br>
+      <span class="sub">Hanlim-Mirae Science Camp, The Korean Academy of Science and Technology (KAST)</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Teaching Experience</h2>
+    <div class="row">
+      <div class="when">Spring 2024</div>
+      <div class="what">Computer Graphics &mdash; Teaching Assistant, Yonsei University</div>
+    </div>
+    <div class="row">
+      <div class="when">Spring 2023</div>
+      <div class="what">Human-Computer Interaction &mdash; Teaching Assistant, GIST</div>
+    </div>
+    <div class="row">
+      <div class="when">2021 &ndash; 2022</div>
+      <div class="what">Mathematics in Civilization &mdash; Teaching Assistant, GIST</div>
+    </div>
+    <div class="row">
+      <div class="when">Spring 2021</div>
+      <div class="what">General Physics &mdash; Teaching Assistant, GIST</div>
+    </div>
+    <div class="row">
+      <div class="when">Fall 2020</div>
+      <div class="what">Introduction to Linear Algebra &mdash; Teaching Assistant, GIST</div>
+    </div>
+  </section>
+
+  <section class="skills">
+    <h2>Technical Skills</h2>
+    <p><span class="k">Languages</span> C#, C++, Python</p>
+    <p><span class="k">Development</span> Unity 3D, XR / VR (Meta Quest Pro, HMD tracking), eye tracking</p>
+    <p><span class="k">Analysis</span> SPSS, JASP</p>
+    <p><span class="k">Modeling</span> Rhino, Autodesk 360</p>
+  </section>
+
+  <p class="foot">Last updated July 2026</p>
+
+</div>
+</body>
+</html>

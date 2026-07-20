@@ -3,12 +3,24 @@
 개인 홈페이지. 빌드 도구 없이 순수 HTML/CSS로 되어 있어, 파일을 push 하면 그대로 배포됩니다.
 
 ```
-index.html      전체 내용 (여기만 고치면 됨)
+index.html      홈페이지 전체 내용 (여기만 고치면 됨)
 style.css       스타일 (색상은 파일 맨 위 :root 변수)
+cv.html         CV 원본 — 여기를 고치고 build-cv.ps1 실행
+build-cv.ps1    cv.html -> assets/cv.pdf 생성 스크립트
 assets/
   profile.jpg   프로필 사진 (이 이름으로 넣으면 자동 표시)
-  cv.pdf        CV
+  casual.jpg    예비 사진
+  cv.pdf        cv.html 에서 자동 생성됨 — 직접 고치지 말 것
+  papers/       논문 PDF ({연도}-{학회}-{약칭}.pdf)
 ```
+
+## CV 수정
+
+`assets/cv.pdf` 는 `cv.html` 에서 생성된 결과물입니다. 직접 편집하지 말고:
+
+1. `cv.html` 수정
+2. `powershell -ExecutionPolicy Bypass -File build-cv.ps1`
+3. commit &amp; push
 
 ## 로컬에서 보기
 
