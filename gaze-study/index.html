@@ -1,0 +1,873 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+</style>
+</head>
+<body>
+<title>참가자 안내 — 시선으로 표적 찾기</title>
+
+<style>
+  :root {
+    --ground: #F5F6F8;
+    --surface: #FFFFFF;
+    --ink: #161A21;
+    --muted: #5A6472;
+    --hairline: #DCE0E6;
+    --accent: #3F6F99;
+    --signal: #A85E12;
+    --signal-soft: #F7EEE1;
+    --signal-line: #E0C39A;
+
+    --font-sans: "Pretendard", "Pretendard Variable", "Apple SD Gothic Neo",
+                 "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+    --font-mono: ui-monospace, "Cascadia Mono", "SF Mono", Consolas,
+                 "Liberation Mono", monospace;
+
+    --measure: 34rem;
+    --wide: 46rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #0E1116;
+      --surface: #161A21;
+      --ink: #E7EBF1;
+      --muted: #99A3B2;
+      --hairline: #272D37;
+      --accent: #7FB1D8;
+      --signal: #DBA05A;
+      --signal-soft: #241C10;
+      --signal-line: #4A3A20;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0E1116;
+    --surface: #161A21;
+    --ink: #E7EBF1;
+    --muted: #99A3B2;
+    --hairline: #272D37;
+    --accent: #7FB1D8;
+    --signal: #DBA05A;
+    --signal-soft: #241C10;
+    --signal-line: #4A3A20;
+  }
+  :root[data-theme="light"] {
+    --ground: #F5F6F8;
+    --surface: #FFFFFF;
+    --ink: #161A21;
+    --muted: #5A6472;
+    --hairline: #DCE0E6;
+    --accent: #3F6F99;
+    --signal: #A85E12;
+    --signal-soft: #F7EEE1;
+    --signal-line: #E0C39A;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.78;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: var(--wide);
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.4rem;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead { display: flex; flex-direction: column; gap: 1rem; }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+  }
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.16;
+    text-wrap: balance;
+    margin: 0;
+  }
+  .standfirst { max-width: var(--measure); color: var(--muted); font-size: 1.03rem; }
+  .masthead-rule { height: 1px; background: var(--hairline); margin-top: 0.5rem; }
+
+  /* ---------- sections ---------- */
+  section { display: flex; flex-direction: column; gap: 1.15rem; }
+  h2 {
+    font-size: 1.34rem;
+    font-weight: 700;
+    letter-spacing: -0.022em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h2 .kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+  h3.sub {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0.8rem 0 0;
+  }
+  p { margin: 0; max-width: var(--measure); }
+  strong { font-weight: 700; }
+  .accent { color: var(--accent); font-weight: 700; }
+
+  /* ---------- viewport figures ---------- */
+  figure { margin: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+  .viewport {
+    background: #000;
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .viewport svg { display: block; width: 100%; height: auto; }
+  figcaption { font-size: 0.88rem; color: var(--muted); max-width: var(--measure); }
+  .figlabel {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+  }
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .diagram svg { display: block; width: 100%; height: auto; }
+
+  /* ---------- legend ---------- */
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 1rem 1.6rem;
+    padding: 1.15rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+  }
+  .legend div { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 0.92rem; line-height: 1.55; }
+  .swatch { width: 20px; height: 20px; border-radius: 50%; flex: 0 0 20px; margin-top: 0.3rem; }
+  .swatch.ctx { background: #4B7AA6; }
+  .swatch.grat { background: repeating-linear-gradient(90deg, #f2f2f2 0 3px, #2b2b2b 3px 6px); }
+  .legend b { display: block; font-weight: 700; }
+  .legend span { color: var(--muted); }
+
+  /* ---------- trial sequence (a real sequence: numbers earn their place) ---------- */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1.6rem;
+  }
+  .step { display: flex; flex-direction: column; gap: 0.6rem; }
+  .step .marker {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+  .step p { font-size: 0.93rem; line-height: 1.62; }
+
+  /* ---------- two-up ---------- */
+  .duo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.5rem;
+  }
+  .method {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+  }
+  .method h3 {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    margin: 0;
+    color: var(--accent);
+  }
+  .method .how { font-size: 0.93rem; line-height: 1.62; }
+  .method .note { font-size: 0.86rem; line-height: 1.6; color: var(--muted); }
+
+  /* ---------- callout ---------- */
+  .callout {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 1.15rem 1.25rem;
+    background: var(--signal-soft);
+    border: 1px solid var(--signal-line);
+    border-radius: 3px;
+  }
+  .callout .tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--signal);
+  }
+  .callout p { font-size: 0.95rem; max-width: var(--measure); }
+
+  /* ---------- session cards ---------- */
+  .sessions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1.2rem;
+  }
+  .ses {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: 1.15rem 1.2rem;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+  }
+  .ses .when {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+  .ses .when em { font-style: normal; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .ses b { font-size: 0.98rem; }
+  .ses p { font-size: 0.89rem; line-height: 1.6; color: var(--muted); }
+  .ses ul { margin: 0; padding-left: 1.05rem; font-size: 0.89rem; line-height: 1.65; }
+  .ses li::marker { color: var(--accent); }
+
+  /* ---------- facts ---------- */
+  .facts { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+  .facts li {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 1.2rem;
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--hairline);
+    font-size: 0.95rem;
+    line-height: 1.62;
+  }
+  .facts li:last-child { border-bottom: 1px solid var(--hairline); }
+  .facts .k {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding-top: 0.4rem;
+  }
+  @media (max-width: 30rem) {
+    .facts li { grid-template-columns: 1fr; gap: 0.15rem; }
+    .facts .k { padding-top: 0; }
+  }
+
+  /* ---------- closing ---------- */
+  .remember {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    padding: 1.7rem 1.5rem;
+    gap: 1.2rem;
+  }
+  .remember h2 { font-size: 1.12rem; }
+  .remember ul {
+    margin: 0; padding: 0; list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    gap: 1.3rem;
+  }
+  .remember li {
+    display: flex; flex-direction: column; gap: 0.35rem;
+    padding-top: 0.9rem;
+    border-top: 2px solid var(--accent);
+  }
+  .remember b { font-size: 1rem; }
+  .remember span { font-size: 0.89rem; color: var(--muted); line-height: 1.58; }
+
+  .signoff {
+    font-size: 0.89rem;
+    color: var(--muted);
+    max-width: var(--measure);
+    padding-top: 1rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  /* ---------- eye-calibration walkthrough ---------- */
+  .calib {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.6rem 1.5rem;
+    margin: 0; padding: 0; list-style: none;
+  }
+  .calib li { display: flex; flex-direction: column; gap: 0.6rem; }
+  .calib .cmark {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+  .shot {
+    border: 1px solid var(--hairline);
+    border-radius: 3px;
+    overflow: hidden;
+    background: #3a3a3a;
+    line-height: 0;
+  }
+  .shot img { display: block; width: 100%; height: auto; }
+  .calib p { font-size: 0.9rem; line-height: 1.62; max-width: none; }
+
+  /* the one moving thing on the page: dwell time filling up */
+  .dwell-arc {
+    stroke-dasharray: 226;
+    stroke-dashoffset: 226;
+    animation: dwellfill 2.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes dwellfill {
+    0%   { stroke-dashoffset: 226; opacity: 0.9; }
+    50%  { stroke-dashoffset: 0;   opacity: 0.9; }
+    78%  { stroke-dashoffset: 0;   opacity: 0.9; }
+    88%  { stroke-dashoffset: 0;   opacity: 0.1; }
+    100% { stroke-dashoffset: 226; opacity: 0.1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dwell-arc { animation: none; stroke-dashoffset: 62; }
+  }
+</style>
+
+<!-- shared stimulus defs: the two grating orientations used everywhere -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="grA" width="13" height="13" patternUnits="userSpaceOnUse" patternTransform="rotate(0)">
+      <rect width="13" height="13" fill="#0d0d0d"/>
+      <rect width="6.5" height="13" fill="#f2f2f2"/>
+    </pattern>
+    <pattern id="grB" width="13" height="13" patternUnits="userSpaceOnUse" patternTransform="rotate(11)">
+      <rect width="13" height="13" fill="#0d0d0d"/>
+      <rect width="6.5" height="13" fill="#f2f2f2"/>
+    </pattern>
+    <filter id="soft" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="0.45"/>
+    </filter>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3.5"/>
+    </filter>
+  </defs>
+</svg>
+
+<main class="page">
+
+  <header class="masthead">
+    <div class="eyebrow">참가자 안내 &middot; 세션 전에 읽어주세요</div>
+    <h1>시선으로 표적을 찾아 선택합니다</h1>
+    <p class="standfirst">
+      헤드셋을 쓰면 검은 화면에 원반들이 나타납니다. 그중 <strong>미리 기억해 둔 줄무늬와 같은 방향</strong>의
+      원반을 눈으로 찾아 선택하는 것 &mdash; 과제는 이게 전부입니다.
+      아래 네 가지만 읽고 오시면 충분합니다.
+    </p>
+    <div class="masthead-rule"></div>
+  </header>
+
+  <!-- ============ 1. 실험 목표 ============ -->
+  <section>
+    <h2><span class="kicker">1 &middot; 실험 목표</span>&lsquo;눈으로 고르는 인터페이스&rsquo;가 쓸 만한지 알아봅니다</h2>
+    <p>
+      요즘 VR/AR 기기는 컨트롤러 없이 <strong>시선으로 물체를 가리키고 손가락으로 확정</strong>하는 방식을 씁니다.
+      편하지만 문제도 있습니다 &mdash; 아직 다 보지도 않았는데 눌러버리거나, 비슷하게 생긴 것을 잘못 고르는 일이 생깁니다.
+    </p>
+    <p>
+      그래서 이 연구는 사람이 <strong>비슷하게 생긴 것들 사이에서 표적을 찾아 고를 때</strong>,
+      얼마나 빠르고 정확한지, 그리고 <strong>고르는 방식(손가락으로 확정 / 계속 바라보기)</strong>에 따라
+      그 결과가 어떻게 달라지는지를 측정합니다.
+    </p>
+
+    <div class="callout">
+      <div class="tag">먼저 말씀드립니다</div>
+      <p>
+        <strong>여러분의 능력을 평가하는 시험이 아닙니다.</strong> 평가 대상은 인터페이스 쪽입니다.
+        틀리는 것도 데이터의 일부라 전혀 문제되지 않고, 기록은 이름 없이 <strong>참가자 번호로만</strong> 저장됩니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 2. 실험 환경 ============ -->
+  <section>
+    <h2><span class="kicker">2 &middot; 실험 환경</span>헤드셋을 쓰고 앉은 채로 진행합니다</h2>
+    <p>
+      Meta Quest Pro를 쓰고 <strong>편히 앉은 자세</strong>로 합니다. 헤드셋이 <strong>눈동자와 손</strong>을 함께
+      인식하므로 컨트롤러는 잡지 않습니다. 시작 전에 짧은 눈 맞춤(캘리브레이션) 과정을 먼저 안내해 드립니다.
+    </p>
+    <p>
+      화면은 완전히 검고, 팔을 뻗으면 닿지 않을 정도의 거리에 원반들이 떠 있습니다.
+      <strong>고개는 자유롭게 돌리셔도 됩니다.</strong> 눈만 굴려서 찾아야 하는 과제가 아닙니다.
+    </p>
+
+
+    <h3 class="sub">시작 전 &mdash; 시선 보정을 한 번 합니다</h3>
+    <p>
+      헤드셋이 <strong>내 눈이 어디를 보는지</strong> 익히는 과정입니다. 1분이면 끝나고,
+      이게 정확해야 뒤의 과제가 제대로 굴러갑니다. 진행자가 설정 화면까지 열어드리면
+      아래 순서대로 따라 하시면 됩니다.
+    </p>
+
+    <ul class="calib">
+      <li>
+        <div class="cmark">1 &middot; 다시 보정</div>
+        <div class="shot"><img src="assets/cal1_redo.jpg" alt="Quest 설정의 Hands and eyes 화면에서 Calibrate eye tracking 항목의 Redo 버튼이 보입니다." loading="lazy"></div>
+        <p>진행자가 <strong>설정 &rarr; Hands &amp; eyes</strong> 화면까지 열어드립니다. <strong>Calibrate eye tracking</strong> 줄의 <strong>Redo</strong>를 누르세요.</p>
+      </li>
+      <li>
+        <div class="cmark">2 &middot; 시작</div>
+        <div class="shot"><img src="assets/cal2_start.jpg" alt="머리를 고정하고 눈으로만 물체를 따라가라는 안내와 Skip, Start 버튼이 있습니다." loading="lazy"></div>
+        <p>&ldquo;머리는 그대로 두고 <strong>눈으로만</strong> 물체를 따라가세요&rdquo;라는 안내가 뜹니다. <strong>Start</strong>를 누르세요.</p>
+      </li>
+      <li>
+        <div class="cmark">3 &middot; 점 따라보기</div>
+        <div class="shot"><img src="assets/cal3_dots.gif" alt="회색 화면 여기저기에 작은 점이 하나씩 차례로 나타납니다." loading="lazy"></div>
+        <p>작은 점이 화면 곳곳에 <strong>하나씩</strong> 나타납니다. 나타나는 즉시 눈으로 옮겨가 사라질 때까지 봅니다. <strong>고개는 움직이지 마세요.</strong> 약 20초.</p>
+      </li>
+      <li>
+        <div class="cmark">4 &middot; 보정 완료</div>
+        <div class="shot"><img src="assets/cal4_done.jpg" alt="Calibration is complete 안내와 Test eye tracking, Done 버튼이 있습니다." loading="lazy"></div>
+        <p>보정이 끝났습니다. 제대로 됐는지 확인하기 위해 <strong>Test eye tracking</strong>을 누르세요.</p>
+      </li>
+      <li>
+        <div class="cmark">5 &middot; 구슬 확인</div>
+        <div class="shot"><img src="assets/cal5_orb.gif" alt="빛나는 구슬이 화면 여기저기로 옮겨 다닙니다." loading="lazy"></div>
+        <p>빛나는 구슬이 나타납니다. 역시 <strong>고개는 고정하고 눈으로만</strong> 따라가세요. 구슬이 시선을 잘 따라오는지 보는 단계입니다. 약 10초.</p>
+      </li>
+      <li>
+        <div class="cmark">6 &middot; 확인 완료</div>
+        <div class="shot"><img src="assets/cal6_check.jpg" alt="Calibration check complete 안내와 Redo calibration, Done, Check again 버튼이 있습니다." loading="lazy"></div>
+        <p>구슬이 보는 곳을 잘 따라왔다면 <strong>Done</strong>. 눈에 띄게 어긋났다면 <strong>Redo calibration</strong>으로 한 번 더 하시면 됩니다.</p>
+      </li>
+    </ul>
+
+    <div class="callout">
+      <div class="tag">보정할 때 중요한 것</div>
+      <p>
+        점과 구슬을 따라갈 때 <strong>고개는 움직이지 말고 눈만</strong> 움직이세요.
+        안경을 쓰신다면 <strong>보정할 때도, 과제 중에도 계속 쓴 채로</strong> 진행합니다 &mdash;
+        중간에 벗거나 헤드셋을 고쳐 쓰면 보정이 어긋납니다.
+      </p>
+    </div>
+
+    <h3 class="sub">화면에서 구분할 것은 두 종류의 원반뿐입니다</h3>
+
+    <figure>
+      <div class="figlabel">헤드셋 화면 &mdash; 원반이 나타난 순간</div>
+      <div class="viewport">
+        <svg viewBox="0 0 460 320" role="img"
+             aria-label="검은 배경에 원반 11개가 원형으로 놓여 있습니다. 그중 두 개는 흰 줄무늬 원반이고 나머지 아홉 개는 파란 단색 원반입니다.">
+          <g>
+            <circle cx="230.0" cy="46.0"  r="16" fill="#4B7AA6"/>
+            <circle cx="290.5" cy="63.8"  r="16" fill="#4B7AA6"/>
+            <circle cx="331.9" cy="111.5" r="16" fill="#4B7AA6"/>
+            <circle cx="340.9" cy="173.9" r="16" fill="url(#grA)" filter="url(#soft)"/>
+            <circle cx="314.6" cy="231.3" r="16" fill="#4B7AA6"/>
+            <circle cx="261.5" cy="265.5" r="16" fill="#4B7AA6"/>
+            <circle cx="198.5" cy="265.5" r="16" fill="#4B7AA6"/>
+            <circle cx="145.4" cy="231.3" r="16" fill="#4B7AA6"/>
+            <circle cx="119.1" cy="173.9" r="16" fill="url(#grB)" filter="url(#soft)"/>
+            <circle cx="128.1" cy="111.5" r="16" fill="#4B7AA6"/>
+            <circle cx="169.5" cy="63.8"  r="16" fill="#4B7AA6"/>
+          </g>
+
+          <g font-family="ui-monospace, Consolas, monospace" font-size="11.5" letter-spacing="1">
+            <line x1="359" y1="171" x2="396" y2="152" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1"/>
+            <text x="400" y="149" fill="#ffffff" fill-opacity="0.85">표적</text>
+
+            <line x1="101" y1="171" x2="64" y2="152" stroke="#ffffff" stroke-opacity="0.4" stroke-width="1"/>
+            <text x="60" y="149" fill="#ffffff" fill-opacity="0.85" text-anchor="end">닮은꼴</text>
+
+            <line x1="198.5" y1="283" x2="184" y2="300" stroke="#ffffff" stroke-opacity="0.28" stroke-width="1"/>
+            <text x="180" y="304" fill="#ffffff" fill-opacity="0.5" text-anchor="end">배경 원반</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>
+        원반은 언제나 11개입니다. 표적에는 아무 표시도 붙지 않습니다 &mdash; 줄무늬 방향만이 단서입니다.
+      </figcaption>
+    </figure>
+
+    <div class="legend">
+      <div>
+        <span class="swatch grat"></span>
+        <span><b>줄무늬 원반 &middot; 2개</b>둘 중 하나가 표적이고, 나머지 하나는 방향이 조금 다른 닮은꼴입니다.</span>
+      </div>
+      <div>
+        <span class="swatch ctx"></span>
+        <span><b>파란 원반 &middot; 9개</b>배경입니다. 살펴볼 필요도, 피할 필요도 없습니다.</span>
+      </div>
+    </div>
+
+    <p>
+      원반들이 나타나기 직전, 화면 가운데에 <span class="accent">기준 패턴</span>이 크게 한 번 보입니다.
+      그것과 <strong>같은 방향</strong>의 줄무늬가 표적입니다.
+    </p>
+
+    <div class="callout">
+      <div class="tag">알아두세요</div>
+      <p>
+        두 줄무늬의 차이는 <strong>아주 작을 수 있습니다.</strong> 또 완벽히 수직이거나 수평인 쪽이
+        항상 표적인 것도 아닙니다 &mdash; 기준 패턴을 기억해 두고 그것과 비교해야만 맞출 수 있게 만들어져 있습니다.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ 3. 클릭 방식 ============ -->
+  <section>
+    <h2><span class="kicker">3 &middot; 클릭 방식</span>고르는 방법은 두 가지입니다</h2>
+    <p>
+      어느 쪽이든 <strong>먼저 표적을 바라보는 것</strong>이 공통이고, 확정하는 방법만 다릅니다.
+      지금 어떤 방식인지는 <strong>화면 아래에 항상 표시</strong>되고, 휴식 화면에서도 다음 블록의 방식을 미리 알려줍니다.
+    </p>
+
+    <div class="duo">
+
+      <div class="method">
+        <h3>PINCH &mdash; 핀치</h3>
+        <div class="viewport">
+          <svg viewBox="0 0 300 200" role="img"
+               aria-label="표적을 바라본 상태에서 엄지와 검지의 끝을 맞붙이는 손 모양입니다.">
+            <!-- gazed target on the left -->
+            <circle cx="72" cy="92" r="24" fill="url(#grA)" filter="url(#soft)"/>
+            <circle cx="72" cy="92" r="34" fill="none" stroke="#ffffff" stroke-opacity="0.55"
+                    stroke-width="1.4" stroke-dasharray="3 4"/>
+            <text x="72" y="152" text-anchor="middle" font-family="system-ui, sans-serif"
+                  font-size="11.5" fill="#ffffff" fill-opacity="0.5">보면서</text>
+
+            <line x1="118" y1="92" x2="150" y2="92" stroke="#ffffff" stroke-opacity="0.25"
+                  stroke-width="1" stroke-dasharray="2 5"/>
+
+            <!-- hand: palm + wrist -->
+            <g>
+              <rect x="196" y="104" width="56" height="62" rx="24" fill="#ffffff" fill-opacity="0.8"/>
+              <rect x="208" y="150" width="32" height="46" rx="14" fill="#ffffff" fill-opacity="0.8"/>
+              <!-- folded fingers, read as creases on the palm -->
+              <g stroke="#0a0a0a" stroke-opacity="0.42" stroke-width="2" stroke-linecap="round">
+                <line x1="208" y1="122" x2="240" y2="122"/>
+                <line x1="208" y1="136" x2="240" y2="136"/>
+                <line x1="210" y1="150" x2="238" y2="150"/>
+              </g>
+              <!-- index finger: up from the left of the palm, curling right -->
+              <path d="M 203 110 C 198 84, 204 66, 220 60" fill="none" stroke="#ffffff"
+                    stroke-opacity="0.9" stroke-width="15" stroke-linecap="round"/>
+              <!-- thumb: up from the right of the palm, curling left to meet it -->
+              <path d="M 246 112 C 250 88, 244 70, 231 63" fill="none" stroke="#ffffff"
+                    stroke-opacity="0.9" stroke-width="16" stroke-linecap="round"/>
+              <!-- contact -->
+              <circle cx="226" cy="60" r="12" fill="#ffffff" fill-opacity="0.18"/>
+              <circle cx="226" cy="60" r="3.4" fill="#ffffff"/>
+            </g>
+
+            <!-- two small arrows: the tips come together -->
+            <g stroke="#ffffff" stroke-opacity="0.6" stroke-width="1.8" fill="none" stroke-linecap="round">
+              <path d="M 196 40 L 214 50"/>
+              <path d="M 208 44 L 214 50 L 207 55"/>
+              <path d="M 258 40 L 240 50"/>
+              <path d="M 246 44 L 240 50 L 247 55"/>
+            </g>
+
+            <text x="226" y="192" text-anchor="middle" font-family="ui-monospace, Consolas, monospace"
+                  font-size="10.5" letter-spacing="1.4" fill="#ffffff" fill-opacity="0.5">엄지 + 검지</text>
+          </svg>
+        </div>
+        <p class="how">
+          표적을 <strong>보면서</strong> 엄지와 검지의 <strong>끝을 가볍게 맞붙였다 뗍니다.</strong>
+          붙는 순간 선택됩니다.
+        </p>
+        <p class="note">
+          손은 무릎이나 팔걸이 위, 편한 곳에 두세요. 팔을 들어 올리거나 카메라 쪽으로 뻗을 필요는 없습니다.
+        </p>
+      </div>
+
+      <div class="method">
+        <h3>DWELL &mdash; 응시</h3>
+        <div class="viewport">
+          <svg viewBox="0 0 300 200" role="img"
+               aria-label="표적을 계속 바라보면 테두리가 한 바퀴 채워지며 자동으로 선택됩니다.">
+            <circle cx="150" cy="86" r="30" fill="url(#grA)" filter="url(#soft)"/>
+            <circle cx="150" cy="86" r="42" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="3.5"/>
+            <circle class="dwell-arc" cx="150" cy="86" r="36" fill="none" stroke="#ffffff"
+                    stroke-width="3.5" stroke-linecap="round" transform="rotate(-90 150 86)"
+                    stroke-opacity="0.95"/>
+            <text x="150" y="160" text-anchor="middle" font-family="system-ui, sans-serif"
+                  font-size="11.5" fill="#ffffff" fill-opacity="0.5">계속 보고 있으면</text>
+            <text x="150" y="182" text-anchor="middle" font-family="ui-monospace, Consolas, monospace"
+                  font-size="10.5" letter-spacing="1.4" fill="#ffffff" fill-opacity="0.5">자동 선택</text>
+          </svg>
+        </div>
+        <p class="how">
+          손은 전혀 쓰지 않습니다. 표적을 <strong>정해진 시간 동안 계속 바라보면</strong> 저절로 선택됩니다.
+        </p>
+        <p class="note">
+          시간은 블록마다 다릅니다 (약 0.4&ndash;1.2초). 짧은 블록에서는 &ldquo;둘러보다 잘못 선택되는&rdquo; 느낌이
+          들 수 있는데, 그것도 저희가 보려는 현상이니 신경 쓰지 마세요.
+        </p>
+      </div>
+
+    </div>
+
+    <h3 class="sub">&lsquo;삐&rsquo; 소리가 나면 그 자리에서 즉시 고르세요</h3>
+    <p>
+      과제 중 가끔 짧은 <strong>삐</strong> 소리가 납니다. 그 순간 아직 표적을 못 찾았더라도
+      <strong>기다리지 말고 바로 고르세요.</strong> 찍어도 괜찮습니다 &mdash; 원래 그러라고 넣어둔 신호입니다.
+    </p>
+    <p>
+      뒤이어 <em>&ldquo;표적이었던 원반을 보고 핀치&rdquo;</em>라는 질문이 나올 수 있습니다.
+      확신이 없어도 가장 그럴듯한 원반 하나를 고르면 됩니다.
+    </p>
+  </section>
+
+  <!-- ============ 4. 세션별 프로토콜 ============ -->
+  <section>
+    <h2><span class="kicker">4 &middot; 세션별 프로토콜</span>모든 세션이 같은 흐름으로 진행됩니다</h2>
+    <p>
+      아래 네 단계가 한 묶음이고, <strong>③&ndash;④가 11번 반복</strong>된 뒤 새 기준 패턴으로 다음 묶음이 시작됩니다.
+      묶음 몇 개가 모여 한 블록이 되고, 블록이 끝날 때마다 휴식 화면이 나옵니다.
+    </p>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="marker">① 중앙 응시</div>
+        <div class="viewport">
+          <svg viewBox="0 0 300 190" role="img" aria-label="검은 화면 가운데에 작은 흰 점 하나가 있습니다.">
+            <circle cx="150" cy="95" r="13" fill="#ffffff" fill-opacity="0.1" filter="url(#glow)"/>
+            <circle cx="150" cy="95" r="4.5" fill="#ffffff"/>
+          </svg>
+        </div>
+        <p>가운데 흰 점을 봅니다. 잠깐 바라보고 있으면 저절로 넘어갑니다.</p>
+      </div>
+
+      <div class="step">
+        <div class="marker">② 기준 패턴</div>
+        <div class="viewport">
+          <svg viewBox="0 0 300 190" role="img" aria-label="화면 가운데에 큰 줄무늬 원반이 있고 아래에 안내 문구가 있습니다.">
+            <circle cx="150" cy="78" r="42" fill="url(#grA)" filter="url(#soft)"/>
+            <text x="150" y="146" text-anchor="middle" font-family="system-ui, sans-serif"
+                  font-size="12.5" fill="#ffffff" fill-opacity="0.85">이 패턴을 기억하세요</text>
+            <text x="150" y="167" text-anchor="middle" font-family="system-ui, sans-serif"
+                  font-size="12.5" fill="#ffffff" fill-opacity="0.45">준비되면 핀치</text>
+          </svg>
+        </div>
+        <p>줄무늬 방향을 기억합니다. <strong>시간 제한은 없습니다.</strong> 다 외웠으면 핀치하세요.</p>
+      </div>
+
+      <div class="step">
+        <div class="marker">③ 찾기</div>
+        <div class="viewport">
+          <svg viewBox="0 0 300 190" role="img" aria-label="원반 11개 가운데 오른쪽 줄무늬 원반으로 시선이 향해 있습니다.">
+            <g>
+              <circle cx="150.0" cy="28.0"  r="10" fill="#4B7AA6"/>
+              <circle cx="186.8" cy="38.8"  r="10" fill="#4B7AA6"/>
+              <circle cx="211.9" cy="67.8"  r="10" fill="#4B7AA6"/>
+              <circle cx="217.3" cy="105.7" r="10" fill="url(#grA)" filter="url(#soft)"/>
+              <circle cx="201.4" cy="140.5" r="10" fill="#4B7AA6"/>
+              <circle cx="169.2" cy="161.2" r="10" fill="#4B7AA6"/>
+              <circle cx="130.8" cy="161.2" r="10" fill="#4B7AA6"/>
+              <circle cx="98.6"  cy="140.5" r="10" fill="#4B7AA6"/>
+              <circle cx="82.7"  cy="105.7" r="10" fill="url(#grB)" filter="url(#soft)"/>
+              <circle cx="88.1"  cy="67.8"  r="10" fill="#4B7AA6"/>
+              <circle cx="113.2" cy="38.8"  r="10" fill="#4B7AA6"/>
+            </g>
+            <circle cx="217.3" cy="105.7" r="18" fill="none" stroke="#ffffff" stroke-opacity="0.7"
+                    stroke-width="1.4" stroke-dasharray="3 4"/>
+          </svg>
+        </div>
+        <p>기준과 <strong>같은 방향</strong>의 줄무늬 원반으로 시선을 옮깁니다.</p>
+      </div>
+
+      <div class="step">
+        <div class="marker">④ 선택 &middot; 반복</div>
+        <div class="viewport">
+          <svg viewBox="0 0 300 190" role="img" aria-label="선택 뒤 다음 표적이 반대편에 나타나 같은 과정을 반복합니다.">
+            <g>
+              <circle cx="150.0" cy="28.0"  r="10" fill="#4B7AA6"/>
+              <circle cx="186.8" cy="38.8"  r="10" fill="#4B7AA6"/>
+              <circle cx="211.9" cy="67.8"  r="10" fill="#4B7AA6"/>
+              <circle cx="217.3" cy="105.7" r="10" fill="#4B7AA6"/>
+              <circle cx="201.4" cy="140.5" r="10" fill="url(#grB)" filter="url(#soft)"/>
+              <circle cx="169.2" cy="161.2" r="10" fill="#4B7AA6"/>
+              <circle cx="130.8" cy="161.2" r="10" fill="#4B7AA6"/>
+              <circle cx="98.6"  cy="140.5" r="10" fill="#4B7AA6"/>
+              <circle cx="82.7"  cy="105.7" r="10" fill="url(#grA)" filter="url(#soft)"/>
+              <circle cx="88.1"  cy="67.8"  r="10" fill="#4B7AA6"/>
+              <circle cx="113.2" cy="38.8"  r="10" fill="#4B7AA6"/>
+            </g>
+            <path d="M 205 118 Q 150 178 95 118" fill="none" stroke="#ffffff" stroke-opacity="0.38"
+                  stroke-width="1.3" stroke-dasharray="3 4"/>
+            <circle cx="82.7" cy="105.7" r="18" fill="none" stroke="#ffffff" stroke-opacity="0.7"
+                    stroke-width="1.4" stroke-dasharray="3 4"/>
+          </svg>
+        </div>
+        <p>선택하면 곧바로 <strong>다음 표적</strong>이 다른 자리에 나타납니다. 기준 패턴은 그대로입니다.</p>
+      </div>
+
+    </div>
+
+    <h3 class="sub">세션은 모두 세 번, 내용이 조금씩 다릅니다</h3>
+    <p>이어서 하셔도 되고 날짜를 나눠서 하셔도 됩니다. 아래는 각 세션에서 무엇을 하는지입니다.</p>
+
+    <div class="sessions">
+
+      <div class="ses">
+        <div class="when"><span>세션 1</span><em>약 20&ndash;25분</em></div>
+        <b>패턴 비교 &rarr; 본 과제</b>
+        <ul>
+          <li>맨 앞에 <strong>짧은 패턴 비교 과제</strong> (5분, 첫 세션에만)</li>
+          <li>연습 뒤 본 과제</li>
+          <li>선택은 <strong>핀치만</strong> 사용</li>
+          <li>원반의 <strong>크기와 간격</strong>이 블록마다 달라집니다</li>
+          <li>가끔 삐 소리</li>
+        </ul>
+      </div>
+
+      <div class="ses">
+        <div class="when"><span>세션 2</span><em>약 15분</em></div>
+        <b>선택 방식 비교</b>
+        <ul>
+          <li>연습 뒤 본 과제</li>
+          <li><strong>핀치와 응시가 블록마다 번갈아</strong> 나옵니다</li>
+          <li>응시 시간도 블록마다 달라집니다</li>
+          <li>마지막 블록은 <strong>삐 소리가 자주</strong> 나고, 표적을 되묻는 질문이 붙습니다</li>
+        </ul>
+      </div>
+
+      <div class="ses">
+        <div class="when"><span>세션 3</span><em>약 12분</em></div>
+        <b>난이도 비교</b>
+        <ul>
+          <li>연습 뒤 본 과제</li>
+          <li>선택은 <strong>핀치만</strong> 사용</li>
+          <li><strong>두 줄무늬의 차이</strong>가 블록마다 커지거나 작아집니다</li>
+          <li>아주 어려운 블록도, 아주 쉬운 블록도 있습니다</li>
+          <li>가끔 삐 소리</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <h3 class="sub">첫 세션의 패턴 비교 과제는 이렇게 진행됩니다</h3>
+
+    <figure>
+      <div class="viewport">
+        <svg viewBox="0 0 640 180" role="img"
+             aria-label="첫 번째 줄무늬, 빈 화면, 두 번째 줄무늬가 차례로 나타나고 마지막에 같음과 다름 선택지가 나타납니다.">
+          <circle cx="72" cy="76" r="30" fill="url(#grA)" filter="url(#soft)"/>
+
+          <line x1="118" y1="76" x2="176" y2="76" stroke="#ffffff" stroke-opacity="0.22"
+                stroke-width="1" stroke-dasharray="2 5"/>
+
+          <circle cx="222" cy="76" r="30" fill="none" stroke="#ffffff" stroke-opacity="0.13"
+                  stroke-width="1" stroke-dasharray="3 5"/>
+
+          <line x1="268" y1="76" x2="326" y2="76" stroke="#ffffff" stroke-opacity="0.22"
+                stroke-width="1" stroke-dasharray="2 5"/>
+
+          <circle cx="372" cy="76" r="30" fill="url(#grB)" filter="url(#soft)"/>
+
+          <line x1="418" y1="76" x2="462" y2="76" stroke="#ffffff" stroke-opacity="0.22"
+                stroke-width="1" stroke-dasharray="2 5"/>
+
+          <circle cx="504" cy="76" r="27" fill="#40485A"/>
+          <text x="504" y="81" text-anchor="middle" font-family="system-ui, sans-serif"
+                font-size="13" fill="#ffffff">같음</text>
+          <circle cx="580" cy="76" r="27" fill="#40485A"/>
+          <text x="580" y="81" text-anchor="middle" font-family="system-ui, sans-serif"
+                font-size="13" fill="#ffffff">다름</text>
+
+          <g font-family="ui-monospace, Consolas, monospace" font-size="9.5" letter-spacing="1.2"
+             fill="#ffffff" fill-opacity="0.42">
+            <text x="72"  y="150" text-anchor="middle">첫 번째</text>
+            <text x="222" y="150" text-anchor="middle">빈 화면</text>
+            <text x="372" y="150" text-anchor="middle">두 번째</text>
+            <text x="542" y="150" text-anchor="middle">응답</text>
+          </g>
+        </svg>
+      </div>
+      <figcaption>
+        줄무늬가 두 번 아주 짧게 나타납니다. 방향이 같으면 왼쪽 <strong>같음</strong>,
+        다르면 오른쪽 <strong>다름</strong>을 보고 핀치하세요. 헷갈리는 경우가 많은 게 정상이니
+        <strong>모르겠어도 하나는 고르시면</strong> 됩니다.
+      </figcaption>
+    </figure>
+
+    <h3 class="sub">그 밖에 알아두면 편한 것들</h3>
+    <ul class="facts">
+      <li>
+        <span class="k">피드백</span>
+        <span>정답 여부는 대부분 알려주지 않습니다. 맨 앞 연습에서만 표시됩니다. 조용하다고 해서 틀린 것이 아닙니다.</span>
+      </li>
+      <li>
+        <span class="k">휴식</span>
+        <span>블록 사이마다 휴식 화면이 나오고, 남은 블록 수가 함께 표시됩니다. <strong>원하는 만큼 쉬고</strong> 준비되면 핀치하세요.</span>
+      </li>
+      <li>
+        <span class="k">놓쳤을 때</span>
+        <span>10초 안에 고르지 않으면 그냥 다음으로 넘어갑니다. 한두 번 놓쳐도 전혀 문제되지 않습니다.</span>
+      </li>
+      <li>
+        <span class="k">중단</span>
+        <span>어지럽거나 눈이 불편하면 <strong>언제든 말씀해 주세요.</strong> 즉시 멈출 수 있고, 이유를 설명하지 않으셔도 됩니다.</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ============ 마무리 ============ -->
+  <section class="remember">
+    <h2>과제 중 기억할 것은 셋뿐입니다</h2>
+    <ul>
+      <li>
+        <b>기준 패턴과 같은 방향</b>
+        <span>가운데에서 본 줄무늬와 같은 방향의 원반이 표적입니다.</span>
+      </li>
+      <li>
+        <b>빠르게, 그리고 정확하게</b>
+        <span>둘 다 중요합니다. 한쪽만 신경 쓰지 않으셔도 됩니다.</span>
+      </li>
+      <li>
+        <b>모르겠어도 하나는 선택</b>
+        <span>특히 삐 소리가 났을 때와 패턴 비교 과제에서요.</span>
+      </li>
+    </ul>
+  </section>
+
+  <p class="signoff">
+    궁금한 점은 시작 전에 편하게 물어봐 주세요. 시작한 뒤에도 휴식 화면에서는 얼마든지 이야기하실 수 있습니다.
+  </p>
+
+</main>
+</body>
+</html>
