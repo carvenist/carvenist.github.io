@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light dark">
+<title>복무 관리</title>
+<link rel="icon" href="data:,">
+<script>
+  // 메인 페이지와 같은 키('theme')를 써서 다크모드 설정을 공유한다
+  try {
+    var t = localStorage.getItem('theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+</script>
+<style>
+  /* 팔레트는 ../style.css 와 동일. 여기에 상태 색만 추가 */
+  :root {
+    --fg: #1a1a1a; --fg-dim: #666; --fg-faint: #999;
+    --bg: #fdfdfc; --accent: #7a1f1f; --rule: #e3e3e0; --badge-bg: #f0eeea;
+    --card: #ffffff;
+    --ok: #2f7a3a; --ok-bg: #e6f2e7;
+    --warn: #9a6200; --warn-bg: #fbf1dc;
+    --bad: #b3261e; --bad-bg: #f9e3e1;
+    --font-sans: "Pretendard", "Pretendard Variable", "Apple SD Gothic Neo", system-ui, -apple-system, "Segoe UI", "Noto Sans KR", sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fg: #e8e6e3; --fg-dim: #a0a0a0; --fg-faint: #777;
+      --bg: #16161a; --accent: #d98a8a; --rule: #2e2e33; --badge-bg: #2a2a30;
+      --card: #1d1d22;
+      --ok: #7fc48a; --ok-bg: #1e2f21;
+      --warn: #e2b04a; --warn-bg: #33290f;
+      --bad: #f28b82; --bad-bg: #3a1f1d;
+    }
+  }
+  :root[data-theme="dark"] {
+    --fg: #e8e6e3; --fg-dim: #a0a0a0; --fg-faint: #777;
+    --bg: #16161a; --accent: #d98a8a; --rule: #2e2e33; --badge-bg: #2a2a30;
+    --card: #1d1d22;
+    --ok: #7fc48a; --ok-bg: #1e2f21;
+    --warn: #e2b04a; --warn-bg: #33290f;
+    --bad: #f28b82; --bad-bg: #3a1f1d;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  html, body { overflow-x: hidden; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: var(--font-sans); font-size: 15px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+
+  h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 0.2rem; }
+  h2 {
+    font-size: 0.74rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--fg-faint); margin: 0 0 0.9rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--rule);
+  }
+  h2 .right { float: right; text-transform: none; letter-spacing: 0; font-weight: 400; }
+  section { margin-bottom: 2.4rem; }
+  .sub { margin: 0; color: var(--fg-dim); font-size: 0.92rem; }
+  .muted { color: var(--fg-faint); }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  #theme-toggle {
+    position: fixed; top: 1rem; right: 1rem; z-index: 10; width: 34px; height: 34px; padding: 0;
+    border: 1px solid var(--rule); border-radius: 50%; background: var(--bg); color: var(--fg-dim);
+    font-size: 14px; line-height: 1; cursor: pointer;
+  }
+  #theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---- alerts ---- */
+  .alert {
+    border-left: 3px solid var(--warn); background: var(--warn-bg); color: var(--fg);
+    padding: 0.6rem 0.85rem; border-radius: 4px; margin: 0 0 0.6rem; font-size: 0.92rem;
+  }
+  .alert.bad { border-left-color: var(--bad); background: var(--bad-bg); }
+  .alert.ok { border-left-color: var(--ok); background: var(--ok-bg); }
+  .alert b { font-weight: 700; }
+
+  /* ---- cards ---- */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.7rem; }
+  .card {
+    border: 1px solid var(--rule); background: var(--card); border-radius: 6px; padding: 0.8rem 0.95rem;
+    min-width: 0;
+  }
+  .card .k { font-size: 0.74rem; color: var(--fg-faint); letter-spacing: 0.04em; margin-bottom: 0.25rem; }
+  .card .v { font-size: 1.35rem; font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .card .v.ok { color: var(--ok); }
+  .card .v.warn { color: var(--warn); }
+  .card .v.bad { color: var(--bad); }
+  .card .v.big { font-size: 1.9rem; font-family: var(--font-mono); letter-spacing: -0.01em; }
+  .card .d { font-size: 0.8rem; color: var(--fg-dim); margin-top: 0.3rem; }
+  .card.wide { grid-column: 1 / -1; }
+
+  .bar { height: 5px; background: var(--badge-bg); border-radius: 3px; overflow: hidden; margin-top: 0.5rem; }
+  .bar i { display: block; height: 100%; background: var(--accent); }
+
+  /* ---- today ---- */
+  .today-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+  @media (max-width: 640px) { .today-grid { grid-template-columns: 1fr; } }
+  .targets { list-style: none; margin: 0.4rem 0 0; padding: 0; font-size: 0.9rem; }
+  .targets li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.25rem 0; border-top: 1px dashed var(--rule); }
+  .targets li:first-child { border-top: 0; }
+  .targets .t { color: var(--fg-dim); }
+  .targets .r { font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+
+  /* ---- buttons & form ---- */
+  button, .btn {
+    font: inherit; font-size: 0.86rem; padding: 0.38rem 0.75rem; border-radius: 4px; cursor: pointer;
+    border: 1px solid var(--rule); background: var(--card); color: var(--fg);
+  }
+  button:hover { border-color: var(--accent); color: var(--accent); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.primary:hover { filter: brightness(1.1); color: #fff; }
+  button.danger:hover { border-color: var(--bad); color: var(--bad); }
+  button.small { font-size: 0.78rem; padding: 0.22rem 0.55rem; }
+  .btnrow { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+
+  form.entry { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.6rem 0.8rem; align-items: end; }
+  form.entry label { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.78rem; color: var(--fg-faint); }
+  form.entry input, form.entry select, .settings input, .settings textarea {
+    font: inherit; font-size: 0.92rem; padding: 0.38rem 0.5rem; border: 1px solid var(--rule); border-radius: 4px;
+    background: var(--card); color: var(--fg); min-width: 0; width: 100%;
+  }
+  form.entry input:focus, .settings input:focus, .settings textarea:focus { outline: none; border-color: var(--accent); }
+  form.entry .actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center; }
+  form.entry .preview { font-size: 0.86rem; color: var(--fg-dim); margin-left: auto; }
+
+  /* ---- tables ---- */
+  .tbl-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+  th, td { padding: 0.42rem 0.5rem; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; vertical-align: top; }
+  th { font-size: 0.72rem; font-weight: 600; color: var(--fg-faint); letter-spacing: 0.06em; text-transform: uppercase; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr.clickable { cursor: pointer; }
+  tr.clickable:hover td { background: var(--badge-bg); }
+  tr.total td { font-weight: 600; border-bottom: 0; }
+  tr.month td { background: var(--badge-bg); font-weight: 600; font-size: 0.8rem; color: var(--fg-dim); }
+  td .flag { display: block; white-space: normal; font-size: 0.76rem; color: var(--bad); }
+  td .note { display: block; white-space: normal; font-size: 0.78rem; color: var(--fg-faint); }
+
+  .chip {
+    display: inline-block; padding: 0.05rem 0.45rem; border-radius: 3px; font-size: 0.74rem; font-weight: 600;
+    background: var(--badge-bg); color: var(--fg-dim); letter-spacing: 0.02em; white-space: nowrap;
+  }
+  .chip.st-work, .chip.st-trip, .chip.st-official { background: var(--ok-bg); color: var(--ok); }
+  .chip.st-half, .chip.st-leave, .chip.st-sick { background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
+  .chip.st-holiday, .chip.st-future, .chip.st-before, .chip.st-today { background: var(--badge-bg); color: var(--fg-faint); }
+  .chip.st-working { background: var(--warn-bg); color: var(--warn); }
+  .chip.st-absent, .chip.st-short, .chip.st-incomplete, .chip.st-error { background: var(--bad-bg); color: var(--bad); }
+
+  .weeknav { display: flex; gap: 0.4rem; align-items: center; margin-bottom: 0.7rem; flex-wrap: wrap; }
+  .weeknav .range { font-weight: 600; margin: 0 0.3rem; }
+  .weeksum { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; font-size: 0.9rem; margin: 0.6rem 0 0; color: var(--fg-dim); }
+  .weeksum b { color: var(--fg); font-variant-numeric: tabular-nums; }
+  .weeksum .bad { color: var(--bad); }
+  .weeksum .ok { color: var(--ok); }
+
+  /* ---- settings / rules ---- */
+  details > summary { cursor: pointer; font-weight: 600; font-size: 0.95rem; color: var(--fg-dim); list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+  details > summary::before { content: "▸ "; color: var(--fg-faint); }
+  details[open] > summary::before { content: "▾ "; }
+  .settings { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.6rem 0.8rem; margin-top: 0.8rem; }
+  .settings label { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.78rem; color: var(--fg-faint); }
+  .settings .full { grid-column: 1 / -1; }
+  .settings textarea { font-family: var(--font-mono); font-size: 0.82rem; min-height: 9rem; resize: vertical; }
+  .rules { margin: 0.8rem 0 0; padding-left: 1.2rem; font-size: 0.9rem; }
+  .rules li { margin-bottom: 0.45rem; }
+  .rules li b { font-weight: 600; }
+  .rules ul { margin: 0.25rem 0 0; padding-left: 1.1rem; color: var(--fg-dim); }
+  .hint { font-size: 0.8rem; color: var(--fg-faint); margin: 0.5rem 0 0; }
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 0.78rem; color: var(--fg-faint); }
+  footer p { margin: 0; }
+
+  @media (max-width: 600px) {
+    main { padding: 2rem 1rem 3rem; }
+    .card .v { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+<button id="theme-toggle" type="button" aria-label="다크모드 전환" title="다크모드 전환">◐</button>
+<main>
+
+  <header style="margin-bottom:1.6rem">
+    <h1>전문연구요원 복무 관리</h1>
+    <p class="sub" id="service-line"></p>
+  </header>
+
+  <div id="alerts"></div>
+
+  <section>
+    <h2>오늘 <span class="right muted" id="today-label"></span></h2>
+    <div id="today"></div>
+  </section>
+
+  <section>
+    <h2>주간 현황</h2>
+    <div id="week"></div>
+  </section>
+
+  <section>
+    <h2>누계</h2>
+    <div id="totals"></div>
+  </section>
+
+  <section>
+    <h2>기록 입력</h2>
+    <form class="entry" id="entry" autocomplete="off">
+      <label>날짜 <input type="date" id="f-date" required></label>
+      <label>구분
+        <select id="f-type">
+          <option value="work">출근</option>
+          <option value="half">반차(4h) + 출근</option>
+          <option value="leave">연차 (1일)</option>
+          <option value="sick">병가</option>
+          <option value="official">공가 · 경조휴가</option>
+          <option value="trip">출장 · 파견</option>
+        </select>
+      </label>
+      <label>출근 <input type="time" id="f-in"></label>
+      <label>퇴근 <input type="time" id="f-out"></label>
+      <label style="grid-column: span 2">비고 <input type="text" id="f-note" placeholder="예: 지문 누락 → 복무변경 신고"></label>
+      <div class="actions">
+        <button type="submit" class="primary">저장</button>
+        <button type="button" id="f-now-in" class="small">지금 출근</button>
+        <button type="button" id="f-now-out" class="small">지금 퇴근</button>
+        <button type="button" id="f-del" class="small danger">삭제</button>
+        <span class="preview" id="f-preview"></span>
+      </div>
+    </form>
+    <p class="hint">날짜를 고르면 기존 기록이 불러와집니다. 저장한 데이터는 이 브라우저(localStorage)에만 남습니다 — 아래 설정에서 JSON으로 내보내 백업하세요.</p>
+  </section>
+
+  <section>
+    <h2>전체 기록 <span class="right muted" id="records-count"></span></h2>
+    <div id="records" class="tbl-wrap"></div>
+  </section>
+
+  <section>
+    <details id="settings-details">
+      <summary>설정 · 백업</summary>
+      <div class="settings">
+        <label>복무 시작일 <input type="date" id="s-start"></label>
+        <label>의무복무 기간(년) <input type="number" id="s-years" min="1" max="5"></label>
+        <label>연가 일수 (1/2/3년차) <input type="text" id="s-leave" placeholder="12,15,15"></label>
+        <label>병가 한도(일, 통틀어) <input type="number" id="s-sick" min="0"></label>
+        <label class="full">공휴일 (한 줄에 하나: YYYY-MM-DD 이름) — 평일만 계산에 반영
+          <textarea id="s-holidays" spellcheck="false"></textarea>
+        </label>
+        <div class="full btnrow">
+          <button type="button" id="s-save" class="primary">설정 저장</button>
+          <span style="flex:1"></span>
+          <button type="button" id="s-export">JSON 내보내기</button>
+          <button type="button" id="s-import">JSON 가져오기</button>
+          <input type="file" id="s-file" accept="application/json,.json" style="display:none">
+          <button type="button" id="s-clear" class="danger">전체 삭제</button>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <section>
+    <details>
+      <summary>규정 요약 (2026-09-01 기준 대학원 안내)</summary>
+      <ol class="rules">
+        <li><b>주 5일, 주 40시간.</b> 월~금 매일 출·퇴근 인증(지문). 공휴일·휴가일이 있는 주는 <b>근무일 × 8시간</b>만 채우면 됨.</li>
+        <li><b>하루 최소 4시간 ~ 최대 12시간</b>(휴게 제외). 출퇴근 가능 시간 06:00~23:59, 반드시 당일 안에서. 자정 넘긴 퇴근은 근무변경 신청 필요.</li>
+        <li><b>휴게 자동 차감.</b> 중식 11~13시, 석식 18~20시 구간에서는 각각 <b>1시간까지만</b> 근무로 인정(그 이상 머문 시간은 휴게). 식사 시간대와 무관하게 하루 휴게는 <b>최소 30분</b>(식사 차감이 30분 미만인 날에도 적용 — 9/17 포탈 기록으로 확인).
+          <ul><li>예: 13:40 출근 → 20:00 이후 퇴근이면 석식 1시간이 빠짐. 18:59 퇴근이면 석식 차감은 없지만 최소 30분이 빠짐.</li></ul></li>
+        <li><b>주간 시간이 부족하면</b> 그 주 <b>금요일 15시까지</b>(유연근무 매뉴얼은 17시로 표기 — 15시로 맞추는 게 안전) 부족분 이상으로 <b>반차(4h)</b>를 신청. 기한 내 미신청 시 부족 시간만큼 무단결근.</li>
+        <li><b>무단결근.</b> 평일에 근무하지 않거나 최소 4시간 미달 → 그날 1일. 시간 부족분은 분 단위로 누적, 8시간 = 1일. 1일당 <b>6일 복무 연장</b>(당일 + 5배). 통틀어 <b>8일이면 편입취소·형사처벌</b>.</li>
+        <li><b>신청 기한.</b> 연차·병가: 시작일 당일 15시까지 포탈 신청. 공가·경조·7일 이하 국내출장: 하루 전 15시. 8일 이상 국내출장·3개월 미만 국외: 14일 전. 3개월 이상: 30일 전. 지도교수 복무상황부 서명도 별도.</li>
+        <li><b>연가.</b> 1년차 12일(2026-09 ~ 2027-08), 2년차 15일. 미사용분 소멸. 반차는 4시간. 연가를 다 쓰고 8시간 초과 시 연장복무 1일로 14일 내 병무청 보고.</li>
+        <li><b>병가.</b> 의무기간 통틀어 30일, 일 단위만. 진료확인서·처방전 등 증빙 필수(영수증 불가), 동일 사유 7일 이상은 진단서. 사전 허가 없으면 무단결근.</li>
+        <li><b>출퇴근 인증 누락</b> → 기본은 연가에서 차감. 건물 상주 증빙(CCTV·방범 기록 제외)으로 복무변경 신고서를 내면 인정 가능.</li>
+        <li><b>출장.</b> 국내 통틀어 2년(1시간짜리도 1일 산입), 8일 이상은 병무청 신상변동 보고. 국외는 통틀어 1년, 반드시 병무청 사전 허가(미승인 출국 = 편입취소).</li>
+        <li><b>매월.</b> 전월 전자출퇴근 기록 + 유연근무조회 출력 → 학과 담당자·지도교수 서명 → 학과 출근부 파일. 복무상황부는 기록이 없어도 월 단위 결재(학과 담당자 → 지도교수 → 주임교수).</li>
+        <li><b>금지.</b> 지정 연구실 외 근무(세미나실·강의실 불가), 전공 외 겸직, 근무시간 중 영리활동, 수업 수강(청강 포함). 휴학·과정변경·미등록 = 편입취소.</li>
+        <li>문의: 대학원 02-2123-3229 · mma_ysgrad@yonsei.ac.kr</li>
+      </ol>
+    </details>
+  </section>
+
+  <footer><p>병무청 훈령 제2177호 · 연세대학교 대학원 전문연구요원 복무안내(2026-09-01) 기준. 공식 기록은 포탈의 출근부·유연근무조회가 우선합니다.</p></footer>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------- 상수 ----------
+  const KEY = 'mma-duty-v1';
+  const DAY = 480, HALF = 240, MIN_DAY = 240, MAX_DAY = 720;
+  const LUNCH = [11 * 60, 13 * 60], DINNER = [18 * 60, 20 * 60], MIN_BREAK = 30;
+  const DOW = ['일', '월', '화', '수', '목', '금', '토'];
+  const TYPES = {
+    work:     { label: '출근',        needsTime: true },
+    half:     { label: '반차+출근',    needsTime: true, credit: HALF, leave: HALF },
+    leave:    { label: '연차',        credit: DAY, leave: DAY },
+    sick:     { label: '병가',        credit: DAY, sick: 1 },
+    official: { label: '공가·경조',    credit: DAY },
+    trip:     { label: '출장·파견',    credit: DAY, trip: 1 },
+  };
+  const STATUS_LABEL = {
+    work: '출근', half: '반차+출근', leave: '연차', sick: '병가', official: '공가·경조', trip: '출장',
+    holiday: '공휴일', before: '복무 전', future: '예정', today: '미입력', working: '근무 중',
+    absent: '결근', short: '4h 미달', incomplete: '기록 불완전', error: '오류',
+  };
+  // 2026년은 정부 확정(추석 9/26 토요일은 대체공휴일 없음, 개천절 대체 10/5).
+  // 2027년은 관공서의 공휴일에 관한 규정으로 계산한 값 — 연말에 확정 공고와 대조할 것.
+  const DEFAULT_HOLIDAYS = {
+    '2026-09-24': '추석 연휴', '2026-09-25': '추석', '2026-10-05': '대체공휴일(개천절)',
+    '2026-10-09': '한글날', '2026-12-25': '성탄절',
+    '2027-01-01': '신정', '2027-02-05': '설 연휴', '2027-02-08': '대체공휴일(설)',
+    '2027-03-01': '삼일절', '2027-05-05': '어린이날', '2027-05-13': '부처님오신날',
+    '2027-08-16': '대체공휴일(광복절)', '2027-09-14': '추석 연휴', '2027-09-15': '추석',
+    '2027-09-16': '추석 연휴', '2027-10-04': '대체공휴일(개천절)', '2027-10-11': '대체공휴일(한글날)',
+    '2027-12-27': '대체공휴일(성탄절)',
+  };
+  const DEFAULT_SETTINGS = { startDate: '2026-09-01', years: 3, leaveDays: [12, 15, 15], sickDays: 30, holidays: DEFAULT_HOLIDAYS };
+  // 첫 방문(저장된 데이터 없음)에만 쓰는 초기 기록 — 포탈 개인별출근부/유연근무조회(2026-09) 기준.
+  // 한 번 불러온 뒤에는 localStorage 가 우선이므로 여기를 고쳐도 기존 브라우저에는 반영되지 않는다.
+  const SEED_RECORDS = {
+    '2026-09-01': { type: 'work', in: '11:09', out: '23:06' },
+    '2026-09-02': { type: 'work', in: '13:55', out: '23:45' },
+    '2026-09-03': { type: 'work', in: '13:23', out: '23:41' },
+    '2026-09-04': { type: 'work', in: '13:40', out: '20:11' },
+    '2026-09-07': { type: 'work', in: '13:06', out: '23:59' },
+    '2026-09-08': { type: 'work', in: '13:15', out: '23:38' },
+    '2026-09-09': { type: 'work', in: '13:27', out: '23:52' },
+    '2026-09-10': { type: 'work', in: '14:19', out: '19:44' },
+    '2026-09-11': { type: 'work', in: '15:00', out: '23:28' },
+    '2026-09-14': { type: 'work', in: '12:13', out: '22:36' },
+    '2026-09-15': { type: 'work', in: '13:43', out: '23:51' },
+    '2026-09-16': { type: 'leave' },
+    '2026-09-17': { type: 'half', in: '14:24', out: '18:59', note: '오전 반차' },
+    '2026-09-18': { type: 'work', in: '13:40' },
+  };
+
+  // ---------- 날짜/시간 유틸 ----------
+  const pad = n => String(n).padStart(2, '0');
+  const ymd = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  const parseYmd = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+  const addDays = (s, n) => { const d = parseYmd(s); d.setDate(d.getDate() + n); return ymd(d); };
+  const addYears = (s, n) => { const d = parseYmd(s); d.setFullYear(d.getFullYear() + n); return ymd(d); };
+  const dow = s => parseYmd(s).getDay();
+  const mondayOf = s => { const w = dow(s); return addDays(s, w === 0 ? -6 : 1 - w); };
+  const daysBetween = (a, b) => Math.round((parseYmd(b) - parseYmd(a)) / 86400000);
+  const toMin = t => { if (!t) return null; const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+  const fmtHM = m => pad(Math.floor(m / 60)) + ':' + pad(m % 60);
+  const fmtDur = m => {
+    const sign = m < 0 ? '−' : ''; m = Math.abs(Math.round(m));
+    const h = Math.floor(m / 60), mm = m % 60;
+    if (h === 0) return sign + mm + '분';
+    return sign + h + '시간' + (mm ? ' ' + mm + '분' : '');
+  };
+  const fmtDays = m => { const d = m / DAY; return (Number.isInteger(d) ? d : parseFloat(d.toFixed(2))) + '일'; };
+  const fmtDate = s => { const d = parseYmd(s); return (d.getMonth() + 1) + '/' + d.getDate() + '(' + DOW[d.getDay()] + ')'; };
+  const todayStr = () => ymd(new Date());
+  const nowMin = () => { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); };
+  const nowMinF = () => { const d = new Date(); return d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60; }; // 초 포함(분 단위 실수)
+  const fmtDurS = min => { // 실시간 표시용 h:mm:ss
+    const sign = min < 0 ? '−' : ''; let sec = Math.floor(Math.abs(min) * 60 + 1e-6);
+    const h = Math.floor(sec / 3600); sec -= h * 3600; const m = Math.floor(sec / 60); sec -= m * 60;
+    return sign + h + ':' + pad(m) + ':' + pad(sec);
+  };
+  const fmtClock = () => { const d = new Date(); return pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()); };
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // ---------- 저장소 ----------
+  let state = load();
+  function load() {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) {}
+    const s = Object.assign({}, DEFAULT_SETTINGS, saved && saved.settings || {});
+    if (!Array.isArray(s.leaveDays) || s.leaveDays.length < 1) s.leaveDays = DEFAULT_SETTINGS.leaveDays.slice();
+    if (!s.holidays || typeof s.holidays !== 'object') s.holidays = Object.assign({}, DEFAULT_HOLIDAYS);
+    const hasSaved = saved && saved.records && Object.keys(saved.records).length > 0;
+    const records = hasSaved ? saved.records : JSON.parse(JSON.stringify(SEED_RECORDS));
+    return { settings: s, records };
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { alert('저장 실패: ' + e.message); }
+  }
+
+  // ---------- 규정 계산 ----------
+  const overlap = (a, b, c, d) => Math.max(0, Math.min(b, d) - Math.max(a, c));
+  // 유연근무조회의 휴게시간 산식: 식사 시간대(2h)에 머문 시간 중 1h 초과분을 휴게로 보고, 합이 30분 미만이면 30분.
+  // 9/1 (11:09~23:06) → 중식 111분 중 51분 + 석식 60분 = 1시간 51분 으로 포탈 기록과 일치.
+  // 최소 30분 규칙은 식사 차감이 30분 미만이어도 항상 적용됨 — 9/17 (14:24~18:59, 석식대 59분 체류) 포탈 기록: 휴게 30분, 근무 4시간4분.
+  function calcWork(i, o) {
+    const span = Math.max(0, o - i);
+    const lunch = Math.max(0, overlap(i, o, LUNCH[0], LUNCH[1]) - 60);
+    const dinner = Math.max(0, overlap(i, o, DINNER[0], DINNER[1]) - 60);
+    const brk = Math.max(MIN_BREAK, lunch + dinner);
+    return { span, lunch, dinner, brk, work: Math.max(0, span - brk) };
+  }
+  // 목표 근무시간을 채우는 가장 이른 퇴근 시각 (없으면 null)
+  function outTimeFor(inMin, need) {
+    if (need > MAX_DAY) return null;
+    for (let m = inMin + 1; m <= 23 * 60 + 59; m++) if (calcWork(inMin, m).work >= need) return m;
+    return null;
+  }
+
+  // 출근 시각이 주어졌을 때 인정 시간이 늘지 않는 구간들 [{from,to,label}] — 최소 휴게 30분, 식사 시간대 초과분
+  function pauseIntervals(inMin) {
+    const out = [];
+    let cur = null, prev = calcWork(inMin, inMin).work;
+    for (let m = inMin; m < 23 * 60 + 59; m++) {
+      const w = calcWork(inMin, m + 1).work;
+      if (w >= MAX_DAY) break;
+      const paused = w === prev;
+      if (paused && !cur) cur = { from: m };
+      if (!paused && cur) { cur.to = m; out.push(cur); cur = null; }
+      prev = w;
+    }
+    if (cur) { cur.to = 23 * 60 + 59; out.push(cur); }
+    for (const iv of out) {
+      iv.label = iv.from < inMin + MIN_BREAK ? '최소 휴게' : iv.from >= LUNCH[0] && iv.from < LUNCH[1] ? '중식' : iv.from >= DINNER[0] && iv.from < DINNER[1] ? '석식' : '휴게';
+    }
+    return out;
+  }
+
+  function analyzeDay(date, ctx) {
+    const rec = state.records[date];
+    const holiday = state.settings.holidays[date];
+    const d = { date, rec, holiday, status: '', credit: 0, calc: null, flags: [], counted: false, absent: false };
+    if (date < state.settings.startDate) { d.status = 'before'; return d; }
+    if (ctx.endDate && date > ctx.endDate) { d.status = 'before'; return d; }
+    if (holiday) { d.status = 'holiday'; return d; }
+    d.counted = true;
+    if (!rec) {
+      d.status = date < ctx.today ? 'absent' : date === ctx.today ? 'today' : 'future';
+      d.absent = d.status === 'absent';
+      return d;
+    }
+    const t = TYPES[rec.type] || TYPES.work;
+    if (!t.needsTime) { d.status = rec.type; d.credit = t.credit; return d; }
+    const i = toMin(rec.in), o = toMin(rec.out);
+    if (i != null && o != null) {
+      if (o <= i) { d.status = 'error'; d.flags.push('퇴근이 출근보다 빠름'); d.absent = date < ctx.today; return d; }
+      const c = calcWork(i, o); d.calc = c;
+      if (i < 6 * 60) d.flags.push('06:00 이전 출근 — 인정 범위 밖');
+      let work = c.work;
+      if (work > MAX_DAY) { d.flags.push('일 최대 12시간 초과 — 12시간만 인정'); work = MAX_DAY; }
+      if (work < MIN_DAY) {
+        d.status = 'short'; d.absent = true;
+        d.flags.push('최소 4시간 미달 (' + fmtDur(c.work) + ') — 근무일 불인정, 1일 무단결근 또는 연차 1일 필요');
+        return d;
+      }
+      d.status = rec.type === 'half' ? 'half' : 'work';
+      d.credit = work + (t.credit || 0);
+      return d;
+    }
+    if (i != null && o == null) {
+      if (date === ctx.today) { d.status = 'working'; return d; }
+      d.status = 'incomplete'; d.flags.push('퇴근 기록 없음'); d.absent = date < ctx.today; return d;
+    }
+    d.status = 'incomplete'; d.flags.push('출근 기록 없음'); d.absent = date < ctx.today; return d;
+  }
+
+  function analyzeWeek(monday, ctx) {
+    const days = [];
+    let required = 0, credited = 0, absentDays = 0, openDays = 0;
+    for (let k = 0; k < 5; k++) {
+      const d = analyzeDay(addDays(monday, k), ctx);
+      days.push(d);
+      if (!d.counted) continue;
+      required += DAY; credited += d.credit;
+      if (d.absent) absentDays++;
+      if (d.status === 'today' || d.status === 'working' || d.status === 'future') openDays++;
+    }
+    const friday = addDays(monday, 4);
+    const finalized = friday < ctx.today;
+    let unauthorized = 0;
+    if (finalized) unauthorized = DAY * absentDays + Math.max(0, required - DAY * absentDays - credited);
+    return { monday, friday, days, required, credited, remaining: required - credited, absentDays, openDays, finalized, unauthorized };
+  }
+
+  function analyzeAll() {
+    const s = state.settings, today = todayStr();
+    const ctx = { today, endDate: null };
+    const weeks = [];
+    const firstMon = mondayOf(s.startDate), lastMon = mondayOf(today);
+    for (let m = firstMon; m <= lastMon; m = addDays(m, 7)) weeks.push(analyzeWeek(m, ctx));
+    const unauthorizedMin = weeks.reduce((a, w) => a + w.unauthorized, 0);
+    const unauthorizedDays = Math.floor(unauthorizedMin / DAY);
+    const extensionDays = unauthorizedDays * 6;
+    const baseEnd = addDays(addYears(s.startDate, s.years), -1);
+    const endDate = addDays(baseEnd, extensionDays);
+
+    // 연가: 복무 연차별
+    const yearIdx = Math.max(0, Math.min(s.years - 1, Math.floor(daysBetween(s.startDate, today) / 365.25)));
+    const years = [];
+    for (let k = 0; k < s.years; k++) {
+      const from = addYears(s.startDate, k), to = addDays(addYears(s.startDate, k + 1), -1);
+      const quota = (s.leaveDays[k] != null ? s.leaveDays[k] : s.leaveDays[s.leaveDays.length - 1]) * DAY;
+      let used = 0;
+      for (const [date, r] of Object.entries(state.records)) {
+        if (date < from || date > to) continue;
+        const t = TYPES[r.type]; if (t && t.leave) used += t.leave;
+      }
+      years.push({ k, from, to, quota, used });
+    }
+    let sickUsed = 0, tripUsed = 0;
+    for (const [date, r] of Object.entries(state.records)) {
+      if (date < s.startDate) continue;
+      if (r.type === 'sick') sickUsed++;
+      if (r.type === 'trip') tripUsed++;
+    }
+    return {
+      today, weeks, current: weeks[weeks.length - 1],
+      unauthorizedMin, unauthorizedDays, extensionDays, baseEnd, endDate,
+      dayN: daysBetween(s.startDate, today) + 1, totalDays: daysBetween(s.startDate, endDate) + 1,
+      yearIdx, years, sickUsed, tripUsed,
+    };
+  }
+
+  // ---------- 렌더 ----------
+  let viewMonday = mondayOf(todayStr());
+
+  function chip(status) { return '<span class="chip st-' + status + '">' + (STATUS_LABEL[status] || status) + '</span>'; }
+
+  function render() {
+    const A = analyzeAll();
+    renderHeader(A); renderAlerts(A); renderToday(A); renderWeek(A); renderTotals(A); renderRecords(A);
+  }
+
+  function renderHeader(A) {
+    const s = state.settings;
+    const pct = Math.max(0, Math.min(100, A.dayN / A.totalDays * 100));
+    document.getElementById('service-line').innerHTML =
+      '복무 <b>D+' + A.dayN + '</b> · ' + s.startDate + ' ~ <b>' + A.endDate + '</b>' +
+      (A.extensionDays ? ' <span style="color:var(--bad)">(무단결근으로 +' + A.extensionDays + '일 연장)</span>' : '') +
+      ' · ' + pct.toFixed(1) + '% 경과 · 만료까지 <b class="num" id="live-end"></b>';
+    document.getElementById('today-label').innerHTML = fmtDate(A.today) + ' <span class="num" id="live-clock"></span>';
+    liveEnd = A.endDate; tick();
+  }
+
+  function lastOpenDay(week) {
+    let last = null;
+    for (const d of week.days) if (d.status === 'today' || d.status === 'working' || d.status === 'future') last = d;
+    return last;
+  }
+
+  function renderAlerts(A) {
+    const out = [];
+    const w = A.current, today = A.today;
+    // 이번 주 부족분 경고 — 오늘이 마지막 근무일이면 실제 가능 시간까지 계산
+    if (w && !w.finalized && w.remaining > 0) {
+      const last = lastOpenDay(w);
+      const todayD = w.days.find(d => d.date === today);
+      if (last && last.date === today && todayD) {
+        let maxToday = 0;
+        if (todayD.status === 'working') maxToday = Math.min(MAX_DAY, calcWork(toMin(todayD.rec.in), 23 * 60 + 59).work);
+        else if (todayD.status === 'today') maxToday = Math.min(MAX_DAY, calcWork(nowMin(), 23 * 60 + 59).work);
+        const gap = w.remaining - maxToday;
+        if (gap > 0) {
+          out.push('<div class="alert bad"><b>이번 주 ' + fmtDur(w.remaining) + ' 부족</b> — 오늘 23:59까지 근무해도 <b>' + fmtDur(gap) + '</b>이 모자랍니다. ' +
+            '금요일 15시까지 <b>반차 ' + Math.ceil(gap / HALF) + '개</b>(' + fmtDur(Math.ceil(gap / HALF) * HALF) + ')를 신청하지 않으면 그만큼 무단결근으로 누적됩니다.</div>');
+        }
+      } else if (w.openDays === 0) {
+        out.push('<div class="alert bad"><b>이번 주 ' + fmtDur(w.remaining) + ' 부족</b> — 금요일 15시까지 반차 ' + Math.ceil(w.remaining / HALF) + '개 신청 필요.</div>');
+      }
+    }
+    // 확정된 주의 무단결근
+    for (const wk of A.weeks) {
+      if (!wk.finalized || wk.unauthorized <= 0) continue;
+      out.push('<div class="alert bad">' + fmtDate(wk.monday) + '~' + fmtDate(wk.friday) + ' 주: 무단결근 <b>' + fmtDur(wk.unauthorized) + '</b> 발생' +
+        (wk.absentDays ? ' (결근/미달 ' + wk.absentDays + '일 포함)' : '') + ' — 연차로 처리했다면 해당 날짜의 구분을 연차/반차로 수정하세요.</div>');
+    }
+    // 기록 불완전 (과거)
+    const bad = [];
+    for (const wk of A.weeks) for (const d of wk.days) if (d.flags.length && d.date < today && d.status !== 'short') bad.push(fmtDate(d.date) + ': ' + d.flags.join(', '));
+    if (bad.length) out.push('<div class="alert">' + bad.map(esc).join('<br>') + '</div>');
+    // 연가 초과
+    const y = A.years[A.yearIdx];
+    if (y && y.used > y.quota) out.push('<div class="alert bad">연가 초과 <b>' + fmtDur(y.used - y.quota) + '</b> — 8시간 초과분은 연장복무 1일로 14일 이내 병무청 보고 대상입니다.</div>');
+    if (A.unauthorizedDays >= 8) out.push('<div class="alert bad"><b>무단결근 누계 ' + A.unauthorizedDays + '일</b> — 편입취소 기준(8일)에 도달했습니다.</div>');
+    document.getElementById('alerts').innerHTML = out.join('');
+  }
+
+  function renderToday(A) {
+    const w = A.current, today = A.today;
+    const el = document.getElementById('today');
+    const d = w && w.days.find(x => x.date === today);
+    if (!d || !d.counted) {
+      const why = d && d.holiday ? '공휴일 (' + esc(d.holiday) + ')' : dow(today) === 0 || dow(today) === 6 ? '주말' : '복무 기간 밖';
+      el.innerHTML = '<div class="card"><div class="k">오늘</div><div class="v muted">' + why + '</div><div class="d">출퇴근 인증 대상 아님</div></div>';
+      return;
+    }
+    const left = [], right = [];
+    if (d.status === 'working') {
+      const i = toMin(d.rec.in);
+      liveIn = i; liveWeekRemain = w.remaining; livePauses = pauseIntervals(i);
+      liveTarget = w.remaining > 0 ? outTimeFor(i, w.remaining) : null;
+      // 포탈은 초 단위를 버려 출퇴근 기록이 있는 날마다 최대 1분씩 적게 잡힘 → 그만큼 더한 시각을 권장
+      liveMargin = w.days.filter(x => x.calc || x.status === 'working').length;
+      liveSafe = w.remaining > 0 ? outTimeFor(i, w.remaining + liveMargin) : null;
+      left.push('<div class="card"><div class="k">이번 주 남은 시간 · 실시간 (인정 근무 기준)</div>' +
+        '<div class="v big" id="live-week"></div>' +
+        '<div class="d" id="live-week-d"></div>' +
+        '<div class="d muted">필요 ' + fmtDur(w.required) + ' 중 ' + fmtDur(w.credited) + ' 인정 + 오늘 근무 중' + (w.openDays > 1 ? ' · 남은 근무일 ' + w.openDays + '일' : '') + '</div></div>');
+      left.push('<div class="card"><div class="k">오늘 인정 시간 · ' + esc(d.rec.in) + ' 출근</div>' +
+        '<div class="v warn big" id="live-today"></div>' +
+        '<div class="d" id="live-today-d"></div></div>');
+      const items = [];
+      const t4 = outTimeFor(i, MIN_DAY);
+      items.push(['최소 4시간', t4 == null ? '불가' : fmtHM(t4) + ' 퇴근']);
+      const tAvg = w.openDays > 1 ? Math.ceil(w.remaining / w.openDays) : w.remaining;
+      if (w.openDays > 1 && w.remaining > 0) {
+        const t = outTimeFor(i, tAvg);
+        items.push(['남은 ' + w.openDays + '일에 균등 배분 (' + fmtDur(tAvg) + ')', t == null ? '오늘 안에 불가' : fmtHM(t) + ' 퇴근']);
+      }
+      if (w.remaining > 0) {
+        const t = outTimeFor(i, w.remaining);
+        const maxW = Math.min(MAX_DAY, calcWork(i, 23 * 60 + 59).work);
+        items.push(['이번 주 전부 채우기 (' + fmtDur(w.remaining) + ')',
+          t == null ? '<span style="color:var(--bad)">오늘 안에 불가 — 23:59 퇴근 시 ' + fmtDur(maxW) + '</span>'
+            : fmtHM(t) + ' 퇴근' + (liveSafe != null && liveSafe !== t ? ' <span class="muted">(권장 ' + fmtHM(liveSafe) + ')</span>' : '')]);
+      } else {
+        items.push(['이번 주 필요 시간', '<span style="color:var(--ok)">이미 충족 (+' + fmtDur(-w.remaining) + ')</span>']);
+      }
+      const t12 = outTimeFor(i, MAX_DAY);
+      items.push(['최대 12시간 한도', t12 == null ? '해당 없음' : fmtHM(t12)]);
+      items.push(['카운트 정지 구간 (시계는 가지만 인정 시간은 멈춤)', livePauses.map(p => fmtHM(p.from) + '–' + fmtHM(p.to) + ' <span class="muted">' + p.label + '</span>').join(' · ') || '없음']);
+      const dinnerNote = (i < DINNER[1] ? '<div class="hint">식사 시간대(11~13시, 18~20시)에 머문 시간 중 1시간 초과분이 휴게로 빠집니다. 하루 최소 휴게 30분과 겹치는 만큼은 흡수되므로, 점심 차감이 없는 날은 석식 정지가 19:30부터 시작합니다.</div>' : '') +
+        '<div class="hint">포탈은 초 단위를 버려 출퇴근 기록이 있는 날마다 최대 1분씩 적게 잡힙니다(이번 주 ' + liveMargin + '일). 권장 시각은 그만큼 더한 값입니다.</div>';
+      right.push('<div class="card wide"><div class="k">퇴근 시각 가이드</div><ul class="targets">' +
+        items.map(([t, r]) => '<li><span class="t">' + t + '</span><span class="r">' + r + '</span></li>').join('') + '</ul>' + dinnerNote + '</div>');
+    } else if (d.status === 'today') {
+      left.push('<div class="card"><div class="k">오늘</div><div class="v muted">미입력</div><div class="d">출근 시간을 입력하세요. 아래 <b>지금 출근</b> 버튼이 현재 시각을 넣어 줍니다.</div></div>');
+      if (w.remaining > 0) {
+        const per = w.openDays > 0 ? Math.ceil(w.remaining / w.openDays) : w.remaining;
+        right.push('<div class="card"><div class="k">이번 주 남은 시간</div><div class="v">' + fmtDur(w.remaining) + '</div><div class="d">남은 근무일 ' + w.openDays + '일 · 하루 평균 ' + fmtDur(per) + '</div></div>');
+      }
+    } else {
+      const c = d.calc;
+      const cls = d.absent ? 'bad' : 'ok';
+      left.push('<div class="card"><div class="k">오늘 ' + chip(d.status) + '</div><div class="v ' + cls + '">' + fmtDur(d.credit) + '</div>' +
+        '<div class="d">' + (c ? esc(d.rec.in) + ' → ' + esc(d.rec.out) + ' · 체류 ' + fmtDur(c.span) + ' − 휴게 ' + fmtDur(c.brk) + (d.rec.type === 'half' ? ' + 반차 4시간' : '') : '인정 시간') + '</div>' +
+        (d.flags.length ? '<div class="d" style="color:var(--bad)">' + esc(d.flags.join(' / ')) + '</div>' : '') + '</div>');
+      const remainAfter = w.remaining;
+      right.push('<div class="card"><div class="k">이번 주 남은 시간</div><div class="v ' + (remainAfter > 0 ? (w.openDays === 0 ? 'bad' : '') : 'ok') + '">' + (remainAfter > 0 ? fmtDur(remainAfter) : '충족 (+' + fmtDur(-remainAfter) + ')') + '</div>' +
+        '<div class="d">' + (remainAfter > 0 && w.openDays === 0 ? '남은 근무일 없음 — 반차 ' + Math.ceil(remainAfter / HALF) + '개 신청 필요' : '남은 근무일 ' + w.openDays + '일') + '</div></div>');
+    }
+    el.innerHTML = '<div class="today-grid">' + left.join('') + right.join('') + '</div>';
+    tick();
+  }
+
+  // ---------- 실시간 갱신 (1초) ----------
+  let liveIn = null, liveWeekRemain = 0, liveEnd = null, liveTarget = null, liveSafe = null, liveMargin = 0, livePauses = [], renderedDay = todayStr();
+  function tick() {
+    const clock = document.getElementById('live-clock');
+    if (clock) clock.textContent = fmtClock();
+    const endEl = document.getElementById('live-end');
+    if (endEl && liveEnd) {
+      const end = parseYmd(liveEnd); end.setHours(23, 59, 59, 999);
+      let sec = Math.max(0, Math.floor((end - Date.now()) / 1000));
+      const days = Math.floor(sec / 86400); sec -= days * 86400;
+      endEl.textContent = days + '일 ' + fmtDurS(sec / 60);
+    }
+    const wkEl = document.getElementById('live-week'), tdEl = document.getElementById('live-today'), tdD = document.getElementById('live-today-d');
+    if (!wkEl || !tdEl || liveIn == null) return;
+    const now = Math.max(liveIn, nowMinF());
+    const c = calcWork(liveIn, now);
+    const work = Math.min(MAX_DAY, c.work);
+    tdEl.textContent = fmtDurS(work);
+    // 지금 어느 구간에 있는지 — 미리 계산한 정지 구간으로 판단
+    let phase = '';
+    const inPause = livePauses.find(p => now >= p.from && now < p.to);
+    const nextPause = livePauses.find(p => p.from > now);
+    if (work >= MAX_DAY) phase = '일 최대 12시간 도달';
+    else if (inPause) phase = inPause.label + ' — 카운트 정지, ' + fmtHM(inPause.to) + '부터 다시 증가';
+    else phase = '카운트 중' + (nextPause ? ' · ' + fmtHM(nextPause.from) + '부터 ' + fmtDur(nextPause.to - nextPause.from) + ' 정지(' + nextPause.label + ')' : '');
+    tdD.textContent = phase + ' · 체류 ' + fmtDur(Math.floor(c.span)) + ' − 휴게 ' + fmtDur(Math.floor(c.brk));
+    const remain = liveWeekRemain - work;
+    const wkD = document.getElementById('live-week-d');
+    if (remain > 0) {
+      wkEl.textContent = fmtDurS(remain); wkEl.className = 'v big';
+      if (wkD) wkD.textContent = liveTarget == null ? '오늘 안에 채울 수 없음 — 반차 신청 필요'
+        : '퇴근 가능 ' + fmtHM(liveTarget) + (liveSafe != null && liveSafe !== liveTarget ? ' · 권장 ' + fmtHM(liveSafe) + ' (포탈 절사 ' + liveMargin + '분 여유)' : '') +
+          ' · 시계로는 앞으로 ' + fmtDurS(liveTarget - now) + (liveTarget - now - remain > 0.5 ? ' (정지 구간 ' + fmtDur(Math.round(liveTarget - now - remain)) + ' 포함)' : '');
+    } else {
+      wkEl.textContent = '충족 (+' + fmtDurS(-remain) + ')'; wkEl.className = 'v big ok';
+      if (wkD) wkD.textContent = '이번 주 필요 시간을 채웠습니다 — 지금 퇴근해도 됩니다';
+    }
+  }
+
+  function renderWeek(A) {
+    const ctx = { today: A.today, endDate: null };
+    const w = analyzeWeek(viewMonday, ctx);
+    const isCur = viewMonday === mondayOf(A.today);
+    let html = '<div class="weeknav">' +
+      '<button type="button" class="small" data-week="-1">‹ 이전 주</button>' +
+      '<span class="range">' + fmtDate(w.monday) + ' ~ ' + fmtDate(w.friday) + (isCur ? ' <span class="muted">(이번 주)</span>' : '') + '</span>' +
+      '<button type="button" class="small" data-week="1">다음 주 ›</button>' +
+      (isCur ? '' : '<button type="button" class="small" data-week="0">이번 주로</button>') + '</div>';
+    html += '<div class="tbl-wrap"><table><thead><tr><th>요일</th><th>상태</th><th>출근</th><th>퇴근</th><th class="num">휴게</th><th class="num">인정</th><th>비고</th></tr></thead><tbody>';
+    for (const d of w.days) {
+      const c = d.calc;
+      html += '<tr class="clickable" data-date="' + d.date + '"><td>' + fmtDate(d.date) + '</td><td>' + chip(d.status) +
+        (d.holiday ? ' <span class="muted">' + esc(d.holiday) + '</span>' : '') + '</td>' +
+        '<td class="mono">' + esc(d.rec && d.rec.in || '') + '</td><td class="mono">' + esc(d.rec && d.rec.out || '') + '</td>' +
+        '<td class="num">' + (c ? fmtDur(c.brk) : '') + '</td>' +
+        '<td class="num">' + (d.counted && (d.credit || c) ? fmtDur(d.credit) : '') + '</td>' +
+        '<td>' + (d.flags.length ? '<span class="flag">' + esc(d.flags.join(' / ')) + '</span>' : '') + (d.rec && d.rec.note ? '<span class="note">' + esc(d.rec.note) + '</span>' : '') + '</td></tr>';
+    }
+    html += '</tbody></table></div>';
+    const remCls = w.remaining > 0 ? (w.finalized ? 'bad' : '') : 'ok';
+    html += '<div class="weeksum"><span>필요 <b>' + fmtDur(w.required) + '</b></span><span>인정 <b>' + fmtDur(w.credited) + '</b></span>' +
+      '<span>' + (w.remaining > 0 ? '부족' : '초과') + ' <b class="' + remCls + '">' + fmtDur(Math.abs(w.remaining)) + '</b></span>' +
+      (w.finalized ? '<span>무단결근 <b class="' + (w.unauthorized ? 'bad' : 'ok') + '">' + fmtDur(w.unauthorized) + '</b></span>' : '<span class="muted">미확정 · 남은 근무일 ' + w.openDays + '일</span>') +
+      '</div>';
+    if (w.required > 0 && w.required < 5 * DAY && !w.days.some(x => x.status === 'before')) {
+      html += '<p class="hint">공휴일·휴가로 이 주의 필요 시간은 ' + fmtDur(w.required) + '입니다(근무일 × 8시간).</p>';
+    }
+    document.getElementById('week').innerHTML = html;
+  }
+
+  function renderTotals(A) {
+    const s = state.settings;
+    const y = A.years[A.yearIdx];
+    const leaveLeft = y ? y.quota - y.used : 0;
+    const cards = [];
+    cards.push('<div class="card"><div class="k">연가 잔여 · ' + (A.yearIdx + 1) + '년차</div><div class="v ' + (leaveLeft < 0 ? 'bad' : '') + '">' + fmtDays(leaveLeft) + '</div>' +
+      '<div class="d">' + fmtDays(y.used) + ' 사용 / ' + fmtDays(y.quota) + ' · ' + y.from + ' ~ ' + y.to + '</div>' +
+      '<div class="bar"><i style="width:' + Math.min(100, y.used / y.quota * 100) + '%"></i></div></div>');
+    cards.push('<div class="card"><div class="k">병가 잔여</div><div class="v">' + (s.sickDays - A.sickUsed) + '일</div><div class="d">' + A.sickUsed + '일 사용 / ' + s.sickDays + '일 (통틀어)</div></div>');
+    cards.push('<div class="card"><div class="k">무단결근 누계</div><div class="v ' + (A.unauthorizedMin > 0 ? 'bad' : 'ok') + '">' + (A.unauthorizedMin > 0 ? fmtDur(A.unauthorizedMin) : '없음') + '</div>' +
+      '<div class="d">' + A.unauthorizedDays + '일 확정 (8시간 = 1일) · 복무 연장 ' + A.extensionDays + '일 · 8일이면 편입취소</div></div>');
+    cards.push('<div class="card"><div class="k">출장 · 파견</div><div class="v">' + A.tripUsed + '일</div><div class="d">국내 통틀어 2년 · 8일 이상은 병무청 신고</div></div>');
+    // 주별 요약
+    let rows = '';
+    for (const w of A.weeks.slice().reverse()) {
+      const cls = w.remaining > 0 ? (w.finalized ? 'bad' : 'warn') : 'ok';
+      rows += '<tr class="clickable" data-monday="' + w.monday + '"><td>' + fmtDate(w.monday) + ' ~ ' + fmtDate(w.friday) + '</td>' +
+        '<td class="num">' + fmtDur(w.required) + '</td><td class="num">' + fmtDur(w.credited) + '</td>' +
+        '<td class="num" style="color:var(--' + cls + ')">' + (w.remaining > 0 ? '−' + fmtDur(w.remaining) : '+' + fmtDur(-w.remaining)) + '</td>' +
+        '<td>' + (w.finalized ? (w.unauthorized ? '<span class="chip st-absent">무단결근 ' + fmtDur(w.unauthorized) + '</span>' : '<span class="chip st-work">충족</span>') : '<span class="chip st-working">진행 중</span>') + '</td></tr>';
+    }
+    document.getElementById('totals').innerHTML = '<div class="cards">' + cards.join('') + '</div>' +
+      '<div class="tbl-wrap" style="margin-top:1rem"><table><thead><tr><th>주</th><th class="num">필요</th><th class="num">인정</th><th class="num">차이</th><th>상태</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
+  }
+
+  function renderRecords(A) {
+    const ctx = { today: A.today, endDate: null };
+    const dates = Object.keys(state.records).sort().reverse();
+    document.getElementById('records-count').textContent = dates.length + '건';
+    if (!dates.length) { document.getElementById('records').innerHTML = '<p class="muted">아직 기록이 없습니다. 설정에서 JSON을 가져오거나 위에서 입력하세요.</p>'; return; }
+    let html = '<table><thead><tr><th>날짜</th><th>구분</th><th>출근</th><th>퇴근</th><th class="num">체류</th><th class="num">휴게</th><th class="num">인정</th><th>비고</th></tr></thead><tbody>';
+    let month = '', mSum = 0, mCount = 0;
+    const flush = () => { if (month) html += '<tr class="total"><td colspan="6">' + month + ' 소계 · ' + mCount + '일</td><td class="num">' + fmtDur(mSum) + '</td><td></td></tr>'; };
+    for (const date of dates) {
+      const m = date.slice(0, 7);
+      if (m !== month) { flush(); month = m; mSum = 0; mCount = 0; html += '<tr class="month"><td colspan="8">' + m.replace('-', '년 ') + '월</td></tr>'; }
+      const d = analyzeDay(date, ctx);
+      const c = d.calc;
+      mSum += d.credit; mCount++;
+      html += '<tr class="clickable" data-date="' + date + '"><td>' + fmtDate(date) + '</td><td>' + chip(d.status) + '</td>' +
+        '<td class="mono">' + esc(d.rec.in || '') + '</td><td class="mono">' + esc(d.rec.out || '') + '</td>' +
+        '<td class="num">' + (c ? fmtDur(c.span) : '') + '</td><td class="num">' + (c ? fmtDur(c.brk) : '') + '</td>' +
+        '<td class="num">' + (d.counted && d.status !== 'working' ? fmtDur(d.credit) : '') + '</td>' +
+        '<td>' + (d.flags.length ? '<span class="flag">' + esc(d.flags.join(' / ')) + '</span>' : '') + (d.rec.note ? '<span class="note">' + esc(d.rec.note) + '</span>' : '') + '</td></tr>';
+    }
+    flush();
+    document.getElementById('records').innerHTML = html + '</tbody></table>';
+  }
+
+  // ---------- 입력 폼 ----------
+  const F = {
+    date: document.getElementById('f-date'), type: document.getElementById('f-type'),
+    in: document.getElementById('f-in'), out: document.getElementById('f-out'),
+    note: document.getElementById('f-note'), preview: document.getElementById('f-preview'),
+  };
+  function loadForm(date) {
+    F.date.value = date;
+    const r = state.records[date];
+    F.type.value = r ? r.type : 'work';
+    F.in.value = r && r.in || ''; F.out.value = r && r.out || ''; F.note.value = r && r.note || '';
+    updatePreview();
+  }
+  function updatePreview() {
+    const t = TYPES[F.type.value];
+    const needs = !!t.needsTime;
+    F.in.disabled = F.out.disabled = !needs;
+    if (!needs) { F.preview.textContent = t.label + ' → ' + fmtDur(t.credit) + ' 인정'; return; }
+    const i = toMin(F.in.value), o = toMin(F.out.value);
+    if (i == null || o == null) { F.preview.textContent = ''; return; }
+    if (o <= i) { F.preview.textContent = '퇴근이 출근보다 빠릅니다'; return; }
+    const c = calcWork(i, o);
+    let s = '체류 ' + fmtDur(c.span) + ' − 휴게 ' + fmtDur(c.brk) + ' = ' + fmtDur(c.work);
+    if (t.credit) s += ' + 반차 4시간 = ' + fmtDur(c.work + t.credit);
+    if (c.work < MIN_DAY) s += ' (4시간 미달!)';
+    if (c.work > MAX_DAY) s += ' (12시간 초과 — 12시간만 인정)';
+    F.preview.textContent = s;
+  }
+  document.getElementById('entry').addEventListener('submit', e => {
+    e.preventDefault();
+    const date = F.date.value; if (!date) return;
+    const type = F.type.value;
+    const rec = { type };
+    if (TYPES[type].needsTime) { if (F.in.value) rec.in = F.in.value; if (F.out.value) rec.out = F.out.value; }
+    if (F.note.value.trim()) rec.note = F.note.value.trim();
+    state.records[date] = rec; save(); render();
+  });
+  document.getElementById('f-del').addEventListener('click', () => {
+    const date = F.date.value;
+    if (!state.records[date]) return;
+    if (!confirm(fmtDate(date) + ' 기록을 삭제할까요?')) return;
+    delete state.records[date]; save(); loadForm(date); render();
+  });
+  document.getElementById('f-now-in').addEventListener('click', () => {
+    F.date.value = todayStr(); if (!TYPES[F.type.value].needsTime) F.type.value = 'work';
+    F.in.value = fmtHM(nowMin()); updatePreview();
+  });
+  document.getElementById('f-now-out').addEventListener('click', () => {
+    if (!F.date.value) F.date.value = todayStr();
+    if (!F.in.value && state.records[F.date.value]) F.in.value = state.records[F.date.value].in || '';
+    F.out.value = fmtHM(nowMin()); updatePreview();
+  });
+  F.date.addEventListener('change', () => loadForm(F.date.value));
+  [F.type, F.in, F.out].forEach(el => el.addEventListener('input', updatePreview));
+
+  // 표 클릭 → 폼에 불러오기 / 주간 이동
+  document.addEventListener('click', e => {
+    const wk = e.target.closest('[data-week]');
+    if (wk) {
+      const n = Number(wk.dataset.week);
+      viewMonday = n === 0 ? mondayOf(todayStr()) : addDays(viewMonday, 7 * n);
+      renderWeek(analyzeAll()); return;
+    }
+    const mon = e.target.closest('tr[data-monday]');
+    if (mon) { viewMonday = mon.dataset.monday; renderWeek(analyzeAll()); document.getElementById('week').scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    const row = e.target.closest('tr[data-date]');
+    if (row) { loadForm(row.dataset.date); document.getElementById('entry').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+  });
+
+  // ---------- 설정 ----------
+  const S = {
+    start: document.getElementById('s-start'), years: document.getElementById('s-years'),
+    leave: document.getElementById('s-leave'), sick: document.getElementById('s-sick'), holidays: document.getElementById('s-holidays'),
+  };
+  function loadSettings() {
+    const s = state.settings;
+    S.start.value = s.startDate; S.years.value = s.years; S.leave.value = s.leaveDays.join(','); S.sick.value = s.sickDays;
+    S.holidays.value = Object.keys(s.holidays).sort().map(d => d + ' ' + s.holidays[d]).join('\n');
+  }
+  document.getElementById('s-save').addEventListener('click', () => {
+    const s = state.settings;
+    if (S.start.value) s.startDate = S.start.value;
+    s.years = Math.max(1, Number(S.years.value) || 3);
+    const ld = S.leave.value.split(/[,\s]+/).map(Number).filter(n => !isNaN(n) && n >= 0);
+    if (ld.length) s.leaveDays = ld;
+    s.sickDays = Math.max(0, Number(S.sick.value) || 0);
+    const h = {};
+    for (const line of S.holidays.value.split('\n')) {
+      const m = line.trim().match(/^(\d{4}-\d{2}-\d{2})\s*(.*)$/); if (m) h[m[1]] = m[2] || '공휴일';
+    }
+    s.holidays = h;
+    save(); loadSettings(); render(); updatePreview();
+  });
+  document.getElementById('s-export').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'mma-duty-' + todayStr() + '.json'; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
+  document.getElementById('s-import').addEventListener('click', () => document.getElementById('s-file').click());
+  document.getElementById('s-file').addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try {
+        const j = JSON.parse(rd.result);
+        if (!j || typeof j !== 'object' || (!j.records && !j.settings)) throw new Error('records/settings 가 없습니다');
+        const n = Object.keys(j.records || {}).length;
+        if (!confirm(n + '건의 기록을 가져옵니다. 같은 날짜는 파일 내용으로 덮어씁니다. 계속할까요?')) return;
+        if (j.settings) state.settings = Object.assign({}, state.settings, j.settings);
+        Object.assign(state.records, j.records || {});
+        save(); loadSettings(); render(); loadForm(F.date.value || todayStr());
+      } catch (err) { alert('가져오기 실패: ' + err.message); }
+      e.target.value = '';
+    };
+    rd.readAsText(f);
+  });
+  document.getElementById('s-clear').addEventListener('click', () => {
+    if (!confirm('모든 기록과 설정을 지웁니다. 먼저 JSON으로 내보냈나요?')) return;
+    if (!confirm('정말 삭제할까요? 되돌릴 수 없습니다.')) return;
+    localStorage.removeItem(KEY); state = load(); loadSettings(); render(); loadForm(todayStr());
+  });
+
+  // ---------- 테마 ----------
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const root = document.documentElement;
+    const cur = root.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+  });
+
+  // ---------- 시작 ----------
+  loadSettings(); loadForm(todayStr()); render();
+  setInterval(() => {
+    if (todayStr() !== renderedDay) { renderedDay = todayStr(); viewMonday = mondayOf(renderedDay); render(); return; }
+    tick();
+  }, 1000);
+})();
+</script>
+</body>
+</html>

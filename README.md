@@ -7,6 +7,8 @@ index.html      홈페이지 전체 내용 (여기만 고치면 됨)
 style.css       스타일 (색상은 파일 맨 위 :root 변수)
 cv.html         CV 원본 — 여기를 고치고 build-cv.ps1 실행
 build-cv.ps1    cv.html -> assets/cv.pdf 생성 스크립트
+mma/index.html  전문연구요원 복무 관리 (개인용, 메인에서 링크 없음·noindex)
+                기록은 브라우저 localStorage 에만 저장 — 소스의 SEED_RECORDS 는 첫 방문용 초기값
 assets/
   profile.jpg   프로필 사진 (이 이름으로 넣으면 자동 표시)
   casual.jpg    예비 사진
