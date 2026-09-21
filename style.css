@@ -282,9 +282,10 @@ h3 {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
-/* [J1] 국제 저널 / [C1] 학술대회 — 예전 CV 표기 방식을 그대로 씀 */
+/* [J1] 국제 저널 / [C1] 국제 학술대회 / [D1] 국내 학술대회 — 예전 CV 표기 방식을 그대로 씀 */
 .pubs-j { --pub-prefix: "J"; }
 .pubs-c { --pub-prefix: "C"; }
+.pubs-d { --pub-prefix: "D"; }
 
 .pubs .title { font-weight: 600; }
 .pubs .authors { color: var(--fg-dim); font-size: 0.9rem; }
