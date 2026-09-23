@@ -177,6 +177,12 @@
   .rules li b { font-weight: 600; }
   .rules ul { margin: 0.25rem 0 0; padding-left: 1.1rem; color: var(--fg-dim); }
   .hint { font-size: 0.8rem; color: var(--fg-faint); margin: 0.5rem 0 0; }
+  .settings select { font: inherit; font-size: 0.92rem; padding: 0.38rem 0.5rem; border: 1px solid var(--rule); border-radius: 4px; background: var(--card); color: var(--fg); width: 100%; }
+  #sync-badge { font-size: 0.78rem; color: var(--fg-faint); }
+  #sync-badge.ok { color: var(--ok); }
+  #sync-badge.bad { color: var(--bad); }
+  #sync-badge.busy { color: var(--warn); }
+  #sync-status { flex: 1 1 100%; margin: 0.3rem 0 0; }
   footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--rule); font-size: 0.78rem; color: var(--fg-faint); }
   footer p { margin: 0; }
 
@@ -193,6 +199,7 @@
   <header style="margin-bottom:1.6rem">
     <h1>전문연구요원 복무 관리</h1>
     <p class="sub" id="service-line"></p>
+    <p class="sub"><span id="sync-badge"></span></p>
   </header>
 
   <div id="alerts"></div>
@@ -243,6 +250,31 @@
   <section>
     <h2>전체 기록 <span class="right muted" id="records-count"></span></h2>
     <div id="records" class="tbl-wrap"></div>
+  </section>
+
+  <section>
+    <details id="sync-details">
+      <summary>동기화 (비공개 GitHub Gist)</summary>
+      <div class="settings">
+        <label class="full">GitHub 토큰 — gist 권한만
+          <input type="password" id="s-token" placeholder="ghp_... 또는 github_pat_..." autocomplete="off" spellcheck="false">
+          <span class="hint">github.com/settings/tokens → Generate new token (classic) → <b>gist 체크 하나만</b> → 생성 후 붙여넣기.
+          토큰은 이 브라우저에만 저장되며 JSON 내보내기에 포함되지 않습니다. 기기를 잃어버리면 GitHub에서 토큰을 폐기하세요.</span>
+        </label>
+        <label class="full">Gist ID
+          <input type="text" id="s-gist" placeholder="처음이면 비워두고 '새 Gist 만들기'" autocomplete="off" spellcheck="false">
+          <span class="hint">다른 기기에서는 여기에 같은 ID를 넣고 토큰만 새로 붙이면 같은 기록을 씁니다.</span>
+        </label>
+        <div class="full btnrow">
+          <button type="button" id="s-sync-create" class="primary">새 Gist 만들기</button>
+          <button type="button" id="s-sync-save">토큰·ID 저장</button>
+          <button type="button" id="s-sync-now">지금 동기화</button>
+          <span style="flex:1"></span>
+          <button type="button" id="s-sync-off" class="danger">연결 해제</button>
+          <p class="hint" id="sync-status"></p>
+        </div>
+      </div>
+    </details>
   </section>
 
   <section>
@@ -388,9 +420,16 @@
     const records = hasSaved ? saved.records : JSON.parse(JSON.stringify(SEED_RECORDS));
     return { settings: s, records };
   }
-  function save() {
+  function saveLocal() {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { alert('저장 실패: ' + e.message); }
   }
+  // 사용자가 고친 뒤에 부르는 저장 — 로컬에 쓰고 동기화도 예약한다
+  function save() { saveLocal(); scheduleSync(); }
+
+  // 삭제는 tombstone({deleted:true, m})으로 남겨 다른 기기까지 전파시킨다
+  const isRec = r => !!(r && !r.deleted);
+  const getRec = d => { const r = state.records[d]; return isRec(r) ? r : null; };
+  const recDates = () => Object.keys(state.records).filter(d => isRec(state.records[d]));
 
   // ---------- 규정 계산 ----------
   const overlap = (a, b, c, d) => Math.max(0, Math.min(b, d) - Math.max(a, c));
@@ -431,7 +470,7 @@
   }
 
   function analyzeDay(date, ctx) {
-    const rec = state.records[date];
+    const rec = getRec(date);
     const holiday = state.settings.holidays[date];
     const d = { date, rec, holiday, status: '', credit: 0, calc: null, flags: [], counted: false, absent: false };
     if (date < state.settings.startDate) { d.status = 'before'; return d; }
@@ -506,14 +545,14 @@
       const quota = (s.leaveDays[k] != null ? s.leaveDays[k] : s.leaveDays[s.leaveDays.length - 1]) * DAY;
       let used = 0;
       for (const [date, r] of Object.entries(state.records)) {
-        if (date < from || date > to) continue;
+        if (!isRec(r) || date < from || date > to) continue;
         const t = TYPES[r.type]; if (t && t.leave) used += t.leave;
       }
       years.push({ k, from, to, quota, used });
     }
     let sickUsed = 0, tripUsed = 0;
     for (const [date, r] of Object.entries(state.records)) {
-      if (date < s.startDate) continue;
+      if (!isRec(r) || date < s.startDate) continue;
       if (r.type === 'sick') sickUsed++;
       if (r.type === 'trip') tripUsed++;
     }
@@ -754,7 +793,7 @@
 
   function renderRecords(A) {
     const ctx = { today: A.today, endDate: null };
-    const dates = Object.keys(state.records).sort().reverse();
+    const dates = recDates().sort().reverse();
     document.getElementById('records-count').textContent = dates.length + '건';
     if (!dates.length) { document.getElementById('records').innerHTML = '<p class="muted">아직 기록이 없습니다. 설정에서 JSON을 가져오거나 위에서 입력하세요.</p>'; return; }
     let html = '<table><thead><tr><th>날짜</th><th>구분</th><th>출근</th><th>퇴근</th><th class="num">체류</th><th class="num">휴게</th><th class="num">인정</th><th>비고</th></tr></thead><tbody>';
@@ -784,7 +823,7 @@
   };
   function loadForm(date) {
     F.date.value = date;
-    const r = state.records[date];
+    const r = getRec(date);
     F.type.value = r ? r.type : 'work';
     F.in.value = r && r.in || ''; F.out.value = r && r.out || ''; F.note.value = r && r.note || '';
     updatePreview();
@@ -811,13 +850,15 @@
     const rec = { type };
     if (TYPES[type].needsTime) { if (F.in.value) rec.in = F.in.value; if (F.out.value) rec.out = F.out.value; }
     if (F.note.value.trim()) rec.note = F.note.value.trim();
+    rec.m = Date.now();
     state.records[date] = rec; save(); render();
   });
   document.getElementById('f-del').addEventListener('click', () => {
     const date = F.date.value;
-    if (!state.records[date]) return;
+    if (!getRec(date)) return;
     if (!confirm(fmtDate(date) + ' 기록을 삭제할까요?')) return;
-    delete state.records[date]; save(); loadForm(date); render();
+    state.records[date] = { deleted: true, m: Date.now() };
+    save(); loadForm(date); render();
   });
   document.getElementById('f-now-in').addEventListener('click', () => {
     F.date.value = todayStr(); if (!TYPES[F.type.value].needsTime) F.type.value = 'work';
@@ -825,7 +866,8 @@
   });
   document.getElementById('f-now-out').addEventListener('click', () => {
     if (!F.date.value) F.date.value = todayStr();
-    if (!F.in.value && state.records[F.date.value]) F.in.value = state.records[F.date.value].in || '';
+    const cur = getRec(F.date.value);
+    if (!F.in.value && cur) F.in.value = cur.in || '';
     F.out.value = fmtHM(nowMin()); updatePreview();
   });
   F.date.addEventListener('change', () => loadForm(F.date.value));
@@ -867,6 +909,7 @@
       const m = line.trim().match(/^(\d{4}-\d{2}-\d{2})\s*(.*)$/); if (m) h[m[1]] = m[2] || '공휴일';
     }
     s.holidays = h;
+    s.m = Date.now();
     save(); loadSettings(); render(); updatePreview();
   });
   document.getElementById('s-export').addEventListener('click', () => {
@@ -885,8 +928,9 @@
         if (!j || typeof j !== 'object' || (!j.records && !j.settings)) throw new Error('records/settings 가 없습니다');
         const n = Object.keys(j.records || {}).length;
         if (!confirm(n + '건의 기록을 가져옵니다. 같은 날짜는 파일 내용으로 덮어씁니다. 계속할까요?')) return;
-        if (j.settings) state.settings = Object.assign({}, state.settings, j.settings);
-        Object.assign(state.records, j.records || {});
+        if (j.settings) state.settings = Object.assign({}, state.settings, j.settings, { m: Date.now() });
+        const now = Date.now();
+        for (const [d, r] of Object.entries(j.records || {})) state.records[d] = Object.assign({}, r, { m: r.m || now });
         save(); loadSettings(); render(); loadForm(F.date.value || todayStr());
       } catch (err) { alert('가져오기 실패: ' + err.message); }
       e.target.value = '';
@@ -896,8 +940,138 @@
   document.getElementById('s-clear').addEventListener('click', () => {
     if (!confirm('모든 기록과 설정을 지웁니다. 먼저 JSON으로 내보냈나요?')) return;
     if (!confirm('정말 삭제할까요? 되돌릴 수 없습니다.')) return;
-    localStorage.removeItem(KEY); state = load(); loadSettings(); render(); loadForm(todayStr());
+    localStorage.removeItem(KEY); localStorage.removeItem(TOKEN_KEY);
+    state = load(); token = ''; loadSettings(); loadSyncUI(); render(); loadForm(todayStr()); setSync('', '');
   });
+
+  // ---------- 동기화 (비공개 Gist) ----------
+  // 기록마다 수정 시각(m)을 들고 있어, 두 기기가 서로 다른 날을 고쳐도 덮어쓰지 않고 날짜 단위로 병합된다.
+  const TOKEN_KEY = 'mma-duty-token', GIST_FILE = 'mma-duty.json';
+  let token = '';
+  try { token = localStorage.getItem(TOKEN_KEY) || ''; } catch (e) {}
+  let syncTimer = null, syncing = false, lastPull = 0;
+
+  const Y = {
+    token: document.getElementById('s-token'), gist: document.getElementById('s-gist'),
+    status: document.getElementById('sync-status'), badge: document.getElementById('sync-badge'),
+  };
+  function loadSyncUI() { Y.token.value = token; Y.gist.value = state.settings.gistId || ''; }
+  function setSync(msg, cls, detail) {
+    const b = document.getElementById('sync-badge'); // 헤더는 다시 그려지므로 매번 조회
+    if (b) { b.textContent = msg; b.className = cls || ''; }
+    if (Y.status) Y.status.textContent = detail || msg || '';
+  }
+  const syncReady = () => !!(token && state.settings.gistId);
+
+  async function gistApi(method, path, body) {
+    const res = await fetch('https://api.github.com' + path, {
+      method,
+      headers: {
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    if (!res.ok) {
+      let m = res.status + ' ' + res.statusText;
+      try { const j = await res.json(); if (j.message) m += ' — ' + j.message; } catch (e) {}
+      if (res.status === 401) m += ' (토큰이 잘못되었거나 만료됨)';
+      if (res.status === 404) m += ' (Gist ID를 찾을 수 없거나 토큰에 gist 권한이 없음)';
+      throw new Error(m);
+    }
+    return res.json();
+  }
+  const payload = () => ({ v: 1, at: new Date().toISOString(), settings: state.settings, records: state.records });
+
+  function mergeRemote(remote) {
+    let changed = false;
+    for (const [d, b] of Object.entries(remote.records || {})) {
+      const a = state.records[d];
+      if (!a || (b.m || 0) > (a.m || 0)) {
+        if (JSON.stringify(a) !== JSON.stringify(b)) { state.records[d] = b; changed = true; }
+      }
+    }
+    const rs = remote.settings;
+    if (rs && (rs.m || 0) > (state.settings.m || 0)) {
+      const gid = state.settings.gistId;
+      state.settings = Object.assign({}, state.settings, rs, { gistId: gid });
+      changed = true;
+    }
+    return changed;
+  }
+
+  async function readGist() {
+    const g = await gistApi('GET', '/gists/' + state.settings.gistId);
+    const f = g.files && g.files[GIST_FILE];
+    if (!f) return null;
+    const text = f.truncated && f.raw_url ? await (await fetch(f.raw_url)).text() : f.content;
+    try { return JSON.parse(text); } catch (e) { throw new Error('Gist 내용을 읽을 수 없습니다 (JSON 오류)'); }
+  }
+
+  async function syncNow(quiet) {
+    if (!syncReady() || syncing) return;
+    syncing = true; setSync('동기화 중…', 'busy');
+    try {
+      const remote = await readGist();
+      const changed = remote ? mergeRemote(remote) : false;
+      if (changed) { saveLocal(); loadSettings(); render(); loadForm(F.date.value || todayStr()); }
+      await gistApi('PATCH', '/gists/' + state.settings.gistId,
+        { files: { [GIST_FILE]: { content: JSON.stringify(payload(), null, 2) } } });
+      lastPull = Date.now();
+      setSync('동기화됨 ' + fmtClock(), 'ok', '마지막 동기화 ' + fmtClock() + (changed ? ' · 다른 기기 변경사항을 받아왔습니다' : ''));
+    } catch (e) {
+      setSync('동기화 실패', 'bad', '동기화 실패: ' + e.message);
+      if (!quiet) alert('동기화 실패: ' + e.message);
+    } finally { syncing = false; }
+  }
+  function scheduleSync() {
+    if (!syncReady()) return;
+    setSync('변경됨 — 곧 올림', 'busy');
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => syncNow(true), 2000);
+  }
+
+  document.getElementById('s-sync-save').addEventListener('click', () => {
+    token = Y.token.value.trim();
+    state.settings.gistId = Y.gist.value.trim();
+    try { token ? localStorage.setItem(TOKEN_KEY, token) : localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+    saveLocal();
+    if (syncReady()) syncNow(); else setSync('', '', '토큰과 Gist ID를 모두 넣어야 동기화됩니다.');
+  });
+  document.getElementById('s-sync-create').addEventListener('click', async () => {
+    token = Y.token.value.trim();
+    if (!token) { alert('먼저 GitHub 토큰을 붙여넣으세요.'); return; }
+    try { localStorage.setItem(TOKEN_KEY, token); } catch (e) {}
+    setSync('Gist 만드는 중…', 'busy');
+    try {
+      const g = await gistApi('POST', '/gists', {
+        description: '전문연구요원 복무 기록 (mma duty tracker)',
+        public: false,
+        files: { [GIST_FILE]: { content: JSON.stringify(payload(), null, 2) } },
+      });
+      state.settings.gistId = g.id; state.settings.m = Date.now();
+      saveLocal(); loadSyncUI();
+      lastPull = Date.now();
+      setSync('동기화됨 ' + fmtClock(), 'ok', '비공개 Gist를 만들었습니다 — ID ' + g.id + ' (다른 기기에 이 ID를 넣으세요)');
+    } catch (e) { setSync('연결 실패', 'bad', 'Gist 생성 실패: ' + e.message); alert('Gist 생성 실패: ' + e.message); }
+  });
+  document.getElementById('s-sync-now').addEventListener('click', () => {
+    if (!syncReady()) { alert('토큰과 Gist ID를 먼저 저장하세요.'); return; }
+    syncNow();
+  });
+  document.getElementById('s-sync-off').addEventListener('click', () => {
+    if (!confirm('이 브라우저에서 동기화를 끕니다. Gist와 기록은 그대로 남습니다.')) return;
+    token = ''; state.settings.gistId = '';
+    try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+    saveLocal(); loadSyncUI(); setSync('', '', '동기화를 껐습니다. 기록은 이 브라우저에 그대로 있습니다.');
+  });
+
+  // 탭을 다시 보거나 창에 돌아올 때 내려받기 (30초 스로틀)
+  const maybePull = () => { if (syncReady() && !syncing && Date.now() - lastPull > 30000) syncNow(true); };
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) maybePull(); });
+  window.addEventListener('focus', maybePull);
+  window.addEventListener('online', maybePull);
 
   // ---------- 테마 ----------
   document.getElementById('theme-toggle').addEventListener('click', () => {
@@ -909,7 +1083,9 @@
   });
 
   // ---------- 시작 ----------
-  loadSettings(); loadForm(todayStr()); render();
+  loadSettings(); loadSyncUI(); loadForm(todayStr()); render();
+  if (syncReady()) syncNow(true);
+  else setSync('', '', '동기화가 꺼져 있습니다 — 기록은 이 브라우저에만 저장됩니다.');
   setInterval(() => {
     if (todayStr() !== renderedDay) { renderedDay = todayStr(); viewMonday = mondayOf(renderedDay); render(); return; }
     tick();
