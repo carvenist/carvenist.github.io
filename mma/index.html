@@ -417,7 +417,15 @@
     if (!Array.isArray(s.leaveDays) || s.leaveDays.length < 1) s.leaveDays = DEFAULT_SETTINGS.leaveDays.slice();
     if (!s.holidays || typeof s.holidays !== 'object') s.holidays = Object.assign({}, DEFAULT_HOLIDAYS);
     const hasSaved = saved && saved.records && Object.keys(saved.records).length > 0;
-    const records = hasSaved ? saved.records : JSON.parse(JSON.stringify(SEED_RECORDS));
+    let records;
+    if (hasSaved) {
+      records = saved.records;
+      // 동기화 기능 이전에 입력한 기록에는 수정 시각이 없다 — 병합에서 초기 데이터에 지지 않도록 최소값을 채운다
+      for (const r of Object.values(records)) if (r && !r.m) r.m = 1;
+    } else {
+      records = JSON.parse(JSON.stringify(SEED_RECORDS));
+      for (const r of Object.values(records)) r.seed = true;
+    }
     return { settings: s, records };
   }
   function saveLocal() {
@@ -988,7 +996,8 @@
     let changed = false;
     for (const [d, b] of Object.entries(remote.records || {})) {
       const a = state.records[d];
-      if (!a || (b.m || 0) > (a.m || 0)) {
+      // 초기 데이터(seed)는 실제로 입력된 기록에 항상 자리를 내준다 — 시각이 같아도 마찬가지
+      if (!a || (b.m || 0) > (a.m || 0) || (a.seed && !b.seed)) {
         if (JSON.stringify(a) !== JSON.stringify(b)) { state.records[d] = b; changed = true; }
       }
     }
