@@ -150,7 +150,7 @@
     display: inline-block; padding: 0.05rem 0.45rem; border-radius: 3px; font-size: 0.74rem; font-weight: 600;
     background: var(--badge-bg); color: var(--fg-dim); letter-spacing: 0.02em; white-space: nowrap;
   }
-  .chip.st-work, .chip.st-trip, .chip.st-official { background: var(--ok-bg); color: var(--ok); }
+  .chip.st-work, .chip.st-trip, .chip.st-tripIntl, .chip.st-official { background: var(--ok-bg); color: var(--ok); }
   .chip.st-half, .chip.st-leave, .chip.st-sick { background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
   .chip.st-holiday, .chip.st-future, .chip.st-before, .chip.st-today { background: var(--badge-bg); color: var(--fg-faint); }
   .chip.st-working { background: var(--warn-bg); color: var(--warn); }
@@ -230,7 +230,8 @@
           <option value="leave">연차 (1일)</option>
           <option value="sick">병가</option>
           <option value="official">공가 · 경조휴가</option>
-          <option value="trip">출장 · 파견</option>
+          <option value="trip">국내출장 · 파견</option>
+          <option value="tripIntl">국외출장 · 파견</option>
         </select>
       </label>
       <label>출근 <input type="time" id="f-in"></label>
@@ -340,10 +341,12 @@
     leave:    { label: '연차',        credit: DAY, leave: DAY },
     sick:     { label: '병가',        credit: DAY, sick: 1 },
     official: { label: '공가·경조',    credit: DAY },
-    trip:     { label: '출장·파견',    credit: DAY, trip: 1 },
+    trip:     { label: '국내출장',     credit: DAY, trip: 'dom' },
+    tripIntl: { label: '국외출장',     credit: DAY, trip: 'intl' },
   };
   const STATUS_LABEL = {
-    work: '출근', half: '반차+출근', leave: '연차', sick: '병가', official: '공가·경조', trip: '출장',
+    work: '출근', half: '반차+출근', leave: '연차', sick: '병가', official: '공가·경조',
+    trip: '국내출장', tripIntl: '국외출장',
     holiday: '공휴일', before: '복무 전', future: '예정', today: '미입력', working: '근무 중',
     absent: '결근', short: '4h 미달', incomplete: '기록 불완전', error: '오류',
   };
@@ -533,6 +536,25 @@
     return { monday, friday, days, required, credited, remaining: required - credited, absentDays, openDays, finalized, unauthorized };
   }
 
+  // 주말을 사이에 두고 이어지는 출장을 한 건으로 묶는다 (일수는 매뉴얼대로 평일만 센다)
+  function tripRuns() {
+    const dates = recDates().filter(d => { const t = state.records[d].type; return t === 'trip' || t === 'tripIntl'; }).sort();
+    const runs = [];
+    for (const d of dates) {
+      const last = runs[runs.length - 1];
+      // 금→월처럼 주말만 끼어 있으면 같은 출장으로 본다
+      if (last && daysBetween(last.to, d) <= 3) { last.to = d; }
+      else runs.push({ from: d, to: d });
+    }
+    for (const r of runs) {
+      let n = 0;
+      for (let d = r.from; d <= r.to; d = addDays(d, 1)) { const w = dow(d); if (w !== 0 && w !== 6) n++; }
+      r.days = n;
+      r.intl = state.records[r.from].type === 'tripIntl';
+    }
+    return runs;
+  }
+
   function analyzeAll() {
     const s = state.settings, today = todayStr();
     const ctx = { today, endDate: null };
@@ -558,17 +580,18 @@
       }
       years.push({ k, from, to, quota, used });
     }
-    let sickUsed = 0, tripUsed = 0;
+    let sickUsed = 0, tripDom = 0, tripIntl = 0;
     for (const [date, r] of Object.entries(state.records)) {
       if (!isRec(r) || date < s.startDate) continue;
       if (r.type === 'sick') sickUsed++;
-      if (r.type === 'trip') tripUsed++;
+      if (r.type === 'trip') tripDom++;
+      if (r.type === 'tripIntl') tripIntl++;
     }
     return {
       today, weeks, current: weeks[weeks.length - 1],
       unauthorizedMin, unauthorizedDays, extensionDays, baseEnd, endDate,
       dayN: daysBetween(s.startDate, today) + 1, totalDays: daysBetween(s.startDate, endDate) + 1,
-      yearIdx, years, sickUsed, tripUsed,
+      yearIdx, years, sickUsed, tripDom, tripIntl, tripRuns: tripRuns(),
     };
   }
 
@@ -629,6 +652,14 @@
     const bad = [];
     for (const wk of A.weeks) for (const d of wk.days) if (d.flags.length && d.date < today && d.status !== 'short') bad.push(fmtDate(d.date) + ': ' + d.flags.join(', '));
     if (bad.length) out.push('<div class="alert">' + bad.map(esc).join('<br>') + '</div>');
+    // 8일 이상 출장 — 시작일로부터 14일 이내 병무청 신상변동 보고
+    for (const r of A.tripRuns) {
+      if (r.days < 8) continue;
+      const due = addDays(r.from, 14);
+      out.push('<div class="alert' + (today > due ? ' bad' : '') + '">' + fmtDate(r.from) + '~' + fmtDate(r.to) +
+        ' ' + (r.intl ? '국외' : '국내') + '출장 <b>' + r.days + '일</b>(평일 기준) — 8일 이상이라 시작일로부터 14일 이내(<b>' + due +
+        '</b>)에 병무청 신상변동 보고가 필요합니다. 학과 복무관리 담당자에게 알리세요.</div>');
+    }
     // 연가 초과
     const y = A.years[A.yearIdx];
     if (y && y.used > y.quota) out.push('<div class="alert bad">연가 초과 <b>' + fmtDur(y.used - y.quota) + '</b> — 8시간 초과분은 연장복무 1일로 14일 이내 병무청 보고 대상입니다.</div>');
@@ -785,7 +816,10 @@
     cards.push('<div class="card"><div class="k">병가 잔여</div><div class="v">' + (s.sickDays - A.sickUsed) + '일</div><div class="d">' + A.sickUsed + '일 사용 / ' + s.sickDays + '일 (통틀어)</div></div>');
     cards.push('<div class="card"><div class="k">무단결근 누계</div><div class="v ' + (A.unauthorizedMin > 0 ? 'bad' : 'ok') + '">' + (A.unauthorizedMin > 0 ? fmtDur(A.unauthorizedMin) : '없음') + '</div>' +
       '<div class="d">' + A.unauthorizedDays + '일 확정 (8시간 = 1일) · 복무 연장 ' + A.extensionDays + '일 · 8일이면 편입취소</div></div>');
-    cards.push('<div class="card"><div class="k">출장 · 파견</div><div class="v">' + A.tripUsed + '일</div><div class="d">국내 통틀어 2년 · 8일 이상은 병무청 신고</div></div>');
+    cards.push('<div class="card"><div class="k">국내출장</div><div class="v">' + A.tripDom + '일</div>' +
+      '<div class="d">통틀어 2년 한도 · 1시간짜리도 1일 산입 · 한 건이 8일 이상이면 병무청 신상변동 신고</div></div>');
+    cards.push('<div class="card"><div class="k">국외출장 · 여행</div><div class="v">' + A.tripIntl + '일</div>' +
+      '<div class="d">통틀어 1년 한도 · 병무청 사전 허가 필수(미승인 출국은 편입취소)</div></div>');
     // 주별 요약
     let rows = '';
     for (const w of A.weeks.slice().reverse()) {
