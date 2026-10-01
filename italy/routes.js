@@ -13,7 +13,7 @@ function routePoints(){
  const points=[];
  if(hotel)points.push({...hotel,routeLabel:hotel.name+' · 출발'});
  if(meal)points.push({...meal,routeLabel:meal.name+(routeChoice==='departure'?' · 점심 후보':' · 저녁 후보')});
- if(routeChoice==='departure'&&hotel)points.push({...hotel,routeLabel:hotel.name+' · 짐 회수(조건 미확인)'});
+ if(routeChoice==='departure'&&hotel)points.push({...hotel,routeLabel:hotel.name+(hotel.id==='memphis'?' · 짐 회수(체크아웃 후 무료 보관 · 회수시각 확인)':' · 짐 회수(조건 미확인)')});
  for(const id of r.stops){const p=findPlace(id);if(p)points.push(p)}
  return points;
 }
@@ -30,7 +30,7 @@ function renderRoutes(fit=false){
  const panel=$('#routeWorkspace');panel.hidden=city!=='rome';routeLayer.clearLayers();if(city!=='rome')return;
  const r=WALK_ROUTES.find(r=>r.id===routeChoice),points=routePoints(),departure=routeChoice==='departure';
  panel.innerHTML='<div class="route-heading"><strong>코스 · 후보 비교</strong><span>미예약 계획</span></div><label class="route-label">지도에서 비교할 코스<select id="routeChoice">'+WALK_ROUTES.map(x=>'<option value="'+x.id+'" '+(routeChoice===x.id?'selected':'')+'>'+escapeHTML(x.name)+'</option>').join('')+'</select></label>'+
- '<details id="routeDetails" '+(routeExpanded?'open':'')+'><summary>호텔·식당 연결과 순서 보기</summary><div class="route-fields"><label class="route-label">호텔 후보 (조식 포함 선호)<select id="routeHotel">'+routeOptions(['montecarlo','basilica','raffaello','domus-harmonia','lancelot'],routeHotel,'미선택 · 코스만 보기')+'</select></label><label class="route-label">'+(departure?'점심 후보':'저녁 후보')+'<select id="'+(departure?'routeLunch':'routeDinner')+'">'+routeOptions(departure?['roscioli','felice','camillo','trapizzino']:['camillo','mons','suburra','cimarra','trapizzino','mercato-centrale'],departure?routeLunch:routeDinner,'미선택 · 식사 제외')+'</select></label></div><p class="route-note">'+escapeHTML(r.note)+'</p>'+
+ '<details id="routeDetails" '+(routeExpanded?'open':'')+'><summary>호텔·식당 연결과 순서 보기</summary><div class="route-fields"><label class="route-label">호텔 후보 (조식 포함 선호)<select id="routeHotel">'+routeOptions(['memphis','pace-helvezia','abruzzi','montecarlo','basilica','madison','virgilio','rome-times','exe-domus','raffaello','domus-harmonia','lancelot'],routeHotel,'미선택 · 코스만 보기')+'</select></label><label class="route-label">'+(departure?'점심 후보':'저녁 후보')+'<select id="'+(departure?'routeLunch':'routeDinner')+'">'+routeOptions(departure?['roscioli','felice','camillo','trapizzino']:['camillo','mons','suburra','cimarra','trapizzino','mercato-centrale'],departure?routeLunch:routeDinner,'미선택 · 식사 제외')+'</select></label></div><p class="route-note">'+escapeHTML(r.note)+'</p>'+
  (departure&&!routeHotel?'<p class="route-warning">호텔을 선택하면 체크아웃 후 짐 회수 경유가 추가됩니다. 보관 가능 여부·비용·회수시간은 호텔 확인 필요.</p>':'')+
  (routeLunch==='roscioli'&&departure?'<p class="route-warning">Roscioli: 10/1 조회 시 10/4 1인 온라인 예약 불가. 실제 예약 없음.</p>':'')+
  '<ol class="route-stops">'+points.map((p,i)=>'<li><button type="button" data-route-place="'+p.id+'"><b>'+String(i+1).padStart(2,'0')+'</b><span>'+escapeHTML(p.routeLabel||p.name)+'</span></button></li>').join('')+'</ol>'+
