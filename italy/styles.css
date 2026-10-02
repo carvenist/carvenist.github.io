@@ -16,3 +16,4 @@
 @media(max-width:850px){.trip-overview{grid-row:3;padding:14px 18px;max-height:none}.route-workspace{grid-row:4}.map-panel{grid-row:5}.list-tools{grid-row:6}.place-list{grid-row:7}.sidebar-foot{grid-row:8}.trip-overview,.daily-plan{min-width:0;overflow-wrap:anywhere}.daily-plan summary{min-height:60px}.booked-heading button{min-height:34px}}
 .sidebar{overflow:auto}.place-list{flex:none}
 @media(min-width:851px){.sidebar-head,.plan-strip,.list-tools,.sidebar-foot{flex:none}.trip-overview,.route-workspace{max-height:none;overflow:visible}.place-list{overflow:visible}}
+.return-plan{border-top:1px solid #eadcc7;margin-top:14px}.return-plan summary{padding:12px 0;cursor:pointer;font-size:13px;line-height:1.5}.return-plan summary span{display:block;font-size:11px;color:#7c715e;margin-top:4px}

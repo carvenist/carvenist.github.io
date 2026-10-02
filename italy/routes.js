@@ -1,4 +1,5 @@
 const WALK_ROUTES=[
+ {id:'return-home',name:'10/9 귀국 · Nicolaus → Bari → Roma → FCO',stops:['nicolaus','bari-station','termini','fco'],note:'택시·열차 이동 순서. 실제 운행 경로가 아닌 개략 연결선.'},
  {id:'memphis-night',name:'10/3 핵심 · 저녁 → Trevi → Memphis',stops:['trevi'],returnHotel:true,note:'21–22시 체크인 예상 후 저녁 → 22:30–23:15 Trevi 외부 야경 → 호텔 복귀. 시각은 계획 예시이며 입국·수하물·교통 상황에 따라 변경. 늦으면 식당 주방 확인, 체력이 없으면 야경도 생략.'},
  {id:'memphis-night-plus',name:'10/3 선택 확장 · Trevi → Quirinale',stops:['trevi','quirinale'],returnHotel:true,note:'핵심 야경 후 체력이 남을 때만 Quirinale 광장 외관 추가. 늦은 도착이면 핵심 코스만 선택.'},
  {id:'morning-shop',name:'10/4 A · Spagna·Margutta + 짧은 쇼핑',stops:['spagna','margutta','rinascente'],morning:true,note:'09:45–10:15 체크아웃·짐 보관(늦어도 11시 전) → Spagna·Via Margutta → 1–2곳만 쇼핑 → 12:30–13시 점심 → 14시 전후 호텔 짐 회수 → Termini 15:15 목표. 기본 지도는 Rinascente 1곳만 경유. Fabriano·OVS·Doppelgänger는 교체 후보, 모두 방문하는 계획 아님. 공휴일 운영 미확인; 닫으면 산책으로 변경.'},
@@ -14,6 +15,7 @@ const WALK_ROUTES=[
 let routeChoice='memphis-night',routeHotel='memphis',routeDinner='piccolo-arancio',routeLunch='baccano',routeExpanded=false;
 try{const prefs=JSON.parse(localStorage.getItem('italia-route-view-v1')||'{}');if(WALK_ROUTES.some(r=>r.id===prefs.route))routeChoice=prefs.route;routeHotel=prefs.hotel||'memphis';routeDinner=prefs.dinner||'piccolo-arancio';routeLunch=prefs.lunch||'baccano'}catch{}
 function routePoints(){
+ if(routeChoice==='return-home')return ['nicolaus','bari-station','termini','fco'].map(id=>findPlace(id));
  const r=WALK_ROUTES.find(r=>r.id===routeChoice),hotel=findPlace(routeHotel),departure=r.id==='departure',meal=findPlace(departure||r.morning?routeLunch:routeDinner),points=[];
  if(hotel)points.push({...hotel,routeLabel:hotel.name+(r.morning?' · 체크아웃·짐 보관':' · 출발')});
  if(meal&&!r.morning)points.push({...meal,routeLabel:meal.name+(departure?' · 점심 추천 (미예약)':' · 저녁 추천 (미예약)')});
@@ -27,9 +29,20 @@ function walkingChunks(points){
  const chunks=[];for(let i=0;i<points.length-1;i+=4)chunks.push(points.slice(i,i+5));
  return chunks.length?chunks:[points];
 }
+
+function returnPlanHTML(){return '<details class="return-plan" '+(dayFilter==='10.9'?'open':'')+'><summary><b>10/9 금 · 귀국 시간·이동</b><span>08:40 Bari → 13:15 Roma / 21:15 FCO 출발</span></summary><ol class="day-timeline"><li><b>07:50 → 08:10 목표</b> Nicolaus 체크아웃 → 택시로 Bari Centrale. 계획용 시각으로 교통·짐 이동에 맞춰 조정.</li><li><b>08:40 → 13:15 확정</b> Frecciarossa 8306 Bari Centrale → Roma Termini · Standard Economy €46.90 · 발권 완료.</li><li><b>13:15 이후 여유</b> 로마 점심·카페·휴식. 16시 전후 Termini 복귀 목표, 짐·승강장 이동 여유 확보.</li><li><b>16:35 → 17:07 추천·미구매</b> Leonardo Express Roma Termini → FCO · €14. 판매표 확인 추천안, 구매·운행 재확인 필요.</li><li><b>17시대 공항 도착</b> 터미널 이동 후 체크인·짐 위탁·보안검색·출국 수속. 공항역 17:07 도착 기준 출발까지 약 4시간 8분의 여유. 실제 카운터 오픈 시간 미확인.</li><li><b>10/9 21:15 FCO → 10/10 16:10 ICN</b> 출발은 이탈리아 Europe/Rome CEST(UTC+2), 도착은 한국 Asia/Seoul KST(UTC+9). 항공 도착은 다음 날.</li></ol><p class="route-warning">10/6–23 공항철도 일부 시간 변경·취소 및 대체버스 공지. 출발 전 운행 확인, 변경 시 로마 휴식 시간을 줄이고 공항 이동을 앞당기세요.</p><button type="button" class="plan-route-button" data-plan-route="return-home">귀국 이동 순서 지도에 보기</button> <a class="plan-source" href="https://www.trenitalia.com/it/informazioni/lavori-programmati/20261006-linee-roma-termini-fiumicino-aeroporto-roma-velletri-roma-pisa.html" target="_blank" rel="noopener">공항철도 공식 변경 공지 ↗</a></details>';}
+function renderReturnRoute(fit){
+ const panel=$('#routeWorkspace');panel.hidden=false;const points=routePoints();routeLayer.clearLayers();
+ const driving=new URL(walkingLink(points.slice(0,2)));driving.searchParams.set('travelmode','driving');driving.searchParams.set('destination','Bari Centrale, Bari, Italy');
+ panel.innerHTML='<div class="route-heading"><strong>10/9 귀국 · 택시·열차 연결</strong></div><ol class="route-stops">'+points.map((p,i)=>'<li><button type="button" data-route-place="'+p.id+'"><b>'+(i+1)+'</b><span>'+escapeHTML(p.name)+'</span></button></li>').join('')+'</ol><div class="route-links"><a href="'+escapeHTML(driving.href)+'" target="_blank" rel="noopener">Nicolaus → 역 차량 길찾기 ↗</a><a href="https://www.trenitalia.com/en.html" target="_blank" rel="noopener">열차 운행·시간표 확인 ↗</a></div><p class="route-disclaimer">점선은 도시 간 이동 순서이며 실제 도로·철도 경로가 아닙니다. Nicolaus→Bari 역은 택시, Bari→Roma는 FR8306, Roma→FCO는 추천 공항철도(미구매)입니다.</p><button type="button" class="plan-route-button" data-plan-route="memphis-night">10/3 로마 동선으로 돌아가기</button>';
+ L.polyline(points.map(p=>[p.lat,p.lng]),{color:'#bd762e',weight:3,dashArray:'5,8',opacity:.8,interactive:false}).addTo(routeLayer);
+ points.forEach((p,i)=>L.marker([p.lat,p.lng],{icon:L.divIcon({className:'',html:'<span class="route-pin">'+(i+1)+'</span>',iconSize:[30,30],iconAnchor:[15,15]}),title:(i+1)+'. '+p.name}).addTo(routeLayer).on('click',()=>{if(!picking)selectPlace(p.id)}));
+ if(fit)map.fitBounds(points.map(p=>[p.lat,p.lng]),{padding:[40,45]});
+}
+
 function renderTripOverview(){
  const panel=$('#tripOverview');panel.hidden=false;
- if(city==='bari'){panel.innerHTML='<div class="booked-heading"><span>10/4–5 확정 숙소</span><button type="button" data-route-place="bari-moderno">Hotel Moderno ↗</button></div><p class="booking-summary">성인 1인 · Superior Single · 전용 욕실 · 조식 포함<br>결제 승인·호텔 예약 확인 완료 · 총 €142.80<br><small>현장 도시세 €2 포함 · 환불·변경 불가</small></p><p class="route-note"><b>10/4</b> Bari Centrale 20:20 도착 → Moderno 21시 체크인 예상 → 저녁. 도착시각은 교통·짐 이동에 따라 달라집니다.</p><p class="route-note"><b>10/5</b> 조식·시내 산책 → 11시 전 Moderno 체크아웃·짐 보관 → 점심·짐 회수 → 택시로 Nicolaus 13시 도착 목표 → 짐 보관 요청·배지 수령 → 13:45 행사장 → GEMINI 14:00–17:45 참석 예정 후보 → 종료 후 객실 체크인.</p><p class="route-note">Moderno 체크아웃 후 짐 보관 시간·비용, Nicolaus 체크인 전 짐 보관·월요일 등록데스크 시간은 확인 필요. Nicolaus 일반 체크인 15시부터, 조기 입실 보장 없음.</p>';return;}
+ if(city==='bari'){panel.innerHTML='<div class="booked-heading"><span>10/4–5 확정 숙소</span><button type="button" data-route-place="bari-moderno">Hotel Moderno ↗</button></div><p class="booking-summary">성인 1인 · Superior Single · 전용 욕실 · 조식 포함<br>결제 승인·호텔 예약 확인 완료 · 총 €142.80<br><small>현장 도시세 €2 포함 · 환불·변경 불가</small></p><p class="route-note"><b>10/4</b> Bari Centrale 20:20 도착 → Moderno 21시 체크인 예상 → 저녁. 도착시각은 교통·짐 이동에 따라 달라집니다.</p><p class="route-note"><b>10/5</b> 조식·시내 산책 → 11시 전 Moderno 체크아웃·짐 보관 → 점심·짐 회수 → 택시로 Nicolaus 13시 도착 목표 → 짐 보관 요청·배지 수령 → 13:45 행사장 → GEMINI 14:00–17:45 참석 예정 후보 → 종료 후 객실 체크인.</p><p class="route-note">Moderno 체크아웃 후 짐 보관 시간·비용, Nicolaus 체크인 전 짐 보관·월요일 등록데스크 시간은 확인 필요. Nicolaus 일반 체크인 15시부터, 조기 입실 보장 없음.</p>'+returnPlanHTML();return;}
  const expanded=[...panel.querySelectorAll('.daily-plan')].map(d=>d.open);
  panel.innerHTML=`<div class="booked-heading"><span>확정 숙소</span><button type="button" data-route-place="memphis">Hotel Memphis ↗</button></div>
  <p class="booking-summary">10/3–4 · 결제·예약 완료 · 조식 포함<br>Single Room 13㎡ / 전용 욕실 · 총 €186.85<br><small>Agoda €179.35 + 현장 €7.50 · 환불·변경 불가</small></p>
@@ -44,6 +57,7 @@ function renderTripOverview(){
  <div class="plan-branch-buttons"><button type="button" data-plan-route="morning-shop">A 쇼핑 동선</button><button type="button" data-plan-route="morning-view">B 전망 동선</button><button type="button" data-plan-route="morning-pantheon">C Pantheon 대안</button></div>
  <div class="plan-small-links"><a href="${escapeHTML(walkingLink([findPlace('memphis'),findPlace('luna'),findPlace('memphis')]))}" target="_blank" rel="noopener">Luna 아침 왕복 ↗</a><a href="${escapeHTML(walkingLink([findPlace('memphis'),findPlace('trecaffe'),findPlace('memphis')]))}" target="_blank" rel="noopener">TreCaffè 아침 왕복 ↗</a></div>
  <p class="route-note">관광 시각은 계획용 여유 목표입니다. 식당·매장은 미예약, 현장 상황과 실제 이동시간에 맞춰 줄이세요.</p></details>`;
+ panel.insertAdjacentHTML('beforeend',returnPlanHTML());
  panel.querySelectorAll('.daily-plan').forEach((d,i)=>{d.open=!!expanded[i]});
 }
 function walkingLink(points){
@@ -56,7 +70,7 @@ function walkingLink(points){
 }
 function routeOptions(ids,value,placeholder){return '<option value="">'+placeholder+'</option>'+ids.map(id=>{const p=findPlace(id);return p?'<option value="'+id+'" '+(value===id?'selected':'')+'>'+escapeHTML(p.name)+'</option>':''}).join('')}
 function renderRoutes(fit=false){
- renderTripOverview();const panel=$('#routeWorkspace');panel.hidden=city!=='rome';routeLayer.clearLayers();if(city!=='rome')return;
+ renderTripOverview();if(routeChoice==='return-home'){renderReturnRoute(fit);return;}const panel=$('#routeWorkspace');panel.hidden=city!=='rome';routeLayer.clearLayers();if(city!=='rome')return;
  const r=WALK_ROUTES.find(r=>r.id===routeChoice),points=routePoints(),departure=routeChoice==='departure'||r.morning;
  panel.innerHTML='<div class="route-heading"><strong>동선 지도 · 선택 비교</strong><span>식당·관광은 미확정</span></div><label class="route-label">지도에서 비교할 코스<select id="routeChoice">'+WALK_ROUTES.map(x=>'<option value="'+x.id+'" '+(routeChoice===x.id?'selected':'')+'>'+escapeHTML(x.name)+'</option>').join('')+'</select></label>'+
  '<details id="routeDetails" '+(routeExpanded?'open':'')+'><summary>호텔·식당 연결과 순서 보기</summary><div class="route-fields"><label class="route-label">지도 비교 호텔 (확정: Memphis)<select id="routeHotel">'+routeOptions(['memphis','pace-helvezia','abruzzi','montecarlo','basilica','madison','virgilio','rome-times','exe-domus','raffaello','domus-harmonia','lancelot'],routeHotel,'미선택 · 코스만 보기')+'</select></label><label class="route-label">'+(departure?'점심 후보':'저녁 후보')+'<select id="'+(departure?'routeLunch':'routeDinner')+'">'+routeOptions(departure?['baccano','piccolo-arancio','chianti','roscioli','felice','camillo','trapizzino']:['piccolo-arancio','chianti','piccolo-buco','baccano','camillo','mons','suburra','cimarra','trapizzino','mercato-centrale'],departure?routeLunch:routeDinner,'미선택 · 식사 제외')+'</select></label></div><p class="route-note">'+escapeHTML(r.note)+'</p>'+
