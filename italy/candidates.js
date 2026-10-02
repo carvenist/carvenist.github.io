@@ -655,3 +655,50 @@ const ROME_CANDIDATES=[
     "mapSource": "https://www.openstreetmap.org/way/516174441"
   }
 ];
+const BARI_CANDIDATES=[
+  {
+    "id": "bari-moderno",
+    "city": "bari",
+    "name": "Hotel Moderno · 추가 1박 우선 후보",
+    "category": "stay",
+    "area": "Via Scipione Crisanzio 60 · Murat",
+    "address": "Hotel Moderno, Via Scipione Crisanzio 60, Bari",
+    "lat": 41.1195168,
+    "lng": 16.8651418,
+    "mapSource": "https://www.openstreetmap.org/node/2882564521",
+    "url": "https://www.modernobari.com/",
+    "day": "10.4",
+    "status": "후보",
+    "desc": "10/4–5 성인 1인 1박 · 미선택·미예약. 10/2 조회 총 €142.80 = 선결제 €140.80 + 현장 도시세 €2. Superior Single 약 17㎡ · 전용 욕실 · 조식 포함, 환불·변경 불가. 24시간 프런트·엘리베이터·짐 보관, 체크아웃 11시. 역·시내 접근과 가격을 고려한 1순위 비교 후보. 10/4 20:20 Bari Centrale 도착 → 숙소 체크인 → 10/5 시내 아침·산책 → 체크아웃·점심·짐 회수 → 택시로 Nicolaus 12:45–13시 도착 목표. 요금·객실·최종 조건 변동 가능; 체크아웃 후 짐 보관 시간·비용은 호텔 확인."
+  },
+  {
+    "id": "bari-victor",
+    "city": "bari",
+    "name": "Victor Hotel · 추가 1박 대안",
+    "category": "stay",
+    "area": "Via Domenico Nicolai 71 · Murat",
+    "address": "Victor Hotel, Via Domenico Nicolai 71, Bari",
+    "lat": 41.1212966,
+    "lng": 16.8662208,
+    "mapSource": "https://www.openstreetmap.org/node/13790588001",
+    "url": "https://www.victorhotelbari.it/",
+    "day": "10.4",
+    "status": "후보",
+    "desc": "10/4–5 성인 1인 1박 · 미선택·미예약. 10/2 조회 총 €168 · 더블침대 · 전용 욕실 · 조식 포함. 선결제·환불 불가. 24시간 프런트·엘리베이터·짐 보관, 체크아웃 10시. 10/4 열차 도착 후 숙박 → 10/5 일찍 체크아웃·짐 보관 후 시내 산책 → 점심·짐 회수 → 택시로 Nicolaus 이동. 요금·객실·최종 조건 변동 가능; 짐 보관 시간·비용 확인."
+  },
+  {
+    "id": "bari-boston",
+    "city": "bari",
+    "name": "Hotel Boston · 추가 1박 대안",
+    "category": "stay",
+    "area": "Via Niccolò Piccinni 155 · Murat",
+    "address": "Hotel Boston, Via Niccolò Piccinni 155, Bari",
+    "lat": 41.1252417,
+    "lng": 16.8648639,
+    "mapSource": "https://maps.app.goo.gl/2x967rJu9p9w9kSf9",
+    "url": "https://www.bostonbari.it/contatti-hotel-bari/",
+    "day": "10.4",
+    "status": "후보",
+    "desc": "10/4–5 성인 1인 1박 · 미선택·미예약. 10/2 조회 총 €216.31 · 퀸 침대 · 18㎡ · 전용 욕실 · 조식 포함. 선결제·환불 불가. 24시간 프런트·엘리베이터·짐 보관, 체크아웃 11시. 시내·구시가지 접근을 고려하는 대안. 10/4 20:20 열차 도착 → 숙소 → 10/5 시내 아침·체크아웃·점심·짐 회수 → 택시로 Nicolaus 12:45–13시 목표. 요금·객실·최종 조건 변동 가능; 짐 보관 시간·비용 확인. 좌표는 호텔 공식 지도 링크 기준."
+  }
+];

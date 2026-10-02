@@ -1,4 +1,4 @@
-const CITY={rome:{title:'로마',latin:'Roma',intro:'10월 3일 19:15 도착 · Memphis 1박 예약 완료(조식 포함). 4일 FR8317 15:57 → 바리 20:20, Standard Base €61 예약·발권 완료.',center:[41.8927,12.4817],zoom:13,days:[['10.3 토','19:15 FCO 도착 · 로마 1박'],['10.4 일','15:57 기차 → 바리 · 발권 완료']]},bari:{title:'바리',latin:'Bari',intro:'포조프랑코에서 학회, 저녁에는 바리 베키아와 바닷가.',center:[41.1145,16.866],zoom:13,days:[['10.4 일','바리 이동 · 추가 숙박 미예약'],['10.5 월','니콜라우스 확정 숙박 시작'],['10.6–8','ISMAR 학회 · 저녁 탐방'],['10.9 금','귀국 동선 검토 중']]}};
+const CITY={rome:{title:'로마',latin:'Roma',intro:'10월 3일 19:15 도착 · Memphis 1박 예약 완료(조식 포함). 4일 FR8317 15:57 → 바리 20:20, Standard Base €61 예약·발권 완료.',center:[41.8927,12.4817],zoom:13,days:[['10.3 토','19:15 FCO 도착 · 로마 1박'],['10.4 일','15:57 기차 → 바리 · 발권 완료']]},bari:{title:'바리',latin:'Bari',intro:'10/4 20:20 도착 · 추가 1박은 미선택·미예약. 5일 Nicolaus 숙박 시작, GEMINI 참석은 후보.',center:[41.1145,16.866],zoom:13,days:[['10.4 일','바리 이동 · 추가 숙박 미예약'],['10.5 월','니콜라우스 확정 숙박 시작'],['10.6–8','ISMAR 학회 · 저녁 탐방'],['10.9 금','귀국 동선 검토 중']]}};
 const CATEGORY={food:'식당',drink:'바·클럽',stay:'숙소',coffee:'카페·아침',shop:'쇼핑',transit:'교통',area:'동네',sight:'관광·산책'};
 const PLACES=[
  {id:'fco',city:'rome',name:'피우미치노 공항 (FCO)',category:'transit',area:'피우미치노',lat:41.8153911,lng:12.2264848,desc:'10월 3일 19:15 도착. 테르미니역까지 레오나르도 익스프레스 이용.',day:'10.3',status:'확정',url:'https://www.trenitalia.com/en/connections/leonardo-express.html'},
@@ -29,7 +29,7 @@ const PLACES=[
  {id:'ferrarese',city:'bari',name:'피아차 델 페라레세',category:'sight',area:'바리 베키아',lat:41.1269251,lng:16.8719518,desc:'구시가지와 바닷가 사이, 저녁 산책 시작점.',day:'',status:'후보',url:'https://www.italia.it/en/puglia/bari/piazza-del-ferrarese'},
  {id:'lungomare',city:'bari',name:'룽고마레 나차리오 사우로',category:'sight',area:'해안',lat:41.1209717,lng:16.8837471,desc:'저녁 식사 전후 바다를 따라 걷기 좋은 구간.',day:'',status:'후보',url:'https://www.italia.it/en/puglia/bari/bari-vecchia'}
 ];
-PLACES.push(...ROME_CANDIDATES);
+PLACES.push(...ROME_CANDIDATES,...BARI_CANDIDATES);
 Object.assign(PLACES.find(p=>p.id==='roscioli'),{address:'Salumeria Roscioli, Via dei Giubbonari 21, Roma',url:'https://salumeriaroscioli.com/en/pages/prenota'});
 Object.assign(PLACES.find(p=>p.id==='felice'),{address:'Felice a Testaccio, Via Mastro Giorgio 29, Roma'});
 Object.assign(PLACES.find(p=>p.id==='termini'),{address:'Roma Termini, Piazza dei Cinquecento, Roma',url:'https://www.trenitalia.com/it/informazioni/la-guida-del-viaggiatore/offerte-commerciali.html',bookingSource:'https://www.lefrecce.it/Channels.Website.WEB/'});
