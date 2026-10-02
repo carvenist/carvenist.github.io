@@ -9,7 +9,7 @@
   <title>로마 · 바리 여행 지도</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23132c3b'/%3E%3Cpath d='M32 10c-11 0-20 9-20 20 0 15 20 26 20 26s20-11 20-26c0-11-9-20-20-20Zm0 27a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z' fill='%23f2b455'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=20261002-booked">
 </head>
 <body>
   <div class="app-shell">
@@ -35,6 +35,7 @@
         </div>
 
         <div class="plan-strip" id="planStrip" aria-label="주요 일정"></div>
+        <section class="trip-overview" id="tripOverview" aria-label="확정 숙소와 날짜별 동선"></section>
         <section class="route-workspace" id="routeWorkspace" aria-label="코스와 후보 비교"></section>
 
         <div class="list-tools">
@@ -55,12 +56,12 @@
   </div>
 
   <dialog id="placeDialog" class="place-dialog"><form method="dialog"><button class="dialog-close" value="cancel" aria-label="닫기">×</button><div id="dialogContent"></div></form></dialog>
-  <dialog id="editDialog" class="edit-dialog"><form id="placeForm"><button type="button" class="dialog-close" id="editClose" aria-label="닫기">×</button><div class="eyebrow">MY MAP</div><h2 id="editTitle">장소 추가</h2><p class="edit-help" id="editHelp">지도에서 원하는 지점을 클릭한 뒤 장소를 저장하세요.</p><label>장소 이름<input name="name" required maxlength="80" placeholder="예: 가보고 싶은 와인바"></label><div class="form-grid"><label>도시<select name="city"><option value="rome">로마</option><option value="bari">바리</option></select></label><label>종류<select name="category"><option value="food">식당</option><option value="drink">바·클럽</option><option value="stay">숙소</option><option value="transit">교통</option><option value="sight">관광·산책</option><option value="area">동네</option></select></label></div><div class="form-grid"><label>일정 날짜<select name="day"><option value="">미정</option><option value="10.3">10월 3일</option><option value="10.4">10월 4일</option><option value="10.5">10월 5일</option><option value="10.6">10월 6일</option><option value="10.7">10월 7일</option><option value="10.8">10월 8일</option><option value="10.9">10월 9일</option></select></label><label>상태<select name="status"><option value="예약·발권 완료">예약·발권 완료</option><option value="선택 · 미발권">선택 · 미발권</option><option value="후보">후보</option><option value="예약 전">예약 전</option><option value="예약 완료">예약 완료</option><option value="방문 완료">방문 완료</option><option value="확정">확정</option><option value="이동 예정">이동 예정</option></select></label></div><label>메모<textarea name="note" rows="3" maxlength="700" placeholder="방문 계획 등 (예약번호·결제정보는 적지 마세요)"></textarea></label><div class="coords-line" id="coordsLine">위치를 선택해 주세요</div><div class="form-actions"><button type="button" id="pickLocation" class="secondary-button">지도에서 위치 선택</button><button class="save-button" type="submit">저장하기</button></div></form></dialog>
+  <dialog id="editDialog" class="edit-dialog"><form id="placeForm"><button type="button" class="dialog-close" id="editClose" aria-label="닫기">×</button><div class="eyebrow">MY MAP</div><h2 id="editTitle">장소 추가</h2><p class="edit-help" id="editHelp">지도에서 원하는 지점을 클릭한 뒤 장소를 저장하세요.</p><label>장소 이름<input name="name" required maxlength="80" placeholder="예: 가보고 싶은 와인바"></label><div class="form-grid"><label>도시<select name="city"><option value="rome">로마</option><option value="bari">바리</option></select></label><label>종류<select name="category"><option value="food">식당</option><option value="coffee">카페·아침</option><option value="shop">쇼핑</option><option value="drink">바·클럽</option><option value="stay">숙소</option><option value="transit">교통</option><option value="sight">관광·산책</option><option value="area">동네</option></select></label></div><div class="form-grid"><label>일정 날짜<select name="day"><option value="">미정</option><option value="10.3">10월 3일</option><option value="10.4">10월 4일</option><option value="10.5">10월 5일</option><option value="10.6">10월 6일</option><option value="10.7">10월 7일</option><option value="10.8">10월 8일</option><option value="10.9">10월 9일</option></select></label><label>상태<select name="status"><option value="예약·발권 완료">예약·발권 완료</option><option value="선택 · 미발권">선택 · 미발권</option><option value="후보">후보</option><option value="예약 전">예약 전</option><option value="예약 완료">예약 완료</option><option value="방문 완료">방문 완료</option><option value="확정">확정</option><option value="이동 예정">이동 예정</option></select></label></div><label>메모<textarea name="note" rows="3" maxlength="700" placeholder="방문 계획 등 (예약번호·결제정보는 적지 마세요)"></textarea></label><div class="coords-line" id="coordsLine">위치를 선택해 주세요</div><div class="form-actions"><button type="button" id="pickLocation" class="secondary-button">지도에서 위치 선택</button><button class="save-button" type="submit">저장하기</button></div></form></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <input type="file" id="importInput" accept="application/json" hidden>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="./candidates.js?v=20261001-hotels7" defer></script>
-  <script src="./app.js?v=20261001-issued" defer></script>
-  <script src="./routes.js?v=20261001-hotels7" defer></script>
+  <script src="./candidates.js?v=20261002-booked" defer></script>
+  <script src="./app.js?v=20261002-booked" defer></script>
+  <script src="./routes.js?v=20261002-booked" defer></script>
 </body>
 </html>
