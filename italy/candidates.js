@@ -659,7 +659,7 @@ const BARI_CANDIDATES=[
   {
     "id": "bari-moderno",
     "city": "bari",
-    "name": "Hotel Moderno · 추가 1박 우선 후보",
+    "name": "Hotel Moderno · 예약 완료",
     "category": "stay",
     "area": "Via Scipione Crisanzio 60 · Murat",
     "address": "Hotel Moderno, Via Scipione Crisanzio 60, Bari",
@@ -668,8 +668,8 @@ const BARI_CANDIDATES=[
     "mapSource": "https://www.openstreetmap.org/node/2882564521",
     "url": "https://www.modernobari.com/",
     "day": "10.4",
-    "status": "후보",
-    "desc": "10/4–5 성인 1인 1박 · 미선택·미예약. 10/2 조회 총 €142.80 = 선결제 €140.80 + 현장 도시세 €2. Superior Single 약 17㎡ · 전용 욕실 · 조식 포함, 환불·변경 불가. 24시간 프런트·엘리베이터·짐 보관, 체크아웃 11시. 역·시내 접근과 가격을 고려한 1순위 비교 후보. 10/4 20:20 Bari Centrale 도착 → 숙소 체크인 → 10/5 시내 아침·산책 → 체크아웃·점심·짐 회수 → 택시로 Nicolaus 12:45–13시 도착 목표. 요금·객실·최종 조건 변동 가능; 체크아웃 후 짐 보관 시간·비용은 호텔 확인."
+    "status": "예약 완료",
+    "desc": "2026/10/4–5 성인 1인 1박 · 결제 승인·호텔 확인 메일로 예약 확정. Superior Single · 전용 욕실 · 조식 포함. 총 €142.80(현장 도시세 €2 포함), 환불·변경 불가. 예상 체크인 21시(도착 보장 시각 아님), 체크아웃 11시. 10/4 Bari Centrale 20:20 도착 → Hotel Moderno → 저녁. 10/5 조식·시내 산책 → 11시 전 체크아웃·짐 보관 → 점심·짐 회수 → 택시로 Nicolaus 13시 도착 목표 → GEMINI 14시 참석 예정 후보. 24시간 프런트·엘리베이터·짐 보관 안내; 체크아웃 후 보관 시간·비용은 호텔에 확인."
   },
   {
     "id": "bari-victor",
