@@ -702,3 +702,53 @@ const BARI_CANDIDATES=[
     "desc": "10/4–5 성인 1인 1박 · 미선택·미예약. 10/2 조회 총 €216.31 · 퀸 침대 · 18㎡ · 전용 욕실 · 조식 포함. 선결제·환불 불가. 24시간 프런트·엘리베이터·짐 보관, 체크아웃 11시. 시내·구시가지 접근을 고려하는 대안. 10/4 20:20 열차 도착 → 숙소 → 10/5 시내 아침·체크아웃·점심·짐 회수 → 택시로 Nicolaus 12:45–13시 목표. 요금·객실·최종 조건 변동 가능; 짐 보관 시간·비용 확인. 좌표는 호텔 공식 지도 링크 기준."
   }
 ];
+
+BARI_CANDIDATES.push(...[
+  {
+    "id": "uascezze",
+    "name": "La Uascézze · 풀 저녁 후보",
+    "category": "food",
+    "address": "La Uascézze, Corte Sant’Agostino 2/3/4, Bari, Italy",
+    "lat": 41.1287738,
+    "lng": 16.871841,
+    "mapSource": "https://maps.app.goo.gl/ev5MNe2xJ8HZN1Js8",
+    "url": "https://www.uascezze.it/menu",
+    "desc": "미예약. Moderno에서 도보 약 20–25분 추정. 정규 일요일 저녁 19:45–23:00(공식); 10/4 공휴일 영업·주방 마감·좌석 미확인. Patate riso e cozze €10, fave e cicorie €9, braciole al sugo €16, 공휴일 서비스 €3. 식사 예산 약 €25–35 추정. 도착 후 주문 가능 여부 확인.",
+    "city": "bari",
+    "area": "10/4 저녁 · Moderno 왕복",
+    "day": "10.4",
+    "status": "후보"
+  },
+  {
+    "id": "yannis-centro",
+    "name": "Yannis Centro · 호텔 근처 대안",
+    "category": "food",
+    "address": "Gyrosteria Yannis, Via Domenico Nicolai 11/13, Bari, Italy",
+    "lat": 41.1213775,
+    "lng": 16.8685085,
+    "mapSource": "https://www.openstreetmap.org/node/2723575652",
+    "url": "https://www.gyrosteriayannis.com/en/menu/",
+    "desc": "미예약. Moderno에서 도보 약 5분 추정. Pita gyros €6.50, moussaka €10, 커버 €2. 공식 일요일 19:30–00:30이나 주문 사이트는 23:30 마감으로 안내가 다름. 공휴일 실제 영업·주방 마감·좌석 미확인. 주문 안내: https://gyrosteriayannis.ipratico.com/",
+    "city": "bari",
+    "area": "10/4 저녁 · Moderno 왕복",
+    "day": "10.4",
+    "status": "후보"
+  },
+  {
+    "id": "luau-tiki",
+    "name": "Luau Tiki · 선택 칵테일 대안",
+    "category": "drink",
+    "address": "Luau Tiki Bar, Via XXIV Maggio 16, Bari, Italy",
+    "lat": 41.1240072,
+    "lng": 16.8742175,
+    "mapSource": "https://www.openstreetmap.org/way/29986261",
+    "url": "https://www.luautiki.bar/",
+    "desc": "미예약. 럼·티키 칵테일 후보. Mercantile Nove 대신 선택하며 두 곳 방문은 필수가 아님. MastroCiccio에서 약 10–12분, Moderno 복귀 약 15–20분 추정. 핀은 확인된 Via XXIV Maggio 거리 대표 좌표이며 정확한 16번 입구는 미확인: 주소 길찾기 사용. 공식 메뉴에 가격·시간 없음. 보조 안내 일요일 마감 01:30/02:00으로 불일치; 공휴일 영업·주방/바 마감·좌석 미확인.",
+    "city": "bari",
+    "area": "10/4 저녁 · Moderno 왕복",
+    "day": "10.4",
+    "status": "후보"
+  }
+]);
+
+for(const p of BARI_CANDIDATES){if(p.id==="bari-moderno")p.desc="10/4 체크인 완료. "+p.desc;}
