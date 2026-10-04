@@ -1,6 +1,6 @@
 const WALK_ROUTES=[
-{"id":"revised-oct4","name":"10/4 현재 동선 · Colonna → Pantheon → Navona → Emma","stops":["colonna","pantheon","navona"],"morning":true,"taxi":true,"note":"09:00 기상·조식·짐 정리 → 11:00 Memphis 체크아웃·짐 보관 → Rinascente 20분 선택 또는 생략 → Piazza Colonna → Pantheon 외관/Piazza della Rotonda → Navona → 12:30 Emma 점심(미예약) → 13:40까지 출발 → 도보 약 30분 추정, 14:15 Memphis 목표 → 14:15–14:30 짐 회수 → 택시로 Termini 15:15 목표 → FR8317 15:57. 시각·도보시간은 계획용 추정."},
-{"id":"revised-oct4-shop","name":"10/4 현재 동선 + Rinascente 20분","stops":["rinascente","colonna","pantheon","navona"],"morning":true,"taxi":true,"note":"09:00 기상·조식·짐 정리 → 11:00 Memphis 체크아웃·짐 보관 → Rinascente 20분 선택 또는 생략 → Piazza Colonna → Pantheon 외관/Piazza della Rotonda → Navona → 12:30 Emma 점심(미예약) → 13:40까지 출발 → 도보 약 30분 추정, 14:15 Memphis 목표 → 14:15–14:30 짐 회수 → 택시로 Termini 15:15 목표 → FR8317 15:57. 시각·도보시간은 계획용 추정."},
+{"id":"revised-oct4","name":"10/4 대안 · 백화점 생략","stops":["colonna","pantheon","navona"],"morning":true,"taxi":true,"note":"09:55–10:05 Memphis 체크아웃·짐 보관(호텔 허가 확인, 실제 맡김 완료 미확인) → 10:05–11:00 Rinascente Tritone → Colonna → Pantheon 11:15–11:45 → Navona 11:50–12:15 → Emma 12:30–13:40(미예약) → 13:40까지 출발 → 도보 약 30분 추정, 14:15 Memphis 목표 → 14:15–14:30 짐 회수 → 택시로 Termini 15:15 목표 → FR8317 15:57. 시각·도보시간은 계획용 추정."},
+{"id":"revised-oct4-shop","name":"10/4 오늘 동선 · Rinascente → Pantheon → Navona → Emma","stops":["rinascente","colonna","pantheon","navona"],"morning":true,"taxi":true,"note":"09:55–10:05 Memphis 체크아웃·짐 보관(호텔 허가 확인, 실제 맡김 완료 미확인) → 10:05–11:00 Rinascente Tritone → Colonna → Pantheon 11:15–11:45 → Navona 11:50–12:15 → Emma 12:30–13:40(미예약) → 13:40까지 출발 → 도보 약 30분 추정, 14:15 Memphis 목표 → 14:15–14:30 짐 회수 → 택시로 Termini 15:15 목표 → FR8317 15:57. 시각·도보시간은 계획용 추정."},
  {id:'return-home',name:'10/9 귀국 · Nicolaus → Bari → Roma → FCO',stops:['nicolaus','bari-station','termini','fco'],note:'택시·열차 이동 순서. 실제 운행 경로가 아닌 개략 연결선.'},
  {id:'memphis-night',name:'10/3 핵심 · 저녁 → Trevi → Memphis',stops:['trevi'],returnHotel:true,note:'21–22시 체크인 예상 후 저녁 → 22:30–23:15 Trevi 외부 야경 → 호텔 복귀. 시각은 계획 예시이며 입국·수하물·교통 상황에 따라 변경. 늦으면 식당 주방 확인, 체력이 없으면 야경도 생략.'},
  {id:'memphis-night-plus',name:'10/3 선택 확장 · Trevi → Quirinale',stops:['trevi','quirinale'],returnHotel:true,note:'핵심 야경 후 체력이 남을 때만 Quirinale 광장 외관 추가. 늦은 도착이면 핵심 코스만 선택.'},
@@ -14,8 +14,9 @@ const WALK_ROUTES=[
  {id:'pincio',name:'Pincio 공원 · 후순위',stops:['pincio'],note:'늦은 도착일에는 후순위. 핀은 공원 대표점, 전망대 출입구가 아님. 오르막·야간 접근 확인.'},
  {id:'departure',name:'10/4 · 점심 → 호텔 짐 회수 → Termini',stops:['termini'],note:'계획용 버퍼: 점심 12:30–13:45 → 짐 회수 14:00–14:30 → 역 이동 14:45 → Termini 15:15–15:25 도착 목표 → FR8317 15:57 출발. 실제 이동시간이 아닌 여유 목표이며, 호텔·점심 위치와 길찾기 결과에 맞춰 조정.'}
 ];
-let routeChoice='revised-oct4',routeHotel='memphis',routeDinner='piccolo-arancio',routeLunch='emma',routeExpanded=false;
-try{const prefs=JSON.parse(localStorage.getItem('italia-route-view-v1')||'{}');if(WALK_ROUTES.some(r=>r.id===prefs.route)&&!['morning-shop','morning-view','morning-pantheon'].includes(prefs.route))routeChoice=prefs.route;routeHotel=prefs.hotel||'memphis';routeDinner=prefs.dinner||'piccolo-arancio';routeLunch=routeChoice.startsWith('revised-oct4')?'emma':prefs.lunch||'emma'}catch{}
+let courseActive=true;
+let routeChoice='revised-oct4-shop',routeHotel='memphis',routeDinner='piccolo-arancio',routeLunch='emma',routeExpanded=false;
+try{const prefs=JSON.parse(localStorage.getItem('italia-route-view-v1')||'{}');if(WALK_ROUTES.some(r=>r.id===prefs.route)&&!['morning-shop','morning-view','morning-pantheon','revised-oct4'].includes(prefs.route))routeChoice=prefs.route;routeHotel=prefs.hotel||'memphis';routeDinner=prefs.dinner||'piccolo-arancio';routeLunch=routeChoice.startsWith('revised-oct4')?'emma':prefs.lunch||'emma'}catch{}
 function routePoints(){
  if(routeChoice==='return-home')return ['nicolaus','bari-station','termini','fco'].map(id=>findPlace(id));
  const r=WALK_ROUTES.find(r=>r.id===routeChoice),hotel=findPlace(routeHotel),departure=r.id==='departure',meal=findPlace(departure||r.morning?routeLunch:routeDinner),points=[];
@@ -53,10 +54,10 @@ function renderTripOverview(){
  <ol class="day-timeline"><li><b>19:15</b> FCO 도착 → 입국·수하물 수령 → Leonardo Express로 Termini → Memphis. 마지막 구간은 짐·실제 도착시각에 맞춰 택시 또는 길찾기 확인.</li><li><b>21–22시 예상</b> 호텔 체크인. 도착 보장 시각이 아니며 지연 시 호텔에 연락.</li><li><b>체크인 후</b> Piccolo Arancio 우선, Il Chianti·Piccolo Buco는 대안. 모두 미예약; 늦으면 주방 주문 가능 여부 확인. 피자 대기가 길면 생략.</li><li><b>22:30–23:15 예시</b> Trevi 외부 야경 → Memphis 복귀. 외부는 무료; 내부 €2 구역(토·일 09–22시, 마지막 입장 21시)과 구분.</li></ol>
  <p class="route-note">핵심은 저녁과 Trevi. Quirinale 광장은 체력이 남을 때만 선택 확장.</p><button type="button" class="plan-route-button" data-plan-route="memphis-night">핵심 야경 동선 지도에 보기</button>
  <a class="plan-source" href="https://www.fontanaditrevi.roma.it/" target="_blank" rel="noopener">Trevi 공식 관람 안내 ↗</a></details>
- <details class="daily-plan"><summary><b>10/4 일 · Pantheon·Navona → Emma → 바리</b><span>11시 전 체크아웃 / Termini 15:15 목표</span></summary>
- <ol class="day-timeline"><li><b>09:00</b> 기상 → 포함 조식(07–10시)·짐 정리.</li><li><b>11:00</b> Memphis 체크아웃·무료 짐 보관. 14:15–14:30 회수 계획을 호텔에 알리기.</li><li><b>11시대 · 선택</b> Rinascente Tritone 20분 둘러보기 또는 생략. 패션·뷰티·식품 선물, 가격대는 높은 편. 공휴일 개장 미확인.</li><li><b>11시대–12:20 예시</b> Piazza Colonna → Pantheon 외관/Piazza della Rotonda → Piazza Navona. 전날 방문한 Spagna는 반복하지 않기. 판테온 내부는 첫 일요일 무료 현장 티켓·대기 가능, 일요일 10:30 미사로 방문 중단 가능. 기본은 외관이며 짧은 줄과 시간 여유가 있을 때만 입장.</li><li><b>12:30</b> Emma 점심 추천 · bufala Margherita €13 + supplì €4. 미예약·좌석 미확인, 공휴일 운영 재확인.</li><li><b>13:40까지 출발</b> Memphis까지 도보 약 30분 추정 → 14:15 호텔 도착 목표 → 14:15–14:30 짐 회수.</li><li><b>짐 회수 후</b> 택시로 Termini 15:15 도착 목표. 실제 교통·대기 상황에 맞춰 이동.</li><li><b>15:57 → 20:20</b> FR8317 Roma Termini → Bari Centrale · Standard/Base €61 예약·발권 완료. 10/4–5 Hotel Moderno 예약 완료. 20:20 역 도착 → 21시 체크인 예상 → 저녁.</li></ol>
+ <details class="daily-plan"><summary><b>10/4 일 · Pantheon·Navona → Emma → 바리</b><span>09:55 체크아웃 시작 / Termini 15:15 목표</span></summary>
+ <ol class="day-timeline"><li><b>09:00</b> 기상 → 포함 조식(07–10시)·짐 정리.</li><li><b>09:55–10:05</b> Memphis 체크아웃·짐 맡기기. 호텔의 짐 보관 허가는 확인됨; 실제 보관 완료는 아직 미확인. 14:15–14:30 회수 계획을 호텔에 알리기.</li><li><b>10:05–11:00</b> 첫 방문지 Rinascente Tritone, Via del Tritone 61. 패션·뷰티·식품 선물 둘러보기. 통상 10:00 개장, 공휴일 예외·현재 영업 여부 미확인. 닫혀 있으면 다음 동선으로 이동.</li><li><b>11:15–11:45 / 11:50–12:15 목표</b> Piazza Colonna 경유 → Pantheon 외관/Piazza della Rotonda → Piazza Navona. 전날 방문한 Spagna는 반복하지 않기. 판테온 내부는 첫 일요일 무료 현장 티켓·대기 가능, 일요일 10:30 미사로 방문 중단 가능. 기본은 외관이며 짧은 줄과 시간 여유가 있을 때만 입장.</li><li><b>12:30</b> Emma 점심 추천 · bufala Margherita €13 + supplì €4. 미예약·좌석 미확인, 공휴일 운영 재확인.</li><li><b>13:40까지 출발</b> Memphis까지 도보 약 30분 추정 → 14:15 호텔 도착 목표 → 14:15–14:30 짐 회수.</li><li><b>짐 회수 후</b> 택시로 Termini 15:15 도착 목표. 실제 교통·대기 상황에 맞춰 이동.</li><li><b>15:57 → 20:20</b> FR8317 Roma Termini → Bari Centrale · Standard/Base €61 예약·발권 완료. 10/4–5 Hotel Moderno 예약 완료. 20:20 역 도착 → 21시 체크인 예상 → 저녁.</li></ol>
  <p class="route-warning">10/4는 2026년부터 국가 공휴일. 매장 통상 일요일 영업이 당일 개장을 보장하지 않습니다. Castroni는 휴일 휴무 안내로 필수 동선 제외.</p>
- <div class="plan-branch-buttons"><button type="button" data-plan-route="revised-oct4">현재 동선 · 쇼핑 생략</button><button type="button" data-plan-route="revised-oct4-shop">Rinascente 20분 추가</button></div>
+ <div class="plan-branch-buttons"><button type="button" data-plan-route="revised-oct4">대안 · 백화점 생략</button><button type="button" data-plan-route="revised-oct4-shop">오늘 동선 · Rinascente 먼저</button></div>
  <div class="plan-small-links"><a href="${escapeHTML(walkingLink([findPlace('memphis'),findPlace('luna'),findPlace('memphis')]))}" target="_blank" rel="noopener">Luna 아침 왕복 ↗</a><a href="${escapeHTML(walkingLink([findPlace('memphis'),findPlace('trecaffe'),findPlace('memphis')]))}" target="_blank" rel="noopener">TreCaffè 아침 왕복 ↗</a></div>
  <p class="route-note">관광 시각은 계획용 여유 목표입니다. 식당·매장은 미예약, 현장 상황과 실제 이동시간에 맞춰 줄이세요.</p></details>`;
  panel.insertAdjacentHTML('beforeend',returnPlanHTML());
@@ -71,7 +72,7 @@ function walkingLink(points,mode='walking'){
  return u.href;
 }
 function routeOptions(ids,value,placeholder){return '<option value="">'+placeholder+'</option>'+ids.map(id=>{const p=findPlace(id);return p?'<option value="'+id+'" '+(value===id?'selected':'')+'>'+escapeHTML(p.name)+'</option>':''}).join('')}
-function renderRoutes(fit=false){
+function buildRoutes(fit=false){
  renderTripOverview();if(routeChoice==='return-home'){renderReturnRoute(fit);return;}const panel=$('#routeWorkspace');panel.hidden=city!=='rome';routeLayer.clearLayers();if(city!=='rome')return;
  const r=WALK_ROUTES.find(r=>r.id===routeChoice),points=routePoints(),departure=routeChoice==='departure'||r.morning;
  panel.innerHTML='<div class="route-heading"><strong>동선 지도 · 선택 비교</strong><span>식당·관광은 미확정</span></div><label class="route-label">지도에서 비교할 코스<select id="routeChoice">'+WALK_ROUTES.map(x=>'<option value="'+x.id+'" '+(routeChoice===x.id?'selected':'')+'>'+escapeHTML(x.name)+'</option>').join('')+'</select></label>'+
@@ -89,11 +90,18 @@ function renderRoutes(fit=false){
 }
 $('#routeWorkspace').addEventListener('change',e=>{
  const fields={routeChoice:v=>routeChoice=v,routeHotel:v=>routeHotel=v,routeDinner:v=>routeDinner=v,routeLunch:v=>routeLunch=v};
- if(!fields[e.target.id])return;fields[e.target.id](e.target.value);
+ if(!fields[e.target.id])return;fields[e.target.id](e.target.value);courseActive=true;
  try{localStorage.setItem('italia-route-view-v1',JSON.stringify({route:routeChoice,hotel:routeHotel,dinner:routeDinner,lunch:routeLunch}))}catch{}
  renderRoutes(true);setTimeout(()=>map.invalidateSize(),100);
 });
-function routeClick(e){const b=e.target.closest('[data-route-place]');if(b)selectPlace(b.dataset.routePlace);const choice=e.target.closest('[data-plan-route]');if(choice){routeChoice=choice.dataset.planRoute;routeHotel='memphis';if(routeChoice.startsWith('revised-oct4'))routeLunch='emma';routeExpanded=true;renderRoutes(true);$('#routeWorkspace').scrollIntoView({block:'start',behavior:'smooth'});setTimeout(()=>map.invalidateSize(),120)}}
+function routeClick(e){if(e.target.closest('#courseToggle')){courseActive=!courseActive;renderRoutes(courseActive);return;}const b=e.target.closest('[data-route-place]');if(b)selectPlace(b.dataset.routePlace);const choice=e.target.closest('[data-plan-route]');if(choice){courseActive=true;routeChoice=choice.dataset.planRoute;routeHotel='memphis';if(routeChoice.startsWith('revised-oct4'))routeLunch='emma';routeExpanded=true;renderRoutes(true);$('#routeWorkspace').scrollIntoView({block:'start',behavior:'smooth'});setTimeout(()=>map.invalidateSize(),120)}}
 $('#routeWorkspace').addEventListener('click',routeClick);
 $('#tripOverview').addEventListener('click',routeClick);
-const renderPlaces=render;render=function(){renderPlaces();renderRoutes()};render();renderRoutes(true);
+const renderPlaces=render;
+function renderRoutes(fit=false){
+ renderPlaces();buildRoutes(fit&&courseActive);
+ const panel=$('#routeWorkspace'),showCourse=courseActive&&!panel.hidden;
+ if(showCourse)markers.clearLayers();else routeLayer.clearLayers();
+ if(!panel.hidden)panel.insertAdjacentHTML('beforeend','<button type="button" class="plan-route-button" id="courseToggle" aria-pressed="'+courseActive+'">'+(courseActive?'경로 끄기 · 필터의 장소 핀 복원':'경로 켜기 · 경로의 핀만 표시')+'</button><p class="route-disclaimer">'+(courseActive?'현재 경로의 핀만 표시 중 · 날짜·종류 필터는 장소 목록에 유지됩니다.':'경로 꺼짐 · 현재 날짜·종류 필터에 맞는 장소 핀을 표시합니다.')+'</p>');
+}
+render=function(){renderRoutes()};render();renderRoutes(true);
