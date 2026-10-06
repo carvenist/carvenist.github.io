@@ -8,7 +8,7 @@ const ROME_CANDIDATES=[
     "address": "Hotel Memphis, Via degli Avignonesi 36, Roma",
     "lat": 41.9028111,
     "lng": 12.4865252,
-    "desc": "10/3–4 1박 · 결제·예약 확인 완료. Single Room 13㎡ · 싱글 침대 · 전용 욕실 · 조식 포함. 총 €186.85 = Agoda 결제 €179.35 + 현장 납부 €7.50. 환불·변경 불가. 이번 예약 체크인 14:00–23:00 / 체크아웃 11:00. 23시 이후 지연 도착 시 호텔에 연락: +39 06 485849 · memphis@remarhotels.com. 공식 24시간 프런트 안내가 늦은 입실을 무조건 보장하지는 않습니다. 체크아웃 후 무료 짐 보관, 14시 전후 회수 계획(호텔에 회수시각 확인). 조식 07:00–10:00(호텔 안내).",
+    "desc": "Single Room 13㎡ · 싱글 침대 · 전용 욕실 · 조식 포함. 환불·변경 불가. 이번 예약 체크인 14:00–23:00 / 체크아웃 11:00. 23시 이후 지연 도착 시 호텔에 연락. 공식 24시간 프런트 안내가 늦은 입실을 무조건 보장하지는 않습니다. 체크아웃 후 무료 짐 보관, 14시 전후 회수 계획(호텔에 회수시각 확인). 조식 07:00–10:00(호텔 안내).",
     "day": "10.3",
     "status": "예약 완료",
     "url": "https://www.hotelmemphisroma.com/servizi",
@@ -42,7 +42,7 @@ const ROME_CANDIDATES=[
     "mapSource": "https://www.openstreetmap.org/node/1920404978",
     "url": "https://www.hotelabruzzi.it/services.php",
     "bookingSource": "https://www.booking.com/hotel/it/albergo-abruzzi.en-gb.html?checkin=2026-10-03&checkout=2026-10-04&group_adults=1&no_rooms=1&group_children=0&selected_currency=EUR",
-    "desc": "10/3–4 1인 · Executive Annex 21m² · 조식 포함, 미예약·미선택. 10/1 08:36–08:39 UTC Booking 조회: 표시총액 €364 현장결제·선결제 없음, 단 취소·변경·노쇼 전액 부과. 판테온뷰 객실은 별도 €413, 현재 별관 후보에는 판테온뷰 보장 없음. 세금 포함 whole-euro 반올림 표시총액이며 VAT·도시세 개별내역 미표시. 지도핀·길찾기는 본관 Piazza della Rotonda 69 기준, 별관 위치·실제 체크인 동선 확인 필요. 24시간 프런트·도착시각 사전 알림, 체크인 14:00 / 체크아웃 12:00. 근처 식당 조식 07:30–10:30. 짐 보관 있으나 비용·최종 회수시간 미확인. 결제 전 최종 조건 확인.",
+    "desc": "10/3–4 1인 · Executive Annex 21m² · 조식 포함, 미예약·미선택. 세금 포함 whole-euro 반올림 표시총액이며 VAT·도시세 개별내역 미표시. 지도핀·길찾기는 본관 Piazza della Rotonda 69 기준, 별관 위치·실제 체크인 동선 확인 필요. 24시간 프런트·도착시각 사전 알림, 체크인 14:00 / 체크아웃 12:00. 근처 식당 조식 07:30–10:30. 짐 보관 있으나 비용·최종 회수시간 미확인.",
     "day": "10.3",
     "status": "후보"
   },
@@ -54,7 +54,7 @@ const ROME_CANDIDATES=[
     "area": "Via Palestro 17/A, Roma",
     "lat": 41.906867,
     "lng": 12.501753,
-    "desc": "싱글 · 전용 욕실 · 조식 포함, 미예약. 10/1 08:10 UTC Expedia 결제 전 내역: 총 €226.01(객실 €198.64 + 세금 €19.87 + 도시세 €7.50), 예약 시 €218.51 / 현장 €7.50. 환불 불가. Booking 앞선 조회는 도시세 €6로 상이, 결제 최종 조건 재확인. 취소·변경·노쇼 전액 부과. 조식 07:15–10:30, 체크아웃 11:00(공식). 체크인 14:00–24:00, Expedia 시간외 체크인 불가 안내. 항공 지연 시 사전 호텔 확인. 짐 보관 비용·체크아웃 후 가능 여부·회수시간은 미확인.",
+    "desc": "싱글 · 전용 욕실 · 조식 포함, 미예약. 환불 불가. 취소·변경·노쇼 전액 부과. 조식 07:15–10:30, 체크아웃 11:00(공식). 체크인 14:00–24:00, Expedia 시간외 체크인 불가 안내. 항공 지연 시 사전 호텔 확인. 짐 보관 비용·체크아웃 후 가능 여부·회수시간은 미확인.",
     "day": "10.3",
     "status": "후보",
     "url": "https://www.hotelmontecarlo.it/en/services-3-star-hotel-rome",
@@ -70,7 +70,7 @@ const ROME_CANDIDATES=[
     "area": "Via Cavour 85/A, Roma",
     "lat": 41.8976633,
     "lng": 12.4961297,
-    "desc": "싱글 · 전용 욕실 · 조식뷔페 포함 선택지, 미예약. 10/1 08:10 UTC Expedia 결제 전 내역: 총 €278(객실·조식 €247.27 + 세금 €24.73 + 도시세 €6), 예약 시 €272 / 현장 €6. 환불 불가. 취소·변경·노쇼 전액 부과. 조식 07:30부터(공식). 체크아웃 공식 10:00 / OTA 11:00로 상이: 10:00 기준 계획, 확인 필요. 체크인 Expedia anytime / Booking 23:30 상한으로 상이, 항공 지연 시 확인 필요. 짐 보관 비용·체크아웃 후 가능 여부·회수시간은 미확인.",
+    "desc": "싱글 · 전용 욕실 · 조식뷔페 포함 선택지, 미예약. 환불 불가. 취소·변경·노쇼 전액 부과. 조식 07:30부터(공식). 체크아웃 공식 10:00 / OTA 11:00로 상이: 10:00 기준 계획, 확인 필요. 체크인 Expedia anytime / Booking 23:30 상한으로 상이, 항공 지연 시 확인 필요. 짐 보관 비용·체크아웃 후 가능 여부·회수시간은 미확인.",
     "day": "10.3",
     "status": "후보",
     "url": "https://basilicahotel.it/it/camere/",
@@ -349,7 +349,7 @@ const ROME_CANDIDATES=[
     "mapSource": "https://www.openstreetmap.org/node/9662296135",
     "url": "https://hotelmadisonrome.reserve-online.net/about",
     "bookingSource": "https://www.expedia.it/Rome-Hotel-Hotel-Madison.h891981.Informazioni-Hotel?chkin=2026-10-03&chkout=2026-10-04&rm1=a1",
-    "desc": "10/3–4 1인 · 조식뷔페 포함 싱글 11m², 미예약. 10/1 08:23–08:31 UTC Expedia 조회: 총 €229.45(예약 시 €223.45 + 현장 도시세 €6), 환불 불가. 별도 유연운임 €283.30 현장결제: 10/1 23:59 로마시간까지 무료취소, 이후 100% 부과. 24시간 프런트, 체크인 15:00–23:30(늦은 도착은 확인), 체크아웃 11:00. 짐 보관 서비스는 있으나 체크아웃 후 가능 시간·비용·최종 회수시간 미공개. 요금·잔여 객실·최종 조건 변동 가능."
+    "desc": "10/3–4 1인 · 조식뷔페 포함 싱글 11m², 미예약. 24시간 프런트, 체크인 15:00–23:30(늦은 도착은 확인), 체크아웃 11:00. 짐 보관 서비스는 있으나 체크아웃 후 가능 시간·비용·최종 회수시간 미공개. 요금·잔여 객실·최종 조건 변동 가능."
   },
   {
     "city": "rome",
@@ -365,7 +365,7 @@ const ROME_CANDIDATES=[
     "mapSource": "https://www.openstreetmap.org/node/5438662783",
     "url": "https://www.hotelvirgilio.it/it/servizi",
     "bookingSource": "https://www.expedia.it/Rome-Hotel-Hotel-Virgilio.h793895.Informazioni-Hotel?chkin=2026-10-03&chkout=2026-10-04&rm1=a1",
-    "desc": "10/3–4 1인 · 조식 포함 Classic double/twin 14m², 미예약. 10/1 08:23–08:31 UTC Expedia 조회: 총 €312.13(예약 시 €306.13 + 현장 도시세 €6), 선결제·환불 불가·변경 불가 partner offer. 24시간 프런트, 체크인 14:00–24:00, 체크아웃 12:00. 엘리베이터·짐 보관 목록 있음, 체크아웃 후 보관 시간·비용·회수시간 미확인. 요금·최종 조건 재확인."
+    "desc": "10/3–4 1인 · 조식 포함 Classic double/twin 14m², 미예약. 24시간 프런트, 체크인 14:00–24:00, 체크아웃 12:00. 엘리베이터·짐 보관 목록 있음, 체크아웃 후 보관 시간·비용·회수시간 미확인. 요금·최종 조건 재확인."
   },
   {
     "city": "rome",
@@ -381,7 +381,7 @@ const ROME_CANDIDATES=[
     "mapSource": "https://www.openstreetmap.org/node/10926033345",
     "url": "https://www.rometimeshotel.com/en/",
     "bookingSource": "https://www.expedia.it/Rome-Hotel-Rome-Times-Hotel.h6024030.Informazioni-Hotel?chkin=2026-10-03&chkout=2026-10-04&rm1=a1",
-    "desc": "10/3–4 1인 · Classic Annex 17m², 미예약. 10/1 08:23–08:31 UTC Expedia 조회: room-only 총 €325.46(예약 시 €317.96 + 현장 도시세 €7.50), 환불 불가. 조식 약 €15 추가 시 예상 €340.46이며 조식 포함 결제 견적이 아님. 접수·조식은 Via Milano 42 본관, 객실 별관은 58번(호텔 안내 50m 거리). 핀·코스 길찾기는 접수 42 기준. 24시간 안내·짐 보관, 체크아웃 11:00. 짐 회수 위치·시간·비용과 최종 조식 금액 확인 필요."
+    "desc": "10/3–4 1인 · Classic Annex 17m², 미예약. 접수·조식은 Via Milano 42 본관, 객실 별관은 58번(호텔 안내 50m 거리). 핀·코스 길찾기는 접수 42 기준. 24시간 안내·짐 보관, 체크아웃 11:00. 짐 회수 위치·시간·비용과 최종 조식 금액 확인 필요."
   },
   {
     "city": "rome",
@@ -397,7 +397,7 @@ const ROME_CANDIDATES=[
     "mapSource": "https://www.openstreetmap.org/node/9961065859",
     "url": "https://www.eurostarshotels.co.uk/exe-domus-aurea.html",
     "bookingSource": "https://www.expedia.it/Rome-Hotel-EXE-Domus-Aurea.h571337.Informazioni-Hotel?chkin=2026-10-03&chkout=2026-10-04&rm1=a1",
-    "desc": "10/3–4 1인 · 조식 포함 싱글 11m², 미예약. 10/1 08:23–08:31 UTC Expedia 조회: 총 €286(예약 시 €280 + 현장 도시세 €6), 환불 불가. 24시간 프런트, 체크인 15:00 이후 / 체크아웃 12:00, 일요일 조식 07:00–11:00. Expedia는 엘리베이터 없음 / Agoda는 있음으로 안내가 충돌. 23kg 짐 이동·계단·객실 접근성을 호텔에 확인해야 하므로 후순위. 요금·최종 조건 재확인."
+    "desc": "10/3–4 1인 · 조식 포함 싱글 11m², 미예약. 24시간 프런트, 체크인 15:00 이후 / 체크아웃 12:00, 일요일 조식 07:00–11:00. Expedia는 엘리베이터 없음 / Agoda는 있음으로 안내가 충돌. 23kg 짐 이동·계단·객실 접근성을 호텔에 확인해야 하므로 후순위. 요금·최종 조건 재확인."
   },
   {
     "id": "piccolo-arancio",
@@ -669,7 +669,7 @@ const BARI_CANDIDATES=[
     "url": "https://www.modernobari.com/",
     "day": "10.4",
     "status": "예약 완료",
-    "desc": "2026/10/4–5 성인 1인 1박 · 결제 승인·호텔 확인 메일로 예약 확정. Superior Single · 전용 욕실 · 조식 포함. 총 €142.80(현장 도시세 €2 포함), 환불·변경 불가. 예상 체크인 21시(도착 보장 시각 아님), 체크아웃 11시. 10/4 Bari Centrale 20:20 도착 → Hotel Moderno → 저녁. 10/5 조식·시내 산책 → 11시 전 체크아웃·짐 보관 → 점심·짐 회수 → 택시로 Nicolaus 13시 도착 목표 → GEMINI 14시 참석 예정 후보. 24시간 프런트·엘리베이터·짐 보관 안내; 체크아웃 후 보관 시간·비용은 호텔에 확인."
+    "desc": "2026/10/4–5 성인 1인 1박 · 예약 확정. Superior Single · 전용 욕실 · 조식 포함. 환불·변경 불가. 예상 체크인 21시(도착 보장 시각 아님), 체크아웃 11시. 10/4 Bari Centrale 20:20 도착 → Hotel Moderno → 저녁. 10/5 조식·시내 산책 → 11시 전 체크아웃·짐 보관 → 점심·짐 회수 → 택시로 Nicolaus 13시 도착 목표 → GEMINI 14시 참석 예정 후보. 24시간 프런트·엘리베이터·짐 보관 안내; 체크아웃 후 보관 시간·비용은 호텔에 확인."
   },
   {
     "id": "bari-victor",
@@ -684,7 +684,7 @@ const BARI_CANDIDATES=[
     "url": "https://www.victorhotelbari.it/",
     "day": "10.4",
     "status": "후보",
-    "desc": "10/4–5 성인 1인 1박 · 미선택·미예약. 10/2 조회 총 €168 · 더블침대 · 전용 욕실 · 조식 포함. 선결제·환불 불가. 24시간 프런트·엘리베이터·짐 보관, 체크아웃 10시. 10/4 열차 도착 후 숙박 → 10/5 일찍 체크아웃·짐 보관 후 시내 산책 → 점심·짐 회수 → 택시로 Nicolaus 이동. 요금·객실·최종 조건 변동 가능; 짐 보관 시간·비용 확인."
+    "desc": "10/4–5 성인 1인 1박 · 미선택·미예약. 24시간 프런트·엘리베이터·짐 보관, 체크아웃 10시. 10/4 열차 도착 후 숙박 → 10/5 일찍 체크아웃·짐 보관 후 시내 산책 → 점심·짐 회수 → 택시로 Nicolaus 이동. 요금·객실·최종 조건 변동 가능; 짐 보관 시간·비용 확인."
   },
   {
     "id": "bari-boston",
@@ -699,7 +699,7 @@ const BARI_CANDIDATES=[
     "url": "https://www.bostonbari.it/contatti-hotel-bari/",
     "day": "10.4",
     "status": "후보",
-    "desc": "10/4–5 성인 1인 1박 · 미선택·미예약. 10/2 조회 총 €216.31 · 퀸 침대 · 18㎡ · 전용 욕실 · 조식 포함. 선결제·환불 불가. 24시간 프런트·엘리베이터·짐 보관, 체크아웃 11시. 시내·구시가지 접근을 고려하는 대안. 10/4 20:20 열차 도착 → 숙소 → 10/5 시내 아침·체크아웃·점심·짐 회수 → 택시로 Nicolaus 12:45–13시 목표. 요금·객실·최종 조건 변동 가능; 짐 보관 시간·비용 확인. 좌표는 호텔 공식 지도 링크 기준."
+    "desc": "10/4–5 성인 1인 1박 · 미선택·미예약. 24시간 프런트·엘리베이터·짐 보관, 체크아웃 11시. 시내·구시가지 접근을 고려하는 대안. 10/4 20:20 열차 도착 → 숙소 → 10/5 시내 아침·체크아웃·점심·짐 회수 → 택시로 Nicolaus 12:45–13시 목표. 요금·객실·최종 조건 변동 가능; 짐 보관 시간·비용 확인. 좌표는 호텔 공식 지도 링크 기준."
   }
 ];
 
@@ -752,3 +752,229 @@ BARI_CANDIDATES.push(...[
 ]);
 
 for(const p of BARI_CANDIDATES){if(p.id==="bari-moderno")p.desc="10/4 체크인 완료. "+p.desc;}
+
+BARI_CANDIDATES.push(...[
+  {
+    "id": "numeri-primi",
+    "name": "Numeri Primi · 와인·오일 후보",
+    "category": "shop",
+    "lat": 41.0962723,
+    "lng": 16.8515648,
+    "address": "Via Salvatore Matarrese 2/5, Bari",
+    "url": "https://www.numeriprimisrl.it/info_punti-vendita",
+    "desc": "Nicolaus에서 약 350m·도보 5분(지도 안내). 화·수 08–21시(공식). 와인·풀리아 오일을 함께 보는 식료품점. 병별 브랜드·가격·재고 미확인. 10/6 18시 방문은 제안이며 확정 아님. 스쿠터 배달은 있으나 호텔 배달 시간·비용 미확인. 핀은 공식 지도 주소 대표 위치.",
+    "city": "bari",
+    "area": "Nicolaus 주변 · 선택 후보",
+    "day": "10.6",
+    "days": [
+      "10.6",
+      "10.7"
+    ],
+    "status": "후보"
+  },
+  {
+    "id": "note-di-vino",
+    "name": "Note Di Vino · 가까운 와인 전문점 추천",
+    "category": "shop",
+    "lat": 41.1035591,
+    "lng": 16.8597618,
+    "address": "Viale Papa Pio XII 38, Bari",
+    "url": "https://www.google.com/maps/search/?api=1&query=Note+Di+Vino+di+Proscia+Nicola+Bari",
+    "desc": "Nicolaus 약 900m·도보 12분, 대체로 평지(지도 안내). 화·수 08–14시/16:45–20:30(지도 안내). 와인 병 구매 전문점으로 도보 선택지 우선 추천. Sassicaia 등 개별 재고·가격 미확인; 있으면 가격을 보고, 없으면 생략. 방문·구매 미완료.",
+    "city": "bari",
+    "area": "Nicolaus 주변 · 선택 후보",
+    "day": "10.6",
+    "days": [
+      "10.6",
+      "10.7"
+    ],
+    "status": "후보"
+  },
+  {
+    "id": "vinarius",
+    "name": "Enoteca Vinarius · 차량 이동 대안",
+    "category": "shop",
+    "lat": 41.1343639,
+    "lng": 16.779413,
+    "address": "Viale Europa 16/C, Bari",
+    "url": "https://www.enotecavinarius.it/",
+    "desc": "호텔 도보권 아님·차량 이동 필요·낮은 우선순위. 공식 상품목록 Due Vittorie Tradizionale Modena DOP 발사믹 100ml €39.90, Lamantea Coratina 오일 500ml €14.90. 당일 재고 미확인. 화·수 08:30–13:30/15:30–20시(업체목록 안내). 핀은 Viale Europa 거리 대표점으로 정확한 입구 미확인; 주소 길찾기 사용.",
+    "city": "bari",
+    "area": "Nicolaus 주변 · 선택 후보",
+    "day": "10.6",
+    "days": [
+      "10.6",
+      "10.7"
+    ],
+    "status": "후보"
+  },
+  {
+    "id": "de-carlo",
+    "name": "Frantoio De Carlo · Bitritto 차량 대안",
+    "category": "shop",
+    "lat": 41.0392998,
+    "lng": 16.8283916,
+    "address": "Via XXIV Maggio 54/B, Bitritto",
+    "url": "https://www.oliodecarlo.com/it/contatti/",
+    "desc": "생산자 쇼룸 화·수 09–13시/15:30–17:30(공식). Torre di Mossa DOP 오일 500ml €21(공식몰 표시), 쇼룸 재고 미확인. 차량 이동 필요·필수 경로 아님. 핀은 Via XXIV Maggio 거리 대표점으로 정확한 입구 미확인; 주소 길찾기 사용.",
+    "city": "bari",
+    "area": "Nicolaus 주변 · 선택 후보",
+    "day": "10.6",
+    "days": [
+      "10.6",
+      "10.7"
+    ],
+    "status": "후보"
+  },
+  {
+    "id": "gulp",
+    "name": "Gulp · 호텔 근처 식사 후보",
+    "category": "food",
+    "lat": 41.098184,
+    "lng": 16.851749,
+    "address": "Via Enrico Pappacena 4/G–26, Bari",
+    "url": "https://www.gulpbari.it/contatti.php",
+    "desc": "호텔 도보 약 4분(숙박사이트 안내치). 공식 화요일 13–15시/20–01시. 포르케타 샌드위치 €10+자리값 €2, 타글리아타 €18, 돼지안심 €14(공개메뉴). 빈자리·임시휴무 미확인. 핀은 공식 지도 대표 위치.",
+    "city": "bari",
+    "area": "Nicolaus 주변 · 선택 후보",
+    "day": "10.6",
+    "days": [
+      "10.6",
+      "10.7"
+    ],
+    "status": "후보"
+  },
+  {
+    "id": "seasons",
+    "name": "The Seasons · 호텔 식당",
+    "category": "food",
+    "lat": 41.0991824,
+    "lng": 16.8548241,
+    "address": "The Nicolaus Hotel, Via C.A. Ciasca 27, Bari",
+    "url": "https://www.thenicolaushotel.com/en/food-drink/menu-restaurant",
+    "desc": "지상층·호텔 대표 핀. 조식 06:30–10:30, 점심 12:30–14:30(FAQ는 15시로 불일치), 저녁 19:30–22:30. 메뉴 고기말이 €24, 앙트르코트 €32, 자리값 €3·물 €3. 실제 이용·예약 완료 아님.",
+    "city": "bari",
+    "area": "Nicolaus 주변 · 선택 후보",
+    "day": "10.6",
+    "days": [
+      "10.6",
+      "10.7"
+    ],
+    "status": "후보"
+  },
+  {
+    "id": "xrmemory",
+    "name": "10/6 XRMemory · 참석 예정",
+    "category": "conference",
+    "lat": 41.0991824,
+    "lng": 16.8548241,
+    "address": "The Nicolaus Hotel, Sezione 6+7, Bari",
+    "url": "https://xrmemory.org/workshop/ismar2026/",
+    "desc": "10/6 14:00–17:45 Nicolaus Sezione 6+7 참석 예정, 실제 참석 완료 아님. 14:15–14:45 Bowman keynote, 16:15–17:45 그룹토론. 호텔 대표 좌표이며 실내 이동은 현장 안내 확인. 오전 AdaptiveXR는 지난 시간·실제 참석 미확인.",
+    "city": "bari",
+    "area": "Nicolaus 주변 · 선택 후보",
+    "day": "10.6",
+    "days": [
+      "10.6",
+      "10.7"
+    ],
+    "status": "이동 예정"
+  },
+  {
+    "id": "poster-oct7",
+    "name": "10/7 포스터 · Cassiopea 9",
+    "category": "conference",
+    "lat": 41.0991824,
+    "lng": 16.8548241,
+    "address": "The Nicolaus Hotel, Cassiopea 9, Bari",
+    "url": "https://www.ieeeismar.net/2026/posters/",
+    "desc": "10/7 10:30–12:45 포스터, Cassiopea 9. 10:30 전 설치 필수; keynote 참석 시 09:30 전 설치 추천. 12:45 정리는 다음 세션 보드 재사용에 따른 추천으로 별도 공식 마감 아님. Live poster teaser 없이 제출 영상 상영. 참석·설치 완료 아님. 호텔 대표 핀.",
+    "city": "bari",
+    "area": "Nicolaus 주변 · 선택 후보",
+    "day": "10.7",
+    "days": [
+      "10.6",
+      "10.7"
+    ],
+    "status": "이동 예정"
+  },
+  {
+    "id": "ps9-oct7",
+    "name": "10/7 PS9 · Sezione 1",
+    "category": "conference",
+    "lat": 41.0991824,
+    "lng": 16.8548241,
+    "address": "The Nicolaus Hotel, Sezione 1, Bari",
+    "url": "https://www.ieeeismar.net/2026/papers/",
+    "desc": "10/7 PS9 13:45–14:45 Sezione 1. 세션 마지막 발표지만 개인 시작시각 미확인. 발표·참석 예정이며 완료 아님. 호텔 대표 핀.",
+    "city": "bari",
+    "area": "Nicolaus 주변 · 선택 후보",
+    "day": "10.7",
+    "days": [
+      "10.6",
+      "10.7"
+    ],
+    "status": "이동 예정"
+  }
+]);
+ROME_CANDIDATES.push(...[
+  {
+    "id": "eataly-termini",
+    "name": "Eataly Termini · 역 소매점",
+    "category": "shop",
+    "lat": 41.9005815,
+    "lng": 12.5025272,
+    "address": "Eataly, Roma Termini, Atrio Piazza dei Cinquecento, Roma",
+    "url": "https://www.romatermini.com/stores/eataly-1",
+    "desc": "승강장층/Piano Binari, Atrio Piazza dei Cinquecento의 소매점·08–21시. 위층 식당과 구분. 활성 임시매장 목록 기준이며 10/8 직접 영업 확인 아님. 캐리어와 인파 부담을 줄이기 위해 역 실내 점심·쇼핑만. Sassicaia는 같은 매장에 있으면 가격을 보고 구매 고려, 없으면 생략. 재고·가격 미확인. 핀은 역 대표점이며 실내 위치 안내를 우선.",
+    "city": "rome",
+    "area": "역·공항 실내",
+    "day": "10.8",
+    "days": [
+      "10.8"
+    ],
+    "status": "후보"
+  },
+  {
+    "id": "aelia-fco",
+    "name": "Aelia / La Bottega dei Sapori · FCO E구역",
+    "category": "shop",
+    "lat": 41.8153911,
+    "lng": 12.2264848,
+    "address": "FCO Terminal 3, Area E departures, Fiumicino",
+    "url": "https://www.adr.it/web/aeroporti-di-roma-en/fiumicino-shop-eat-negozi-search",
+    "desc": "E구역 출국장 식품·와인 코너. 예전 Casa del Gusto 명칭과 같은 후보로 중복 추가하지 않음. 짐 위탁·보안검색·출국 수속 후 이용. 최신 영업시간·제품재고·가격 미확인. Sassicaia는 있으면 가격을 보고, 없으면 생략. 핀은 터미널 대표 위치로 실제 매장 입구나 보행 경로가 아님.",
+    "city": "rome",
+    "area": "역·공항 실내",
+    "day": "10.8",
+    "days": [
+      "10.8"
+    ],
+    "status": "후보"
+  },
+  {
+    "id": "bongustare-fco",
+    "name": "Bongustare Market · FCO 선택 보충",
+    "category": "shop",
+    "lat": 41.8153911,
+    "lng": 12.2264848,
+    "address": "FCO Terminal 3, Area E departures, Fiumicino",
+    "url": "https://www.adr.it/web/aeroporti-di-roma-en/fiumicino-shop-eat-negozi-search",
+    "desc": "E구역 출국장 선택형 보충 매장. 필수 방문 아님·최신 영업시간·재고·가격 미확인. 짐 위탁·출국 수속 후 시간 여유가 있을 때만. 터미널 대표 핀이며 정확한 실내 입구 미확인.",
+    "city": "rome",
+    "area": "역·공항 실내",
+    "day": "10.8",
+    "days": [
+      "10.8"
+    ],
+    "status": "후보"
+  }
+]);
+
+for(const p of [...BARI_CANDIDATES,...ROME_CANDIDATES]){
+ if(p.category==='conference')p.days=[p.day];
+ if(p.id==='numeri-primi')p.sources=[{url:'https://www.numeriprimisrl.it/info_consegna-a-domicilio-con-scooter-elettrici',label:'배달 안내'}];
+ if(p.id==='gulp')p.sources=[{url:'https://www.gulpbari.it/carne.php',label:'샌드위치 메뉴'},{url:'https://www.gulpbari.it/secondi.php',label:'메인 메뉴'}];
+ if(p.id==='vinarius')p.mapSource='https://www.openstreetmap.org/way/127669593';
+ if(p.id==='de-carlo')p.mapSource='https://www.openstreetmap.org/way/172261817';
+}
