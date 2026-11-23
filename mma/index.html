@@ -151,7 +151,7 @@
     background: var(--badge-bg); color: var(--fg-dim); letter-spacing: 0.02em; white-space: nowrap;
   }
   .chip.st-work, .chip.st-trip, .chip.st-tripIntl, .chip.st-official { background: var(--ok-bg); color: var(--ok); }
-  .chip.st-half, .chip.st-leave, .chip.st-sick { background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
+  .chip.st-half, .chip.st-halfOnly, .chip.st-leave, .chip.st-sick { background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
   .chip.st-holiday, .chip.st-future, .chip.st-before, .chip.st-today { background: var(--badge-bg); color: var(--fg-faint); }
   .chip.st-working { background: var(--warn-bg); color: var(--warn); }
   .chip.st-absent, .chip.st-short, .chip.st-incomplete, .chip.st-error { background: var(--bad-bg); color: var(--bad); }
@@ -227,6 +227,7 @@
         <select id="f-type">
           <option value="work">출근</option>
           <option value="half">반차(4h) + 출근</option>
+          <option value="halfOnly">반차(4h) 단독 · 미출근</option>
           <option value="leave">연차 (1일)</option>
           <option value="sick">병가</option>
           <option value="official">공가 · 경조휴가</option>
@@ -310,9 +311,9 @@
         <li><b>휴게 자동 차감.</b> 중식 11~13시, 석식 18~20시 구간에서는 각각 <b>1시간까지만</b> 근무로 인정(그 이상 머문 시간은 휴게). 식사 시간대와 무관하게 하루 휴게는 <b>최소 30분</b>(식사 차감이 30분 미만인 날에도 적용 — 9/17 포탈 기록으로 확인).
           <ul><li>예: 13:40 출근 → 20:00 이후 퇴근이면 석식 1시간이 빠짐. 18:59 퇴근이면 석식 차감은 없지만 최소 30분이 빠짐.</li></ul></li>
         <li><b>주간 시간이 부족하면</b> 그 주 <b>금요일 15시까지</b>(유연근무 매뉴얼은 17시로 표기 — 15시로 맞추는 게 안전) 부족분 이상으로 <b>반차(4h)</b>를 신청. 기한 내 미신청 시 부족 시간만큼 무단결근.</li>
-        <li><b>무단결근.</b> 평일에 근무하지 않거나 최소 4시간 미달 → 그날 1일. 시간 부족분은 분 단위로 누적, 8시간 = 1일. 1일당 <b>6일 복무 연장</b>(당일 + 5배). 통틀어 <b>8일이면 편입취소·형사처벌</b>.</li>
+        <li><b>무단결근.</b> 평일에 근무하지 않거나 최소 4시간 미달 → 그날 1일(연차·반차 단독 등 승인된 휴가는 제외). 시간 부족분은 분 단위로 누적, 8시간 = 1일. 1일당 <b>6일 복무 연장</b>(당일 + 5배). 통틀어 <b>8일이면 편입취소·형사처벌</b>.</li>
         <li><b>신청 기한.</b> 연차·병가: 시작일 당일 15시까지 포탈 신청. 공가·경조·7일 이하 국내출장: 하루 전 15시. 8일 이상 국내출장·3개월 미만 국외: 14일 전. 3개월 이상: 30일 전. 지도교수 복무상황부 서명도 별도.</li>
-        <li><b>연가.</b> 1년차 12일(2026-09 ~ 2027-08), 2년차 15일. 미사용분 소멸. 반차는 4시간. 연가를 다 쓰고 8시간 초과 시 연장복무 1일로 14일 내 병무청 보고.</li>
+        <li><b>연가.</b> 1년차 12일(2026-09 ~ 2027-08), 2년차 15일. 미사용분 소멸. 반차는 4시간. 출근하지 않은 날 반차만 쓰는 것도 가능(2026-11 복무 담당자 확인) — 그날은 4시간만 인정되므로 나머지는 그 주 다른 날에 채워야 함. 연가를 다 쓰고 8시간 초과 시 연장복무 1일로 14일 내 병무청 보고.</li>
         <li><b>병가.</b> 의무기간 통틀어 30일, 일 단위만. 진료확인서·처방전 등 증빙 필수(영수증 불가), 동일 사유 7일 이상은 진단서. 사전 허가 없으면 무단결근.</li>
         <li><b>출퇴근 인증 누락</b> → 기본은 연가에서 차감. 건물 상주 증빙(CCTV·방범 기록 제외)으로 복무변경 신고서를 내면 인정 가능.</li>
         <li><b>출장.</b> 국내 통틀어 2년(1시간짜리도 1일 산입), 8일 이상은 병무청 신상변동 보고. 국외는 통틀어 1년, 반드시 병무청 사전 허가(미승인 출국 = 편입취소).</li>
@@ -338,6 +339,7 @@
   const TYPES = {
     work:     { label: '출근',        needsTime: true },
     half:     { label: '반차+출근',    needsTime: true, credit: HALF, leave: HALF },
+    halfOnly: { label: '반차(단독)',   credit: HALF, leave: HALF },
     leave:    { label: '연차',        credit: DAY, leave: DAY },
     sick:     { label: '병가',        credit: DAY, sick: 1 },
     official: { label: '공가·경조',    credit: DAY },
@@ -345,7 +347,7 @@
     tripIntl: { label: '국외출장',     credit: DAY, trip: 'intl' },
   };
   const STATUS_LABEL = {
-    work: '출근', half: '반차+출근', leave: '연차', sick: '병가', official: '공가·경조',
+    work: '출근', half: '반차+출근', halfOnly: '반차(단독)', leave: '연차', sick: '병가', official: '공가·경조',
     trip: '국내출장', tripIntl: '국외출장',
     holiday: '공휴일', before: '복무 전', future: '예정', today: '미입력', working: '근무 중',
     absent: '결근', short: '4h 미달', incomplete: '기록 불완전', error: '오류',
